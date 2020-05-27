@@ -36,12 +36,12 @@ mkdir %EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPCpxSolver
 mkdir %EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPMskSolver
 
 copy /Y doc\*.pdf 							%EXPORT_DIR%\doc
-copy /Y MIPModelerCore\include\*.h 			%EXPORT_DIR%\MIPModelerCore\include
-copy /Y MIPSolverInterface\*.bat 			%EXPORT_DIR%\MIPSolverInterface
-copy /Y MIPSolverInterface\MIPClpSolver\*.h 	%EXPORT_DIR%\MIPSolverInterface\MIPClpSolver
-copy /Y MIPSolverInterface\MIPCbcSolver\*.h 	%EXPORT_DIR%\MIPSolverInterface\MIPCbcSolver
-copy /Y MIPSolverInterface\MIPCpxSolver\*.h 	%EXPORT_DIR%\MIPSolverInterface\MIPCpxSolver
-copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\MIPSolverInterface\MIPMskSolver
+copy /Y MIPModelerCore\include\*.h 			%EXPORT_DIR%\src\MIPModeler\MIPModelerCore\include
+copy /Y MIPSolverInterface\*.bat 			%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface
+copy /Y MIPSolverInterface\MIPClpSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPClpSolver
+copy /Y MIPSolverInterface\MIPCbcSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPCbcSolver
+copy /Y MIPSolverInterface\MIPCpxSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPCpxSolver
+copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPMskSolver
 
 copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
