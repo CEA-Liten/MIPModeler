@@ -37,7 +37,7 @@ SOURCES += MIPCbcSolver.cpp
 HEADERS += MIPCbcSolver.h \
            MIPCbcSolver_global.h
 
-DESTDIR     = $$(PEGASE_MPC_HOME)/lib
+DESTDIR     = $$(PEGASE_MPC_HOME)/lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 
