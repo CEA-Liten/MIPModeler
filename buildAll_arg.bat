@@ -17,7 +17,7 @@ echo %PATH% | findstr Visual > file.txt
 )) || (
     Echo the file is empty
 	call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
-	call MIPModelerEnv.bat
+	call MIPModelerEnv
 )
 del file.txt
 
@@ -25,7 +25,7 @@ rem TODO: ajouter ici la compilation en mode debug de OSI (une fois le code rapa
 
 call build .\
 
-call %~dp0\ExportBinaries.bat
+::call %~dp0\ExportBinaries.bat
 
 cd /D %~dp0 
 

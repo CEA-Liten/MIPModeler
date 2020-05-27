@@ -22,12 +22,18 @@ if not exist setDepsPath.bat (
    echo Then change the PEGASE_ROOT variable in setDepsPath.bat
    EXIT /B 1
 )
+echo %PATH%
 
 call setDepsPath
 echo %PEGASE_ROOT%
 set DEPS_HOME=%PEGASE_ROOT%\Deps
 
 echo %DEPS_HOME%
+rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+rem Path for Qt
+rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+call %DEPS_HOME%\FBSF\latest%extensions%\QtEnv.bat
+
 set PEGASE_MPC_HOME=%~dp0
 
 echo %PEGASE_MPC_HOME%
@@ -37,6 +43,9 @@ rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 call %PEGASE_MPC_HOME%\MIPSolverInterface\OsiEnv.bat
 call %PEGASE_MPC_HOME%\MIPSolverInterface\MosekEnv.bat
 call %PEGASE_MPC_HOME%\MIPSolverInterface\CplexEnv.bat
+
+echo %PATH%
+
 rem call %PEGASE_MPC_HOME%\src\CbcSolverAPI\OsiEnv.bat
 rem call %PEGASE_MPC_HOME%\src\MosekSolverAPI\MosekEnv.bat
 rem call %PEGASE_MPC_HOME%\src\CplexSolverAPI\CplexEnv.bat
