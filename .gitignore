@@ -1,3 +1,7 @@
 /setDepsPath.bat
 /MIPModeler.pro.user
 /Makefile
+/MIPSolverInterface/MIPMskSolver/debug/*.pdb
+/MIPSolverInterface/MIPCpxSolver/debug
+/lib/release
+/lib/debug
