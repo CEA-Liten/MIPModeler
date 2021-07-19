@@ -5,3 +5,4 @@
 /MIPSolverInterface/MIPCpxSolver/debug
 /lib/release
 /lib/debug
+/.qmake.stash
