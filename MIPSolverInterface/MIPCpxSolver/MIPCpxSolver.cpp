@@ -64,6 +64,9 @@ void MIPCpxSolver::solve() {
         std::cerr <<"CPXopenCPLEX: Failed to open Cplex env. " << errmsg <<std::endl;
         return;
     }
+//    char const *filename = 'cplex.log' ;
+//    char const *mode ;
+    CPXsetlogfilename (env, "cplex_optim.log", "w");
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);
