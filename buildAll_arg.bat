@@ -25,7 +25,7 @@ rem TODO: ajouter ici la compilation en mode debug de OSI (une fois le code rapa
 
 call build .\
 
-::call %~dp0\ExportBinaries.bat
+call %~dp0\ExportBinaries.bat
 
 cd /D %~dp0 
 
