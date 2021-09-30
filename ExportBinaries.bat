@@ -8,9 +8,9 @@ ECHO A build mode is required. please enter release or debug
 set /p OPTION=release or debug?:
 )
 
-if /i "%PEGASE_ROOT%" == "" (
+::if /i "%PEGASE_ROOT%" == "" (
 call setDepsPath
-)
+::)
 
 cd %~dp0
 
@@ -43,6 +43,8 @@ copy /Y MIPSolverInterface\MIPCbcSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolv
 copy /Y MIPSolverInterface\MIPCpxSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPCpxSolver
 copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPMskSolver
 
+mkdir %EXPORT_DIR%\lib
+mkdir %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
@@ -56,6 +58,8 @@ copy /Y lib\%OPTION%\MIPMskSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPMskSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 
 ::if not /i "%PERSEE_DEPS%" == "" (
+
+echo "Saving to PERSEE_DEPS %PERSEE_DEPS%\MIPModelerLib "
 
 set EXPORT_DIR=%PERSEE_DEPS%\MIPModelerLib
 
@@ -85,6 +89,8 @@ copy /Y MIPSolverInterface\MIPCbcSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolv
 copy /Y MIPSolverInterface\MIPCpxSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPCpxSolver
 copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPMskSolver
 
+mkdir %EXPORT_DIR%\lib
+mkdir %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
