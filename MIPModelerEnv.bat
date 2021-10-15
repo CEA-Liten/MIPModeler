@@ -17,6 +17,19 @@ if "%OPTION%" == "debug" (
 set extension=_debug
 )
 
+if not exist setDepsPath.bat (
+   echo command file setDepsPath.bat missing in directory
+   echo You have to create one by copying setDepsPath.bat.exemple to setDepsPath.bat
+   echo Then change the PEGASE_ROOT variable in setDepsPath.bat
+   EXIT /B 1
+)
+
+call setDepsPath
+
+:: necessary for Cplex and Eigen
+
+set DEPS_HOME=%PEGASE_ROOT%/Deps
+
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem Path for Qt - for compilation using jom !
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
