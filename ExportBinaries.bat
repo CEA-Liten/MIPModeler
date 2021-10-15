@@ -49,13 +49,13 @@ copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolv
 
 mkdir %EXPORT_DIR%\lib
 mkdir %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPClpSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPClpSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPCbcSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPCbcSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.lib copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.dll copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.pdb copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPClpSolver.lib copy /Y lib\%OPTION%\MIPClpSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPClpSolver.dll copy /Y lib\%OPTION%\MIPClpSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPCbcSolver.lib copy /Y lib\%OPTION%\MIPCbcSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPCbcSolver.dll copy /Y lib\%OPTION%\MIPCbcSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPCpxSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPCpxSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPMskSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
@@ -97,13 +97,13 @@ copy /Y MIPSolverInterface\MIPMskSolver\*.h 	%EXPORT_DIR%\src\MIPModeler\MIPSolv
 
 mkdir %EXPORT_DIR%\lib
 mkdir %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPClpSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPClpSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPCbcSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
-copy /Y lib\%OPTION%\MIPCbcSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.lib copy /Y lib\%OPTION%\MIPModeler.lib     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.dll copy /Y lib\%OPTION%\MIPModeler.dll     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPModeler.pdb copy /Y lib\%OPTION%\MIPModeler.pdb     %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPClpSolver.lib copy /Y lib\%OPTION%\MIPClpSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPClpSolver.dll copy /Y lib\%OPTION%\MIPClpSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPCbcSolver.lib copy /Y lib\%OPTION%\MIPCbcSolver.lib   %EXPORT_DIR%\lib\%OPTION%\
+if exist lib\%OPTION%\MIPCbcSolver.dll copy /Y lib\%OPTION%\MIPCbcSolver.dll   %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPCpxSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPCpxSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPMskSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
