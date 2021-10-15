@@ -1,4 +1,0 @@
-@echo off
-
-::Change the following line to set your own path to Peagse root diretory (parent of Deps)
-set PEGASE_ROOT=C:\Users\AR170699\workspace\PEGASE_Tuleap
