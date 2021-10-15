@@ -14,6 +14,10 @@ call setDepsPath
 
 cd %~dp0
 
+:: No export to Pegase for Integration branch !
+
+if "%EXPORT_TO_PEGASE%" == "NO" goto persee
+
 set DEPS_HOME=%PEGASE_ROOT%\Deps
 set EXPORT_DIR=%DEPS_HOME%\External\MIPModelerLib
 
@@ -58,6 +62,8 @@ copy /Y lib\%OPTION%\MIPMskSolver*.lib  %EXPORT_DIR%\lib\%OPTION%\
 copy /Y lib\%OPTION%\MIPMskSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 
 ::if not /i "%PERSEE_DEPS%" == "" (
+
+:persee
 
 echo "Saving to PERSEE_DEPS %PERSEE_DEPS%\MIPModelerLib "
 
