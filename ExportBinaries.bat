@@ -23,7 +23,7 @@ set EXPORT_DIR=%DEPS_HOME%\External\MIPModelerLib
 
 set DOC_DIR=%EXPORT_DIR%\doc
 
-copy /Y PegaseMPCEnv.bat   %EXPORT_DIR%\
+copy /Y MIPModelerEnv.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
 rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 
@@ -64,14 +64,13 @@ copy /Y lib\%OPTION%\MIPMskSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 ::if not /i "%PERSEE_DEPS%" == "" (
 
 :persee
-set PERSEE_DEPS=%PERSEE_APP%\Deps
 echo "Saving to PERSEE_DEPS %PERSEE_DEPS%\MIPModelerLib "
 
 set EXPORT_DIR=%PERSEE_DEPS%\MIPModelerLib
 
 set DOC_DIR=%EXPORT_DIR%\doc
 
-copy /Y PegaseMPCEnv.bat   %EXPORT_DIR%\
+copy /Y MIPModelerEnv.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
 rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 
