@@ -20,14 +20,14 @@ set extension=_debug
 if not exist setDepsPath.bat (
    echo command file setDepsPath.bat missing in directory
    echo You have to create one by copying setDepsPath.bat.exemple to setDepsPath.bat
-   echo Then change the PEGASE_ROOT variable in setDepsPath.bat
+   echo Then change the SOLVER_DEPS and PERSEE_APP variable in setDepsPath.bat
    EXIT /B 1
 )
 
 call setDepsPath
 
 echo " Solver_deps = %SOLVER_DEPS%"
-#set SOLVER_DEPS=%PEGASE_ROOT%/Deps/External
+::set SOLVER_DEPS=%PEGASE_ROOT%/Deps/External
 
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem Path for Qt - for compilation using jom !
