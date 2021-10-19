@@ -26,9 +26,8 @@ if not exist setDepsPath.bat (
 
 call setDepsPath
 
-:: necessary for Cplex and Eigen
-
-set DEPS_HOME=%PEGASE_ROOT%/Deps
+echo " Solver_deps = %SOLVER_DEPS%"
+#set SOLVER_DEPS=%PEGASE_ROOT%/Deps/External
 
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem Path for Qt - for compilation using jom !

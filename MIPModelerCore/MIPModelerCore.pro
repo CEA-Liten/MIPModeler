@@ -10,7 +10,7 @@ TARGET = MIPModeler
 TEMPLATE = lib
 
 INCLUDEPATH += include
-INCLUDEPATH += $$(DEPS_HOME)/External/Eigen/3.2.9-modif
+INCLUDEPATH += $$(PERSEE_DEPS)/Eigen/3.2.9-modif
 
 SOURCES += \
         src/MIPConstraint.cpp \
