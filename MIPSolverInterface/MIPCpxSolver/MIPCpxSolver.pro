@@ -19,7 +19,7 @@ INCLUDEPATH += $$(CPLEX_HOME_129)/include/ilcplex
 
 LIBS        += $$(PEGASE_MPC_HOME)/lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += $$(PEGASE_MPC_HOME)/MIPModelerCore/include/
-INCLUDEPATH += $$(DEPS_HOME)/External/Eigen/3.2.9-modif/
+INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/
 
 DEFINES += MIPCPXSOLVER_LIBRARY
 

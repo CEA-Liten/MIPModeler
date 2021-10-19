@@ -22,7 +22,7 @@ LIBS        += $$(COINOR_HOME)/lib/libOsiCbc.lib
 LIBS        += $$(COINOR_HOME)/lib/libOsiClp.lib
 
 INCLUDEPATH += $$(PEGASE_MPC_HOME)/MIPModelerCore/include/
-INCLUDEPATH += $$(DEPS_HOME)/External/Eigen/3.2.9-modif/
+INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/
 INCLUDEPATH += $$(COINOR_HOME)/Cgl/src/
 INCLUDEPATH += $$(COINOR_HOME)/CoinUtils/src/
 INCLUDEPATH += $$(COINOR_HOME)/Osi/src/Osi/
