@@ -10,14 +10,16 @@ if "%OPTION%" == "" set /p OPTION=debug or release expected
 if not "%OPTION%"=="debug" if not "%OPTION%"=="release" goto error_option 
 
 REM Do we need to Set path for Visual CPP compiler
-echo %PATH% | findstr "Studio 14.0" > file.txt
+echo %PATH% | findstr Visual > file.txt
 
 (Call :notEmpty file.txt && (
     Echo the file is not empty
 )) || (
     Echo the file is empty
 	call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+	call DepsEnv.bat
 )
+del file.txt
 
 call MIPModelerEnv
 del file.txt
