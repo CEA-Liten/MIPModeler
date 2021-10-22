@@ -23,7 +23,7 @@ set EXPORT_DIR=%DEPS_HOME%\External\MIPModelerLib
 
 set DOC_DIR=%EXPORT_DIR%\doc
 
-copy /Y MIPModelerEnv.bat   %EXPORT_DIR%\
+copy /Y MIPModelerEnv_build.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
 rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 
@@ -70,7 +70,7 @@ set EXPORT_DIR=%PERSEE_DEPS%\MIPModelerLib
 
 set DOC_DIR=%EXPORT_DIR%\doc
 
-copy /Y MIPModelerEnv.bat   %EXPORT_DIR%\
+copy /Y MIPModelerEnv_build.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
 rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 

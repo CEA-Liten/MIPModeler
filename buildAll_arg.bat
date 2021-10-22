@@ -21,7 +21,7 @@ echo %PATH% | findstr Visual > file.txt
 )
 del file.txt
 
-call MIPModelerEnv
+call MIPModelerEnv_build
 del file.txt
 
 rem TODO: ajouter ici la compilation en mode debug de OSI (une fois le code rapatrié) 
