@@ -18,7 +18,7 @@ MIPExpression::MIPExpression(const double& constPart)
 void MIPExpression::setRowIndex(int& idx) {
     std::list<Node>::iterator it = mNodes.begin();
     for (; it != mNodes.end(); it++)
-        it->setRow(idx);
+    	*it = Eigen::Triplet<double>(idx,it->col(),it->value());
 }
 //---------------------------------------------------------------------------
 MIPExpression operator * (const MIPVariable0D& var, const double& val) {
@@ -177,7 +177,7 @@ MIPExpression operator - (const double& val, const MIPExpression& expr) {
 MIPExpression& MIPExpression::operator *= (const double& val) {
     std::list<Node>::iterator it = mNodes.begin();
     for (; it != mNodes.end(); ++it)
-        it->setValue(it->value() * val);
+    	*it = Eigen::Triplet<double>(it->row(),it->col(),it->value()*val);
     mConstPart *= val;
     return *this;
 }
@@ -185,7 +185,7 @@ MIPExpression& MIPExpression::operator *= (const double& val) {
 MIPExpression& MIPExpression::operator /= (const double& val) {
     std::list<Node>::iterator it = mNodes.begin();
     for (; it != mNodes.end(); it++)
-        it->setValue(it->value()/ val);
+    	*it = Eigen::Triplet<double>(it->row(),it->col(),it->value()/val);
     mConstPart /= val;
     return *this;
 }
@@ -216,7 +216,7 @@ MIPExpression& MIPExpression::operator -= (const MIPExpression& expr) {
     std::list<Node> nodes = expr.getNode();
     std::list<Node>::iterator it = nodes.begin();
     for (; it != nodes.end(); it++)
-        it->setValue(-it->value());
+    	*it = Eigen::Triplet<double>(it->row(),it->col(),-it->value());
     mNodes.insert(mNodes.end(), nodes.begin(), nodes.end());
     mConstPart -= expr.mConstPart;
     return *this;
