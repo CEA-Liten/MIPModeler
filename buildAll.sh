@@ -9,7 +9,7 @@ if [ $? = 0 ]
 then
   pwd
   rm -rf *
-  # build and install Persee
+  # build and install MIPModeler
   if [ ${FBSF_BUILD_MODE} == release ]
   then
     cmake ${MIPMODELER_HOME} -DCMAKE_INSTALL_PREFIX=${MIPMODELER_INSTALL} -DCMAKE_BUILD_TYPE=Release
@@ -20,5 +20,5 @@ then
   if [ $? != 0 ]; then exit; fi
   make install
   if [ $? != 0 ]; then exit; fi
-  echo "Persee installation completed!"
+  echo "MIPModeler installation completed!"
 fi

@@ -12,7 +12,6 @@ else
   exit
 fi
 source ${FBSF_HOME}/QtVersion.sh
-export PERSEE_HOME=${TRILOGY_ROOT}/Persee
 export CPLEX_HOME=${TRILOGY_ROOT}/cplex/cplex
 export MIPMODELER_INSTALL=${TRILOGY_ROOT}/MIPModeler_install
 export MIPMODELER_HOME=${TRILOGY_ROOT}/MIPModeler
