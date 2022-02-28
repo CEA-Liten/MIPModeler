@@ -52,7 +52,7 @@ public:
     void add(MIPVariable1D& variable1D, const std::string& name = "");
     void add(MIPVariable2D& variable2D, const std::string& name = "");
     void add(MIPVariable3D& variable3D, const std::string& name = "");
-    void add(MIPConstraint& constraint, const std::string& name = "");
+    void add(MIPConstraint constraint, const std::string& name = "");
     void add(const MIPSpecialOrderedSet& sos, const MIPSOSType& sosType);
     void add(const MIPWarmStart& warmStartSolution);
 //---------------------------------------------------------------------------

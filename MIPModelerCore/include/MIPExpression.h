@@ -96,5 +96,30 @@ private:
     double mConstPart;
 };
 
+#if not defined(WIN32) && not defined(_WIN32)
+MIPExpression operator * (const MIPVariable0D& var, const double& val);
+MIPExpression operator * (const double& val, const MIPVariable0D& var);
+MIPExpression operator * (const double& val, const MIPExpression& var);
+MIPExpression operator * (const MIPExpression& expr, const double& val);
+MIPExpression operator / (const MIPExpression& expr, const double& val);
+MIPExpression operator / (const MIPVariable0D& var, const double& val);
+MIPExpression operator + (const MIPExpression& expr, const MIPVariable0D& var);
+MIPExpression operator + (const MIPVariable0D& var, const MIPExpression& expr);
+MIPExpression operator + (const MIPExpression& expr1, const MIPExpression& expr2);
+MIPExpression operator + (const MIPVariable0D& var1, const MIPVariable0D& var2);
+MIPExpression operator + (const MIPExpression& expr, const double& val);
+MIPExpression operator + (const double& val, const MIPExpression& expr);
+MIPExpression operator + (const double& val, const MIPVariable0D& var);
+MIPExpression operator + (const MIPVariable0D& var, const double& val);
+MIPExpression operator - (const MIPExpression& expr, const MIPVariable0D& var);
+MIPExpression operator - (const MIPVariable0D& var, const MIPExpression& expr);
+MIPExpression operator - (const MIPExpression& expr1, const MIPExpression& expr2);
+MIPExpression operator - (const MIPVariable0D& var1, const MIPVariable0D& var2);
+MIPExpression operator - (const MIPExpression& expr, const double& val);
+MIPExpression operator - (const double& val, const MIPExpression& expr);
+MIPExpression operator - (const double& val, const MIPVariable0D& var);
+MIPExpression operator - (const MIPVariable0D& var, const double& val);
+#endif
+
 }
 #endif /* MIPExpression */

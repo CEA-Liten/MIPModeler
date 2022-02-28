@@ -90,5 +90,32 @@ private:
     std::string mName;
 };
 
+#if not defined(WIN32) && not defined(_WIN32)
+MIPConstraint operator == (const MIPExpression& expr, const double& val);
+MIPConstraint operator == ( const double& val, const MIPExpression& expr);
+MIPConstraint operator == (const MIPVariable0D& var, const double& val);
+MIPConstraint operator == (const double& val, const MIPVariable0D& var);
+MIPConstraint operator == (const MIPExpression& expr1, const MIPExpression& expr2);
+MIPConstraint operator == (const MIPExpression& expr, const MIPVariable0D& var);
+MIPConstraint operator == (const MIPVariable0D& var, const MIPExpression& expr);
+MIPConstraint operator == (const MIPVariable0D& var1, const MIPVariable0D& var2);
+MIPConstraint operator >= (const double& val, const MIPExpression& expr);
+MIPConstraint operator >= (const MIPExpression& expr, const double& val);
+MIPConstraint operator >= (const MIPVariable0D& var, const double& val);
+MIPConstraint operator >= (const double& val, const MIPVariable0D& var);
+MIPConstraint operator >= (const MIPExpression& expr1, const MIPExpression& expr2);
+MIPConstraint operator >= (const MIPExpression& expr, const MIPVariable0D& var);
+MIPConstraint operator >= (const MIPVariable0D& var, const MIPExpression& expr);
+MIPConstraint operator >= (const MIPVariable0D& var1, const MIPVariable0D& var2);
+MIPConstraint operator <= (const double& val, const MIPExpression& expr);
+MIPConstraint operator <= (const MIPExpression& expr, const double& val);
+MIPConstraint operator <= (const MIPVariable0D& var, const double& val);
+MIPConstraint operator <= (const double& val, const MIPVariable0D& var);
+MIPConstraint operator <= (const MIPExpression& expr1, const MIPExpression& expr2);
+MIPConstraint operator <= (const MIPExpression& expr, const MIPVariable0D& var);
+MIPConstraint operator <= (const MIPVariable0D& var, const MIPExpression& expr);
+MIPConstraint operator <= (const MIPVariable0D& var1, const MIPVariable0D& var2);
+#endif
+
 }
 #endif /* MIPConstraint */

@@ -67,7 +67,7 @@ void MIPModel::add(MIPVariable3D& variable3D, const std::string& name) {
     mVariables.insert(mVariables.end(), variables.begin(), variables.end());
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPConstraint& constraint, const std::string& name) {
+void MIPModel::add(MIPConstraint constraint, const std::string& name) {
     constraint.setRowIndex(mNumRows);
     if (!name.empty())
         constraint.setName(name);
