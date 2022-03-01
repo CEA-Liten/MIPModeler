@@ -126,7 +126,7 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPData1D& xTable, const MIPData1D& yTable,
                                           const MIPLinearType& type,
                                           const bool& relaxedForm,
-                                          MIPVariable2D& xSOS){
+                                          MIPVariable2D xSOS){
     try{
         //check data
         if (xTable.size() != yTable.size ())
@@ -182,7 +182,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D& xSOS){
+                                        MIPVariable1D xSOS){
     try{
         //check data
         if (xTable.size() != yTable.size ())
@@ -235,7 +235,7 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPData1D& xTable, const MIPData1D& yTable,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
-                                         MIPVariable2D& xSOS){
+                                         MIPVariable2D xSOS){
     int length = xInputData.size();
     MIPExpression1D xInputExpr(length);
     for (int i = 0; i < length; i++)
@@ -249,7 +249,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D& xSOS){
+                                        MIPVariable1D xSOS){
     MIPExpression xInputExpr = xInputData;
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
 }
@@ -259,7 +259,7 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPData1D& xTable, const MIPData1D& yTable,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
-                                         MIPVariable2D& xSOS){
+                                         MIPVariable2D xSOS){
     int length = xInputVar.getDims();
     MIPExpression1D xInputExpr(length);
     for (int i = 0; i < length; i++)
@@ -273,7 +273,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D& xSOS){
+                                        MIPVariable1D xSOS){
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
@@ -283,10 +283,10 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPExpression1D& xInputExpr, const MIPExpression1D& yInputExpr,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type, const bool& relaxedForm,
-                                        MIPVariable3D& weight,
-                                        MIPVariable2D& xSOS,
-                                        MIPVariable2D& ySOS,
-                                        MIPVariable2D& diagSOS){
+                                        MIPVariable3D weight,
+                                        MIPVariable2D xSOS,
+                                        MIPVariable2D ySOS,
+                                        MIPVariable2D diagSOS){
     try{
         // check data
         if (xInputExpr.size() != yInputExpr.size()){
@@ -438,10 +438,10 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const MIPExpression& xInputExpr, const MIPExpression& yInputExpr,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
-                                      MIPVariable2D& weight,
-                                      MIPVariable1D& xSOS,
-                                      MIPVariable1D& ySOS,
-                                      MIPVariable1D& diagSOS){
+                                      MIPVariable2D weight,
+                                      MIPVariable1D xSOS,
+                                      MIPVariable1D ySOS,
+                                      MIPVariable1D diagSOS){
     try{
         // check data
         if (xTable.size() != zTable.size()){
@@ -579,10 +579,10 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPData1D& xInputData, const MIPData1D& yInputData,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type, const bool& relaxedForm,
-                                        MIPVariable3D& weight,
-                                        MIPVariable2D& xSOS,
-                                        MIPVariable2D& ySOS,
-                                        MIPVariable2D& diagSOS){
+                                        MIPVariable3D weight,
+                                        MIPVariable2D xSOS,
+                                        MIPVariable2D ySOS,
+                                        MIPVariable2D diagSOS){
     MIPExpression1D xInputExpr;
     MIPExpression1D yInputExpr;
 
@@ -637,10 +637,10 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const double& xInputData, const double& yInputData,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
-                                      MIPVariable2D& weight,
-                                      MIPVariable1D& xSOS,
-                                      MIPVariable1D& ySOS,
-                                      MIPVariable1D& diagSOS){
+                                      MIPVariable2D weight,
+                                      MIPVariable1D xSOS,
+                                      MIPVariable1D ySOS,
+                                      MIPVariable1D diagSOS){
     MIPExpression xInputExpr = xInputData;
     MIPExpression yInputExpr = yInputData;
 
@@ -713,10 +713,10 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const MIPVariable0D& xInputVar, const MIPVariable0D& yInputVar,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
-                                      MIPVariable2D& weight,
-                                      MIPVariable1D& xSOS,
-                                      MIPVariable1D& ySOS,
-                                      MIPVariable1D& diagSOS){
+                                      MIPVariable2D weight,
+                                      MIPVariable1D xSOS,
+                                      MIPVariable1D ySOS,
+                                      MIPVariable1D diagSOS){
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
     MIPExpression yInputExpr;
