@@ -17,14 +17,14 @@ if "%OPTION%" == "debug" (
 set extension=_debug
 )
 
-if not exist setDepsPath.bat (
+
+if /i "%SOLVER_DEPS%" == "" call setDepsPath
+if "%SOLVER_DEPS%" == "" (
    echo command file setDepsPath.bat missing in directory
    echo You have to create one by copying setDepsPath.bat.exemple to setDepsPath.bat
    echo Then change the SOLVER_DEPS and PERSEE_APP variable in setDepsPath.bat
    EXIT /B 1
 )
-
-call setDepsPath
 
 echo " Solver_deps = %SOLVER_DEPS%"
 ::set SOLVER_DEPS=%PEGASE_ROOT%/Deps/External
@@ -32,14 +32,18 @@ echo " Solver_deps = %SOLVER_DEPS%"
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem Path for Qt - for compilation using jom !
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-call %~dp0\QtEnv.bat
 
-set PEGASE_MPC_HOME=%~dp0
+set MIPMODELER_HOME=%~dp0
+:: for upward comaptibility with MIPModeler*.pro
+set PEGASE_MPC_HOME=%MIPMODELER_HOME%
 
-echo "PEGASE_MPC_HOME=%PEGASE_MPC_HOME%"
+echo "MIPMODELER_HOME=%MIPMODELER_HOME%"
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem Path for MILP Solvers
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-call %PEGASE_MPC_HOME%\MIPSolverInterface\OsiEnv.bat
-call %PEGASE_MPC_HOME%\MIPSolverInterface\MosekEnv.bat
-call %PEGASE_MPC_HOME%\MIPSolverInterface\CplexEnv.bat
+call %MIPMODELER_HOME%\QtEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\OsiEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\MosekEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\CplexEnv.bat
+
+set PATH=%MIPMODELER_HOME%\lib\%OPTION%;%PATH%

@@ -8,9 +8,9 @@ ECHO A build mode is required. please enter release or debug
 set /p OPTION=release or debug?:
 )
 
-::if /i "%PEGASE_ROOT%" == "" (
+if /i "%PEGASE_ROOT%" == "" (
 call setDepsPath
-::)
+)
 
 cd %~dp0
 
@@ -18,8 +18,7 @@ cd %~dp0
 
 if "%EXPORT_TO_PEGASE%" == "NO" goto persee
 
-set DEPS_HOME=%PEGASE_ROOT%\Deps
-set EXPORT_DIR=%DEPS_HOME%\External\MIPModelerLib
+set EXPORT_DIR=%PEGASE_ROOT%\Deps\External\MIPModelerLib
 
 set DOC_DIR=%EXPORT_DIR%\doc
 
@@ -64,11 +63,11 @@ copy /Y lib\%OPTION%\MIPMskSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 ::if not /i "%PERSEE_DEPS%" == "" (
 
 :persee
-echo "Saving to PERSEE_DEPS %PERSEE_DEPS%\MIPModelerLib "
-
+set SET PERSEE_DEPS=%PERSEE_APP%\Deps
 set EXPORT_DIR=%PERSEE_DEPS%\MIPModelerLib
-
 set DOC_DIR=%EXPORT_DIR%\doc
+
+echo "Exporting to %EXPORT_DIR% "
 
 copy /Y MIPModelerEnv_build.bat   %EXPORT_DIR%\
 
