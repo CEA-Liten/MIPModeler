@@ -61,42 +61,42 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                           const MIPData1D& xTable, const MIPData1D& yTable,
                                           const MIPLinearType& type = MIP_SOS,
                                           const bool& relaxedForm = false,
-                                          const MIPVariable2D& xSOS = MIPVariable2D());
+                                          MIPVariable2D xSOS = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPExpression& xInputExpr,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable1D& xSOS = MIPVariable1D());
+                                        MIPVariable1D xSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPData1D& xInputData,
                                           const MIPData1D& xTable, const MIPData1D& yTable,
                                           const MIPLinearType& type  = MIP_SOS,
                                           const bool& relaxedForm = false,
-                                          const MIPVariable2D& xSOS  = MIPVariable2D());
+                                          MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const double& xInputData,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type  = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable1D& xSOS  = MIPVariable1D());
+                                        MIPVariable1D xSOS  = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPVariable1D& xInputVar,
                                           const MIPData1D& xTable, const MIPData1D& yTable,
                                           const MIPLinearType& type  = MIP_SOS,
                                           const bool& relaxedForm = false,
-                                          const MIPVariable2D& xSOS  = MIPVariable2D());
+                                          MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPVariable0D& xInputVar,
                                         const MIPData1D& xTable, const MIPData1D& yTable,
                                         const MIPLinearType& type  = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable1D& xSOS  = MIPVariable1D());
+                                        MIPVariable1D xSOS  = MIPVariable1D());
 /*
  MIPTriMeshLinearisation
  version 1.0
@@ -126,10 +126,10 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable3D& weight = MIPVariable3D(),
-                                        const MIPVariable2D& xSOS = MIPVariable2D(),
-                                        const MIPVariable2D& ySOS = MIPVariable2D(),
-                                        const MIPVariable2D& diagSOS = MIPVariable2D());
+                                        MIPVariable3D weight = MIPVariable3D(),
+                                        MIPVariable2D xSOS = MIPVariable2D(),
+                                        MIPVariable2D ySOS = MIPVariable2D(),
+                                        MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPTriMeshLinearisation(MIPModel& model,
@@ -137,20 +137,20 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
                                       const bool& relaxedForm = false,
-                                      const MIPVariable2D& weight = MIPVariable2D(),
-                                      const MIPVariable1D& xSOS = MIPVariable1D(),
-                                      const MIPVariable1D& ySOS = MIPVariable1D(),
-                                      const MIPVariable1D& diagSOS = MIPVariable1D());
+                                      MIPVariable2D weight = MIPVariable2D(),
+                                      MIPVariable1D xSOS = MIPVariable1D(),
+                                      MIPVariable1D ySOS = MIPVariable1D(),
+                                      MIPVariable1D diagSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPData1D& xInputData, const MIPData1D& yInputData,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable3D& weight = MIPVariable3D(),
-                                        const MIPVariable2D& xSOS = MIPVariable2D(),
-                                        const MIPVariable2D& ySOS = MIPVariable2D(),
-                                        const MIPVariable2D& diagSOS = MIPVariable2D());
+                                        MIPVariable3D weight = MIPVariable3D(),
+                                        MIPVariable2D xSOS = MIPVariable2D(),
+                                        MIPVariable2D ySOS = MIPVariable2D(),
+                                        MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPTriMeshLinearisation(MIPModel& model,
@@ -158,20 +158,20 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
                                       const bool& relaxedForm = false,
-                                      const MIPVariable2D& weight = MIPVariable2D(),
-                                      const MIPVariable1D& xSOS = MIPVariable1D(),
-                                      const MIPVariable1D& ySOS = MIPVariable1D(),
-                                      const MIPVariable1D& diagSOS = MIPVariable1D());
+                                      MIPVariable2D weight = MIPVariable2D(),
+                                      MIPVariable1D xSOS = MIPVariable1D(),
+                                      MIPVariable1D ySOS = MIPVariable1D(),
+                                      MIPVariable1D diagSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPVariable1D& xInputVar, const MIPVariable1D& yInputVar,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
                                         const bool& relaxedForm = false,
-                                        const MIPVariable3D& weight = MIPVariable3D(),
-                                        const MIPVariable2D& xSOS = MIPVariable2D(),
-                                        const MIPVariable2D& ySOS = MIPVariable2D(),
-                                        const MIPVariable2D& diagSOS = MIPVariable2D());
+                                        MIPVariable3D weight = MIPVariable3D(),
+                                        MIPVariable2D xSOS = MIPVariable2D(),
+                                        MIPVariable2D ySOS = MIPVariable2D(),
+                                        MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPTriMeshLinearisation(MIPModel& model,
@@ -179,10 +179,10 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
                                       const bool& relaxedForm = false,
-                                      const MIPVariable2D& weight = MIPVariable2D(),
-                                      const MIPVariable1D& xSOS = MIPVariable1D(),
-                                      const MIPVariable1D& ySOS = MIPVariable1D(),
-                                      const MIPVariable1D& diagSOS = MIPVariable1D());
+                                      MIPVariable2D weight = MIPVariable2D(),
+                                      MIPVariable1D xSOS = MIPVariable1D(),
+                                      MIPVariable1D ySOS = MIPVariable1D(),
+                                      MIPVariable1D diagSOS = MIPVariable1D());
 }
 
 #endif // MIPUTILS_H
