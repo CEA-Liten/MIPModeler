@@ -63,7 +63,7 @@ copy /Y lib\%OPTION%\MIPMskSolver*.dll  %EXPORT_DIR%\lib\%OPTION%\
 ::if not /i "%PERSEE_DEPS%" == "" (
 
 :persee
-set SET PERSEE_DEPS=%PERSEE_APP%\Deps
+set PERSEE_DEPS=%PERSEE_APP%\Deps
 set EXPORT_DIR=%PERSEE_DEPS%\MIPModelerLib
 set DOC_DIR=%EXPORT_DIR%\doc
 
