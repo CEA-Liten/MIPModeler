@@ -10,7 +10,7 @@ if "%OPTION%" == "" set /p OPTION=debug or release expected
 if not "%OPTION%"=="debug" if not "%OPTION%"=="release" goto error_option 
 
 REM Do we need to Set path for Visual CPP compiler
-echo %PATH% | findstr "Visual Studio 14" > file.txt
+echo %PATH% | findstr "Visual" > file.txt
 
 (Call :notEmpty file.txt && (
     Echo the file is not empty
