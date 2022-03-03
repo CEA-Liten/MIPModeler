@@ -6,13 +6,13 @@ rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 cd %~dp0
 
 ::set extension=_debug
-
-call MIPModelerEnv.bat
+call QtEnv.bat
+call MIPModelerEnv_build.bat
 
 rem set COMPONENTS_PATH=%APP_HOME%
 rem set QML_IMPORT_TRACE=1
 
 ::start C:\Qt\Qt5.14.0\Tools\QtCreator\bin\qtcreator.exe
-start C:\Qt\Qt5.14.1\Tools\QtCreator\bin\qtcreator.exe
+start qtcreator.exe
 exit
 
