@@ -141,7 +141,15 @@ void MIPModel::buildProblem() {
 }
 // --------------------------------------------------------------------------
 MIPModel::~MIPModel() {
-
+    delete (mObjectiveCoefficients) ;
+    mColIntegers.clear();
+    mColLowerBounds.clear();
+    mColUpperBounds.clear();
+    mWarmStarts.clear();
+    mRhs.clear();
+    mSense.clear();
+    mColNames.clear();
+    mRowNames.clear();
 }
 //---------------------------------------------------------------------------
 }
