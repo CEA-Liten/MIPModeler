@@ -21,7 +21,8 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mGap(GAP),
       mThreads(THREADS),
       mLpFile(false),
-      mSolverPrint(CPX_ON)
+      mSolverPrint(CPX_ON),
+      mLocation("cplex_optim.log")
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -44,6 +45,11 @@ void MIPCpxSolver::setGap(const double& gap){
 void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
+
+void MIPCpxSolver::setLocation(const char *location)
+{
+    mLocation = location ;
+}
 // --------------------------------------------------------------------------
 void MIPCpxSolver::writeLp() {
     mLpFile = true;
@@ -64,9 +70,10 @@ void MIPCpxSolver::solve() {
         std::cerr <<"CPXopenCPLEX: Failed to open Cplex env. " << errmsg <<std::endl;
         return;
     }
-//    char const *filename = 'cplex.log' ;
+    char const *filename = mLocation ;
 //    char const *mode ;
-    CPXsetlogfilename (env, "cplex_optim.log", "w");
+    std::cout << "Writting to location file " << *filename ;
+    CPXsetlogfilename (env, filename, "w");
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);

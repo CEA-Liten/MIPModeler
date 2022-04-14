@@ -29,6 +29,7 @@ public:
     void setTimeLimit(const double& timeLimit);
     void setGap(const double& gap);
     void setThreads(const int& threads);
+    void setLocation(const char* location);
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution;}
     double getObjectiveValue() const {return mObjectiveValue;}
@@ -48,6 +49,8 @@ private:
     int mThreads;
     bool mLpFile;
     bool mSolverPrint;
+
+    const char* mLocation ;
 };
 
 }
