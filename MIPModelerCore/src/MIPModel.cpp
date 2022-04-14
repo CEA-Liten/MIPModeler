@@ -6,6 +6,7 @@
 */
 
 #include "MIPModel.h"
+#include <QDebug>
 
 namespace MIPModeler {
 // --------------------------------------------------------------------------
@@ -141,7 +142,12 @@ void MIPModel::buildProblem() {
 }
 // --------------------------------------------------------------------------
 MIPModel::~MIPModel() {
-    delete (mObjectiveCoefficients) ;
+
+    if (mNumCols > 0)
+      delete [] mObjectiveCoefficients ;
+    if (mNumRows > 0)
+       delete [] mLengths ;
+
     mColIntegers.clear();
     mColLowerBounds.clear();
     mColUpperBounds.clear();
