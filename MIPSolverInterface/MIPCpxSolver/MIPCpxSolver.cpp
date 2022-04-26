@@ -22,7 +22,7 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mThreads(THREADS),
       mLpFile(false),
       mSolverPrint(CPX_ON),
-      mLocation("cplex_optim.log")
+      mLocation("cplex")
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -70,9 +70,14 @@ void MIPCpxSolver::solve() {
         std::cerr <<"CPXopenCPLEX: Failed to open Cplex env. " << errmsg <<std::endl;
         return;
     }
-    char const *filename = mLocation ;
+    std::string optimFile = mLocation ;
+    optimFile += "_optim.log";
+    char* stdLocation ;
+    stdLocation = new char [optimFile.size()+1];
+    std::strcpy( stdLocation, optimFile.c_str() );
+    char const *filename = stdLocation ;
 //    char const *mode ;
-    std::cout << "Writting to location file " << *filename ;
+//    std::cout << "Writting to location file " << *filename ;
     CPXsetlogfilename (env, filename, "w");
 
     // show solving information
@@ -232,7 +237,16 @@ void MIPCpxSolver::solve() {
 
         //write .lp file for debugg
         if (mLpFile)
-            CPXwriteprob(env, lp, "cplex_model.lp", NULL);
+        {
+            std::string optimFile = mLocation ;
+            optimFile += "_model.lp";
+            char* stdLocation ;
+            stdLocation = new char [optimFile.size()+1];
+            std::strcpy( stdLocation, optimFile.c_str() );
+            char const *filename = stdLocation ;
+
+            CPXwriteprob(env, lp, filename, NULL);
+        }
 
         //set mip parameters
         if (mModel->isMip()) {
