@@ -10,6 +10,7 @@
 #include "cplex.h"
 #include "MIPModeler.h"
 #include <iostream>
+#include <QtCore>
 
 #ifndef MIPCPXSOLVER_H
 #define MIPCPXSOLVER_H
@@ -49,6 +50,7 @@ private:
     int mThreads;
     bool mLpFile;
     bool mSolverPrint;
+
 
     const char* mLocation ;
 };

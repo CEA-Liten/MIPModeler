@@ -50,6 +50,7 @@ void MIPCpxSolver::setLocation(const char *location)
 {
     mLocation = location ;
 }
+
 // --------------------------------------------------------------------------
 void MIPCpxSolver::writeLp() {
     mLpFile = true;
@@ -267,6 +268,14 @@ void MIPCpxSolver::solve() {
             if (status){
                 std::cout<<"Failed to set Cplex number of threads"<<std::endl;
             }
+            std::string paramFile = mLocation ;
+            paramFile += "_cplexParam.prm";
+            char* stdLocation ;
+            stdLocation = new char [paramFile.size()+1];
+            std::strcpy( stdLocation, paramFile.c_str() );
+            char const *filename = stdLocation ;
+
+            CPXreadcopyparam(env, filename);
         }
 
         //solve mip or lp depending on problem type
