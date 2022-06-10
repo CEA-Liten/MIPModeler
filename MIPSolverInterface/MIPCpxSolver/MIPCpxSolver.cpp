@@ -22,7 +22,9 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mThreads(THREADS),
       mLpFile(false),
       mSolverPrint(CPX_ON),
-      mLocation("cplex")
+      mLocation("cplex"),
+      mWriteMipStart(false),
+      mFileMipStart("")
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -41,6 +43,10 @@ void MIPCpxSolver::setGap(const double& gap){
     mGap = gap;
 }
 // --------------------------------------------------------------------------
+void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
+    mFileMipStart = mipStartFile;
+}
+// --------------------------------------------------------------------------
 
 void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
@@ -54,6 +60,10 @@ void MIPCpxSolver::setLocation(const char *location)
 // --------------------------------------------------------------------------
 void MIPCpxSolver::writeLp() {
     mLpFile = true;
+}
+// --------------------------------------------------------------------------
+void MIPCpxSolver::writeMipStart() {
+    mWriteMipStart = true;
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::solve() {
@@ -230,6 +240,7 @@ void MIPCpxSolver::solve() {
             }
         }
 
+
         //set objective direction
         if (mModel->getObjectiveDirection() == MIPModeler::MIP_MAXIMIZE)
             CPXchgobjsen(env, lp, CPX_MAX);
@@ -248,7 +259,9 @@ void MIPCpxSolver::solve() {
 
             CPXwriteprob(env, lp, filename, NULL);
         }
-
+        if(mFileMipStart!=""){
+            status = CPXreadcopymipstarts(env,lp,mFileMipStart);
+        }
         //set mip parameters
         if (mModel->isMip()) {
             //set gap limit
@@ -262,7 +275,7 @@ void MIPCpxSolver::solve() {
             if (status){
                  std::cout<<"Failed to set Cplex time limit"<<std::endl;
             }
-
+            status = CPXsetdblparam(env,CPXPARAM_MIP_Limits_TreeMemory,50000);
             // set number of threads
             status = CPXsetintparam(env, CPXPARAM_Threads, mThreads);
             if (status){
@@ -325,6 +338,16 @@ void MIPCpxSolver::solve() {
         }
         else{
             mOptimisationStatus = "Unknown";
+        }
+        if (mWriteMipStart){
+            std::string mipStartFile = mLocation ;
+            mipStartFile += "_mipstart.mst";
+            char* stdLocation ;
+            stdLocation = new char [mipStartFile.size()+1];
+            std::strcpy( stdLocation, mipStartFile.c_str() );
+            char const *filename = stdLocation ;
+
+            CPXwritemipstarts(env, lp, filename, 0,0);
         }
 
         mObjectiveValue = objval;

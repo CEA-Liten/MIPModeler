@@ -25,12 +25,14 @@ public:
 // --------------------------------------------------------------------------
     void solve();
     void writeLp();
+    void writeMipStart();
 // --------------------------------------------------------------------------
     void setSolverPrint(const bool& solverPrint);
     void setTimeLimit(const double& timeLimit);
     void setGap(const double& gap);
     void setThreads(const int& threads);
     void setLocation(const char* location);
+    void setFileMipStart(const char* mipStartFile);
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution;}
     double getObjectiveValue() const {return mObjectiveValue;}
@@ -44,12 +46,15 @@ private:
     double mObjectiveValue;
     double mLpValue;
     std::string mOptimisationStatus;
+    const char* mFileMipStart;
 
     double mTimeLimit;
     double mGap;
     int mThreads;
     bool mLpFile;
     bool mSolverPrint;
+    bool mWriteMipStart;
+
 
 
     const char* mLocation ;
