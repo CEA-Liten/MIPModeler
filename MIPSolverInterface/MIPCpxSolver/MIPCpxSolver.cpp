@@ -24,7 +24,8 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mSolverPrint(CPX_ON),
       mLocation("cplex"),
       mWriteMipStart(false),
-      mFileMipStart("")
+      mFileMipStart(""),
+      mReadParamFile(false)
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -42,6 +43,11 @@ void MIPCpxSolver::setTimeLimit(const double& timeLimit) {
 void MIPCpxSolver::setGap(const double& gap){
     mGap = gap;
 }
+// --------------------------------------------------------------------------
+void MIPCpxSolver::setReadParamFile(){
+    mReadParamFile = true;
+}
+
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
     mFileMipStart = mipStartFile;
@@ -281,14 +287,16 @@ void MIPCpxSolver::solve() {
             if (status){
                 std::cout<<"Failed to set Cplex number of threads"<<std::endl;
             }
-            std::string paramFile = mLocation ;
-            paramFile += "_cplexParam.prm";
-            char* stdLocation ;
-            stdLocation = new char [paramFile.size()+1];
-            std::strcpy( stdLocation, paramFile.c_str() );
-            char const *filename = stdLocation ;
+            if(mReadParamFile){
+                std::string paramFile = mLocation ;
+                paramFile += "_cplexParam.prm";
+                char* stdLocation ;
+                stdLocation = new char [paramFile.size()+1];
+                std::strcpy( stdLocation, paramFile.c_str() );
+                char const *filename = stdLocation ;
 
-            CPXreadcopyparam(env, filename);
+                CPXreadcopyparam(env, filename);
+            }
         }
 
         //solve mip or lp depending on problem type
