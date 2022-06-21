@@ -270,6 +270,16 @@ void MIPCpxSolver::solve() {
         }
         //set mip parameters
         if (mModel->isMip()) {
+            if(mReadParamFile){
+                std::string paramFile = mLocation ;
+                paramFile += "_cplexParam.prm";
+                char* stdLocation ;
+                stdLocation = new char [paramFile.size()+1];
+                std::strcpy( stdLocation, paramFile.c_str() );
+                char const *filename = stdLocation ;
+
+                CPXreadcopyparam(env, filename);
+            }
             //set gap limit
             status = CPXsetdblparam(env, CPX_PARAM_EPGAP, mGap);
             if (status){
@@ -287,16 +297,7 @@ void MIPCpxSolver::solve() {
             if (status){
                 std::cout<<"Failed to set Cplex number of threads"<<std::endl;
             }
-            if(mReadParamFile){
-                std::string paramFile = mLocation ;
-                paramFile += "_cplexParam.prm";
-                char* stdLocation ;
-                stdLocation = new char [paramFile.size()+1];
-                std::strcpy( stdLocation, paramFile.c_str() );
-                char const *filename = stdLocation ;
 
-                CPXreadcopyparam(env, filename);
-            }
         }
 
         //solve mip or lp depending on problem type
