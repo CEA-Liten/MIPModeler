@@ -8,3 +8,5 @@ set PERSEE_APP=F:\Persee_Project\Persee_Integration\PerseeGui
 
 ::Do /Do not export to Pegase
 set EXPORT_TO_PEGASE=NO
+
+rem PEGASE_ROOT= chemin vers pegase (pour export des dll)
