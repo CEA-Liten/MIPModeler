@@ -345,6 +345,9 @@ void MIPCpxSolver::solve() {
                  lpstat == CPX_STAT_FEASIBLE){
             mOptimisationStatus = "Best Feasible";
         }
+        else if (lpstat == CPXMIP_MEM_LIM_FEAS){
+            mOptimisationStatus = "Best Feasible (TreeMemoryLimit Reached)";
+        }
         else{
             mOptimisationStatus = "Unknown";
         }
