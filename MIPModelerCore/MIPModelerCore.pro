@@ -16,6 +16,7 @@ SOURCES += \
         src/MIPConstraint.cpp \
         src/MIPExpression.cpp \
         src/MIPModel.cpp \
+        src/MIPSubobjective.cpp \
         src/MIPVariable0D.cpp \
         src/MIPVariable1D.cpp \
         src/MIPVariable2D.cpp \
@@ -36,7 +37,8 @@ HEADERS += \
         include/MIPSpecialOrderedSet.h \
         include/MIPUtils.h \
         include/MIPModeler.h \
-        include/MIPWarmStart.h
+        include/MIPWarmStart.h \
+        include/MIPSubobjective.h
 
 DEFINES += MIPMODELER_LIBRARY
 DEFINES += EIGEN_MPL2_ONLY
