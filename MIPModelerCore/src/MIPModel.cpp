@@ -16,7 +16,8 @@ MIPModel::MIPModel(const std::string& modelName)
       mNumIntegerCols(0),
       mObjectiveDirection(MIP_MINIMIZE),
       mProblemBuilt(false),
-      mModelName(modelName)
+      mModelName(modelName),
+      mNumObj(0)
 {
 
 }
@@ -25,10 +26,21 @@ void MIPModel::setObjective(const MIPExpression& objective,
                             const  MIPDirection& objectiveDirection) {
     mObjectiveExpression = objective;
     mObjectiveDirection = objectiveDirection;
+    mNumObj += 1;
+    std::string strName = "FirstObj";
+    MIPSubobjective subObj(strName);
+    double tol = 1;
+    subObj.setSubObjective(mObjectiveExpression,mObjectiveDirection,0,tol,tol); //TODO : changer tolérances
+    mListSubobjectives.insert(mListSubobjectives.begin(),subObj);
 }
 //---------------------------------------------------------------------------
 void MIPModel::setObjectiveDirection(const MIPDirection& objectiveDirection){
     mObjectiveDirection = objectiveDirection;
+}
+//---------------------------------------------------------------------------
+void MIPModel::addSubobjective(MIPSubobjective &subobj){
+    mListSubobjectives.push_back(subobj);
+    mNumObj += 1;
 }
 // --------------------------------------------------------------------------
 bool MIPModel::isMip() {
@@ -111,8 +123,27 @@ void MIPModel::buildProblem() {
     double* value = sprarseMatrixObjective.valuePtr();
     int* idx = sprarseMatrixObjective.innerIndexPtr();
     mObjectiveCoefficients = new double[mNumCols]();
-    for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++)
+    for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
         mObjectiveCoefficients[idx[i]] = value[i];
+    }
+
+    // subobjective information
+    if(mNumObj>1){
+        for(int j = 0; j<mNumObj; j++){
+            std::list<Node> objectiveNodes = mListSubobjectives[j].getSubObjectiveExpression().getNode();
+            int nbNodes = objectiveNodes.size();
+            mSubObjNz.push_back(nbNodes);
+            mSubObjIndices.push_back(new int[nbNodes]());
+            mSubObjCoeff.push_back(new double[nbNodes]());
+            int i=0;
+            std::list<Node>::iterator it = objectiveNodes.begin();
+            for (; it != objectiveNodes.end(); it++){
+                mSubObjIndices[j][i] = it->col();
+                mSubObjCoeff[j][i] = it->value();
+                i++;
+            }
+        }
+    }
 
     //constraint matrix information
     mRhs.reserve(mNumRows);
