@@ -14,6 +14,7 @@
 #include "MIPVariable3D.h"
 #include "MIPExpression.h"
 #include "MIPConstraint.h"
+#include "MIPSubobjective.h"
 #include "MIPSpecialOrderedSet.h"
 #include "MIPWarmStart.h"
 #include <Eigen/SparseCore>
@@ -31,6 +32,7 @@ class MIPExpression;
 class MIPConstraint;
 class MIPSpecialOrderedSet;
 class MIPWarmStart;
+class MIPSubobjective;
 
 #ifndef MIPDIRECTION
 #define MIPDIRECTION
@@ -64,6 +66,7 @@ public:
     void setObjective(const MIPExpression& objective = MIPExpression(),
                       const MIPDirection& objectiveDirection = MIP_MINIMIZE);
     void setObjectiveDirection(const MIPDirection& objectiveDirection);
+    void addSubobjective(MIPSubobjective& subobj);
 // --------------------------------------------------------------------------
     int getNumCols() const {return mNumCols;}
     int getNumRows() const {return mNumRows;}
@@ -87,6 +90,10 @@ public:
     const int* getColIntegers() const {return (mNumIntegerCols>0 ? mColIntegers.data(): nullptr);}
     const double* getRhs() const {return mRhs.data();}
     const char* getSense() const {return mSense.data();}
+    const int* getNumSubobj() const {return  &mNumObj;}
+    const std::vector<MIPSubobjective> getListSubobjectives() const {return mListSubobjectives;}
+    const std::vector<double*> getSubobjectiveCoefficients() const {return mSubObjCoeff;}
+    const std::vector<int*> getSubobjectiveIndices() const {return mSubObjIndices;}
 // --------------------------------------------------------------------------
 private:
     MIPExpression mObjectiveExpression;
@@ -95,11 +102,13 @@ private:
     std::list<MIPConstraint> mConstraints;
     std::vector<MIPSpecialOrderedSet> mSOS;
     std::vector<MIPSOSType> mSOSType;
+    std::vector<MIPSubobjective> mListSubobjectives;
 
     int mNumCols;
     int mNumIntegerCols;
     int mNumRows;
     int mNumNonZeroElements;
+    int mNumObj;
 
     std::vector<int> mColIntegers;
     std::vector<double> mColLowerBounds;
@@ -112,6 +121,12 @@ private:
 
     double* mObjectiveCoefficients;
     double* mNonZeroElements;
+    std::vector<int> mSubObjNz;
+    int mObjNz;
+    std::vector<int*> mSubObjIndices;
+    int* mObjIndices;
+    double* mObjCoeff;
+    std::vector<double*> mSubObjCoeff;
     int* mIndexes;
     int* mStartIndexes;
     int* mLengths;
