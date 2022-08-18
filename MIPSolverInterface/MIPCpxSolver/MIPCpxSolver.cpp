@@ -136,7 +136,36 @@ void MIPCpxSolver::solve() {
             std::cerr<<"CPXnewcols: Failed when creating variables"<<std::endl;
             return;
         }
+        //add subobjectives
+        if(*(mModel->getNumSubobj())>1){
+            CPXsetnumobjs (env, lp, *(mModel->getNumSubobj()));
+            for(int i = 0 ; i< *(mModel->getNumSubobj()); i++){
+                MIPModeler::MIPSubobjective subObj = mModel->getListSubobjectives()[i];
+                std::string name(subObj.getName());
+                char* charName = new char[name.length() + 1];
+                std::copy(name.begin(), name.end(), charName);
+                int rank = subObj.getRank();
+                int cpxNumObj = CPXgetnumobjs(env,lp);
+                if (rank >= cpxNumObj){
+                    rank = cpxNumObj-1;
+                }
+                status = CPXmultiobjsetobj(env,lp,
+                                           subObj.getRank(),
+                                           subObj.getSubObjectiveExpression().getNode().size(),
+                                           mModel->getSubobjectiveIndices()[i],
+                                           mModel->getSubobjectiveCoefficients()[i],
+                                           subObj.getSubObjectiveExpression().getConstPart(),
+                                           1,
+                                           subObj.getRank(),
+                                           subObj.getAbsTol(),
+                                           subObj.getRelTol(),
+                                           charName);
+                if (status){
+                    std::cerr<<"CPXmutliobjsetobj: Failed when creating subobj"<<name<<std::endl;
+                }
+            }
 
+        }
         //create constraints
         int numRows = mModel->getNumRows();
         std::vector<std::string> cntNames = mModel->getRowNames();
@@ -301,12 +330,20 @@ void MIPCpxSolver::solve() {
         }
 
         //solve mip or lp depending on problem type
-        status = CPXmipopt(env, lp);
-        if ( status ){
-            std::cerr<<"CPXmipopt: Failed when solving optimisation problem"<<std::endl;
-            return;
-         }
-
+        if(*(mModel->getNumSubobj())>1){
+            status = CPXmultiobjopt(env,lp,NULL);
+            if ( status ){
+                std::cerr<<"CPXmipopt: Failed when solving mutliobj optimisation problem"<<std::endl;
+                return;
+             }
+        }
+        else{
+            status = CPXmipopt(env, lp);
+            if ( status ){
+                std::cerr<<"CPXmipopt: Failed when solving optimisation problem"<<std::endl;
+                return;
+             }
+        }
         double* x = (double*)malloc( numCols * sizeof(double) );
         double objval;
         int lpstat;
