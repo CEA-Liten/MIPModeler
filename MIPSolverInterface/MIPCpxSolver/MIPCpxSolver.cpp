@@ -7,7 +7,7 @@
 
 
 #include "MIPCpxSolver.h"
-
+#include <cstring>
 // --------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8
 #define GAP 1e-4
@@ -143,7 +143,7 @@ void MIPCpxSolver::solve() {
                 MIPModeler::MIPSubobjective subObj = mModel->getListSubobjectives()[i];
                 std::string name(subObj.getName());
                 char* charName = new char[name.length() + 1];
-                std::copy(name.begin(), name.end(), charName);
+                strcpy(charName, name.c_str());
                 int rank = subObj.getRank();
                 int cpxNumObj = CPXgetnumobjs(env,lp);
                 if (rank >= cpxNumObj){
@@ -357,7 +357,8 @@ void MIPCpxSolver::solve() {
 
         if (lpstat == CPX_STAT_OPTIMAL ||
             lpstat == CPXMIP_OPTIMAL ||
-            lpstat == CPXMIP_OPTIMAL_TOL){
+            lpstat == CPXMIP_OPTIMAL_TOL ||
+            lpstat == CPX_STAT_MULTIOBJ_OPTIMAL){
             mOptimisationStatus = "Optimal";
         }
         else if (lpstat == CPX_STAT_NUM_BEST){
