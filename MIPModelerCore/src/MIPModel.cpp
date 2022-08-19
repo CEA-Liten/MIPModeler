@@ -187,6 +187,7 @@ MIPModel::~MIPModel() {
     mSense.clear();
     mColNames.clear();
     mRowNames.clear();
+    mListSubobjectives.clear();
 }
 //---------------------------------------------------------------------------
 }
