@@ -27,12 +27,12 @@ public:
                          int objectiveDirection,
                          int rankObjective, double& abstol,
                          double& reltol);
-    MIPExpression getSubObjectiveExpression(){return mSubObjectiveExpression;};
-    int getObjectiveDirection(){return mObjectiveDirection;}
-    double getAbsTol(){return mAbsTol;}
-    double getRelTol(){return mRelTol;}
-    int getRank(){return mRank;}
-    std::string getName(){return mNameSubObj;}
+    MIPExpression const getSubObjectiveExpression(){return mSubObjectiveExpression;};
+    int getObjectiveDirection() const {return mObjectiveDirection;}
+    double getAbsTol() const {return mAbsTol;}
+    double getRelTol() const {return mRelTol;}
+    int getRank() const {return mRank;}
+    std::string const getName() const {return mNameSubObj;}
 private:
     MIPExpression mSubObjectiveExpression;
     std::string mNameSubObj;
