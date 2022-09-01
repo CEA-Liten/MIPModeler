@@ -57,7 +57,11 @@ void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
 void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
-
+// --------------------------------------------------------------------------
+void MIPCpxSolver::setNumberOfSolutions(const int &numberOfSolutions){
+    mNumberOfSolutions = numberOfSolutions;
+}
+// --------------------------------------------------------------------------
 void MIPCpxSolver::setLocation(const char *location)
 {
     mLocation = location ;
@@ -331,6 +335,7 @@ void MIPCpxSolver::solve() {
 
         //solve mip or lp depending on problem type
         if(*(mModel->getNumSubobj())>1){
+            status = CPXsetintparam(env,CPXPARAM_MultiObjective_Display,2);
             status = CPXmultiobjopt(env,lp,NULL);
             if ( status ){
                 std::cerr<<"CPXmipopt: Failed when solving mutliobj optimisation problem"<<std::endl;
@@ -407,6 +412,19 @@ void MIPCpxSolver::solve() {
         if ( status ){
             std::cerr <<"CPXgetbestobjval: Failed when getting best possible obj"<<std::endl;
             return;
+        }
+
+        mNbSolutionsGardees = CPXgetsolnpoolnumsolns(env,lp);
+        std::cout <<"Number of solutions:"<< mNbSolutionsGardees<<std::endl;
+        int n = (mNumberOfSolutions);
+        if (n>mNbSolutionsGardees)
+            n=mNbSolutionsGardees;
+        for(int i=0; i<n;i++){
+            mOtherSolutions.push_back((double*)malloc( numCols * sizeof(double) ));
+            status = CPXgetsolnpoolx(env,lp, 0, mOtherSolutions[i], 0,numCols-1);
+            mObjectiveOtherSolutions.push_back(0);
+            CPXgetsolnpoolobjval(env,lp,0,&mObjectiveOtherSolutions[i]);
+            std::cout <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i]<<std::endl;
         }
     }
 
