@@ -58,8 +58,8 @@ void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
 // --------------------------------------------------------------------------
-void MIPCpxSolver::setNumberOfSolutions(const int &numberOfSolutions){
-    mNumberOfSolutions = numberOfSolutions;
+void MIPCpxSolver::setMaxNumberOfSolutions(const int &maxNumberOfSolutions){
+    mMaxNumberOfSolutions = maxNumberOfSolutions;
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setLocation(const char *location)
@@ -414,16 +414,20 @@ void MIPCpxSolver::solve() {
             return;
         }
 
-        mNbSolutionsGardees = CPXgetsolnpoolnumsolns(env,lp);
-        std::cout <<"Number of solutions:"<< mNbSolutionsGardees<<std::endl;
-        int n = (mNumberOfSolutions);
-        if (n>mNbSolutionsGardees)
-            n=mNbSolutionsGardees;
-        for(int i=0; i<n;i++){
+        int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);
+        std::cout <<"Number of solutions trouvees:"<< nbSolTrouvees<<std::endl;
+        if (nbSolTrouvees>mMaxNumberOfSolutions)
+            mNbSolutionsGardees=mMaxNumberOfSolutions;
+        else{
+            mNbSolutionsGardees=nbSolTrouvees;
+        }
+        std::cout <<"Number max of solutions gardees:"<< mMaxNumberOfSolutions<<std::endl;
+        std::cout <<"Number of solutions gardees:"<< mNbSolutionsGardees<<std::endl;
+        for(int i=0; i<mNbSolutionsGardees;i++){
             mOtherSolutions.push_back((double*)malloc( numCols * sizeof(double) ));
-            status = CPXgetsolnpoolx(env,lp, 0, mOtherSolutions[i], 0,numCols-1);
+            status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i], 0,numCols-1);
             mObjectiveOtherSolutions.push_back(0);
-            CPXgetsolnpoolobjval(env,lp,0,&mObjectiveOtherSolutions[i]);
+            CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
             std::cout <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i]<<std::endl;
         }
     }

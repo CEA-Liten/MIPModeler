@@ -33,7 +33,7 @@ public:
     void setThreads(const int& threads);
     void setLocation(const char* location);
     void setFileMipStart(const char* mipStartFile);
-    void setNumberOfSolutions(const int& numberOfSolutions);
+    void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
     void setReadParamFile();
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution;}
@@ -64,7 +64,7 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    bool mNumberOfSolutions;
+    bool mMaxNumberOfSolutions;
 
     const char* mLocation ;
 };
