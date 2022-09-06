@@ -64,7 +64,7 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    bool mMaxNumberOfSolutions;
+    int mMaxNumberOfSolutions;
 
     const char* mLocation ;
 };
