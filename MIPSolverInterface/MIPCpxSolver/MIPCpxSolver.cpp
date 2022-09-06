@@ -59,7 +59,12 @@ void MIPCpxSolver::setThreads(const int& threads) {
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setMaxNumberOfSolutions(const int &maxNumberOfSolutions){
-    mMaxNumberOfSolutions = maxNumberOfSolutions;
+    if (maxNumberOfSolutions>=1){
+        mMaxNumberOfSolutions = maxNumberOfSolutions;
+    }
+    else{
+        mMaxNumberOfSolutions=1;
+    }
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setLocation(const char *location)
