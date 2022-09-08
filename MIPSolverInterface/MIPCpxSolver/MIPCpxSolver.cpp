@@ -8,6 +8,7 @@
 
 #include "MIPCpxSolver.h"
 #include <cstring>
+
 // --------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8
 #define GAP 1e-4
@@ -25,7 +26,8 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mLocation("cplex"),
       mWriteMipStart(false),
       mFileMipStart(""),
-      mReadParamFile(false)
+      mReadParamFile(false),
+      mTerminate(NULL)
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -46,6 +48,14 @@ void MIPCpxSolver::setGap(const double& gap){
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setReadParamFile(){
     mReadParamFile = true;
+}
+
+void MIPCpxSolver::setTerminateSignal(int *terminate){
+    mTerminate=terminate;
+}
+
+int* MIPCpxSolver::getTerminateSignal(){
+    return mTerminate;
 }
 
 // --------------------------------------------------------------------------
@@ -108,6 +118,10 @@ void MIPCpxSolver::solve() {
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);
+
+    //give a pointer to terminate
+
+    status = CPXsetterminate (env, mTerminate);
 
     //create model
     lp = CPXcreateprob(env, &status, "problem");
@@ -375,18 +389,21 @@ void MIPCpxSolver::solve() {
             mOptimisationStatus = "Abandoned";
         }
         else if (lpstat == CPX_STAT_UNBOUNDED ||
-                 lpstat == CPXMIP_UNBOUNDED){
+                 lpstat == CPXMIP_UNBOUNDED ||
+                 lpstat == CPXMIP_ABORT_RELAXATION_UNBOUNDED){
              mOptimisationStatus = "Unbounded";
         }
         else if (lpstat == CPX_STAT_INFEASIBLE ||
                  lpstat == CPX_STAT_INForUNBD ||
                  lpstat == CPXMIP_INForUNBD ||
                  lpstat == CPXMIP_OPTIMAL_INFEAS ||
-                 lpstat == CPXMIP_INFEASIBLE){
+                 lpstat == CPXMIP_INFEASIBLE ||
+                 lpstat == CPXMIP_ABORT_INFEAS){
             mOptimisationStatus = "Infeasible";
         }
         else if (lpstat == CPX_STAT_ABORT_TIME_LIM ||
-                 lpstat == CPXMIP_TIME_LIM_FEAS){
+                 lpstat == CPXMIP_TIME_LIM_FEAS||
+                 lpstat == CPXMIP_ABORT_FEAS ){
             mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
         }
         else if (lpstat == CPXMIP_FEASIBLE ||
@@ -397,7 +414,8 @@ void MIPCpxSolver::solve() {
             mOptimisationStatus = "Best Feasible (TreeMemoryLimit Reached)";
         }
         else{
-            mOptimisationStatus = "Unknown";
+
+            mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
         }
         if (mWriteMipStart){
             std::string mipStartFile = mLocation ;
