@@ -35,6 +35,8 @@ public:
     void setFileMipStart(const char* mipStartFile);
     void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
     void setReadParamFile();
+    void setTerminateSignal(int* terminate);
+    int* getTerminateSignal();
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution;}
     int getNbSolutionsGardees(){return mNbSolutionsGardees;}
@@ -65,6 +67,7 @@ private:
     bool mWriteMipStart;
     bool mReadParamFile;
     int mMaxNumberOfSolutions;
+    int* mTerminate;
 
     const char* mLocation ;
 };
