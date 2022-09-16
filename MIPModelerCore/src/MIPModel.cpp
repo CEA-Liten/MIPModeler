@@ -182,10 +182,10 @@ void MIPModel::buildProblem() {
 // --------------------------------------------------------------------------
 MIPModel::~MIPModel() {
 
-    if (mNumCols > 0)
-      delete [] mObjectiveCoefficients ;
-    if (mNumRows > 0)
-       delete [] mLengths ;
+//    if (mNumCols > 0)
+//      delete [] mObjectiveCoefficients ;
+//    if (mNumRows > 0)
+//       delete [] mLengths ;
 
     mColIntegers.clear();
     mColLowerBounds.clear();
