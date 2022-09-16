@@ -151,8 +151,16 @@ void MIPModel::buildProblem() {
     std::list<Node> constraintNodes;
     std::list<Node> allConstraintNodes;
     std::list<MIPConstraint>::iterator itConstr = mConstraints.begin();
+
     for (; itConstr != mConstraints.end(); itConstr++){
         constraintNodes = itConstr->getExpression().getNode();
+        for (std::list<Node>::iterator it = constraintNodes.begin(); it != constraintNodes.end(); it++)
+        {
+            if (it->row() <0  || it->col() <0)
+            {
+                qDebug()<< " == ERROR constraint == " << QString::fromStdString(itConstr->getName()) << " reference to bad variable " << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
+            }
+        }
         allConstraintNodes.insert(allConstraintNodes.end(),
                                   constraintNodes.begin(), constraintNodes.end());
         mRhs.push_back(itConstr->getConstPart());
