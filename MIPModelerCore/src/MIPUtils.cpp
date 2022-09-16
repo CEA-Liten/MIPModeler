@@ -40,7 +40,7 @@ bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
                 }
             }
 
-            return (convex || concave);
+            return (convex);
         }
     }
     catch(const std::exception& e){
