@@ -15,8 +15,8 @@ equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler Solvers )
 SUBDIRS +=\
 MIPModelerCore\
-#MIPSolverInterface\MIPCbcSolver\
-#MIPSolverInterface\MIPClpSolver\
+MIPSolverInterface\MIPCbcSolver\
+MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
 MIPSolverInterface\MIPMskSolver\
 }
