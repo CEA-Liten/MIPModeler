@@ -6,3 +6,5 @@
 /lib/release
 /lib/debug
 /.qmake.stash
+compile.debug.log
+compile.release.log
