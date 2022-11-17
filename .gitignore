@@ -8,3 +8,10 @@
 /.qmake.stash
 compile.debug.log
 compile.release.log
+/.vs/MIPModeler/v17
+/MIPModelerCore/lib/Debug
+/MIPModelerCore/MIPModelerCore.vcxproj.user
+/MIPSolverInterface/MIPCbcSolver/lib/Debug
+/MIPSolverInterface/MIPCbcSolver/MIPCbcSolver.vcxproj.user
+/MIPSolverInterface/MIPCpxSolver/lib/Debug
+/MIPSolverInterface/MIPCpxSolver/MIPCpxSolver.vcxproj.user
