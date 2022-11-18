@@ -9,40 +9,46 @@ QT       -= gui
 TARGET = MIPModeler
 TEMPLATE = lib
 
-INCLUDEPATH += include
 INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif
 
+DEFINES     += USE_GAMS
+LIBS        += $$(GAMS_HOME)/apifiles/C++/lib/vs2019/gamscpp.lib
+INCLUDEPATH += $$(GAMS_HOME)/apifiles/C++/api
+LIBS        += $$(MIPMODELER_HOME)/lib/$$(OPTION)/GAMSModeler39.lib
+INCLUDEPATH += $$(MIPMODELER_HOME)/GAMSModeler
+
 SOURCES += \
-        src/MIPConstraint.cpp \
-        src/MIPExpression.cpp \
-        src/MIPModel.cpp \
-        src/MIPSubobjective.cpp \
-        src/MIPVariable0D.cpp \
-        src/MIPVariable1D.cpp \
-        src/MIPVariable2D.cpp \
-        src/MIPVariable3D.cpp \
-        src/MIPSpecialOrderedSet.cpp \
-        src/MIPUtils.cpp \
-        src/MIPModeler.cpp \
-        src/MIPWarmStart.cpp
+        MIPConstraint.cpp \
+        MIPExpression.cpp \
+        MIPModel.cpp \
+        MIPSubobjective.cpp \
+        MIPVariable0D.cpp \
+        MIPVariable1D.cpp \
+        MIPVariable2D.cpp \
+        MIPVariable3D.cpp \
+        MIPSpecialOrderedSet.cpp \
+        MIPUtils.cpp \
+        MIPModeler.cpp \
+        MIPWarmStart.cpp
 HEADERS += \
-        include/MIPModeler_global.h \
-        include/MIPConstraint.h \
-        include/MIPExpression.h \
-        include/MIPModel.h \
-        include/MIPVariable0D.h \
-        include/MIPVariable1D.h \
-        include/MIPVariable2D.h \
-        include/MIPVariable3D.h \
-        include/MIPSpecialOrderedSet.h \
-        include/MIPUtils.h \
-        include/MIPModeler.h \
-        include/MIPWarmStart.h \
-        include/MIPSubobjective.h
+        MIPModeler_global.h \
+        MIPConstraint.h \
+        MIPExpression.h \
+        MIPModel.h \
+        MIPVariable0D.h \
+        MIPVariable1D.h \
+        MIPVariable2D.h \
+        MIPVariable3D.h \
+        MIPSpecialOrderedSet.h \
+        MIPUtils.h \
+        MIPModeler.h \
+        MIPWarmStart.h \
+        MIPSubobjective.h
 
 DEFINES += MIPMODELER_LIBRARY
 DEFINES += EIGEN_MPL2_ONLY
 
-DESTDIR     = $$(PEGASE_MPC_HOME)/lib/$$(OPTION)
+DESTDIR     = $$(MIPMODELER_HOME)/lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+

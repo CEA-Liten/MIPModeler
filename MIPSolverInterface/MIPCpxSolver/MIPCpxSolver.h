@@ -33,15 +33,9 @@ public:
     void setThreads(const int& threads);
     void setLocation(const char* location);
     void setFileMipStart(const char* mipStartFile);
-    void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
     void setReadParamFile();
-    void setTerminateSignal(int* terminate);
-    int* getTerminateSignal();
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution;}
-    int getNbSolutionsGardees(){return mNbSolutionsGardees;}
-    std::vector<double*> getOtherSolutions() const {return mOtherSolutions;}
-    std::vector<double> getObjectiveOtherSolutions() const {return mObjectiveOtherSolutions;}
     double getObjectiveValue() const {return mObjectiveValue;}
     double getLpValue() const {return mLpValue;}
     std::string getOptimisationStatus() const {return mOptimisationStatus;}
@@ -50,11 +44,7 @@ private:
     MIPModeler::MIPModel* mModel;
 
     const double* mOptimalSolution;
-    std::vector<double*> mOtherSolutions;
-
     double mObjectiveValue;
-    int mNbSolutionsGardees;
-    std::vector<double> mObjectiveOtherSolutions;
     double mLpValue;
     std::string mOptimisationStatus;
     const char* mFileMipStart;
@@ -66,8 +56,7 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    int mMaxNumberOfSolutions;
-    int* mTerminate;
+
 
     const char* mLocation ;
 };

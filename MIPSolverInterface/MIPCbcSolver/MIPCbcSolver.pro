@@ -9,9 +9,7 @@ QT       -= gui
 TARGET = MIPCbcSolver
 TEMPLATE = lib
 
-message("MIPCbcSolver compilation using coinor 0.107: '$$(COINOR_HOME)'")
-
-LIBS        += $$(PEGASE_MPC_HOME)/lib/$$(OPTION)/MIPModeler.lib
+LIBS        += $$(MIPMODELER_HOME)/lib/$$(OPTION)/MIPModeler.lib
 LIBS        += $$(COINOR_HOME)/lib/libCbc.lib
 LIBS        += $$(COINOR_HOME)/lib/libCbcSolver.lib
 LIBS        += $$(COINOR_HOME)/lib/libCgl.lib
@@ -21,7 +19,7 @@ LIBS        += $$(COINOR_HOME)/lib/libOsi.lib
 LIBS        += $$(COINOR_HOME)/lib/libOsiCbc.lib
 LIBS        += $$(COINOR_HOME)/lib/libOsiClp.lib
 
-INCLUDEPATH += $$(PEGASE_MPC_HOME)/MIPModelerCore/include/
+INCLUDEPATH += $$(MIPMODELER_HOME)/MIPModelerCore/
 INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/
 INCLUDEPATH += $$(COINOR_HOME)/Cgl/src/
 INCLUDEPATH += $$(COINOR_HOME)/CoinUtils/src/
@@ -37,7 +35,7 @@ SOURCES += MIPCbcSolver.cpp
 HEADERS += MIPCbcSolver.h \
            MIPCbcSolver_global.h
 
-DESTDIR     = $$(PEGASE_MPC_HOME)/lib/$$(OPTION)
+DESTDIR     = $$(MIPMODELER_HOME)/lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 

@@ -35,7 +35,7 @@ rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 set MIPMODELER_HOME=%~dp0
 :: for upward comaptibility with MIPModeler*.pro
-set PEGASE_MPC_HOME=%MIPMODELER_HOME%
+::set PEGASE_MPC_HOME=%MIPMODELER_HOME%
 
 echo "MIPMODELER_HOME=%MIPMODELER_HOME%"
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,5 +45,6 @@ call %MIPMODELER_HOME%\QtEnv.bat
 call %MIPMODELER_HOME%\MIPSolverInterface\OsiEnv.bat
 call %MIPMODELER_HOME%\MIPSolverInterface\MosekEnv.bat
 call %MIPMODELER_HOME%\MIPSolverInterface\CplexEnv.bat
+call %MIPMODELER_HOME%\GAMSModeler\GAMSEnv.bat
 
 set PATH=%MIPMODELER_HOME%\lib\%OPTION%;%PATH%
