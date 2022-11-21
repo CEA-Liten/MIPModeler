@@ -15,3 +15,6 @@ compile.release.log
 /MIPSolverInterface/MIPCbcSolver/MIPCbcSolver.vcxproj.user
 /MIPSolverInterface/MIPCpxSolver/lib/Debug
 /MIPSolverInterface/MIPCpxSolver/MIPCpxSolver.vcxproj.user
+/MIPModelerCore/lib/Release
+/MIPSolverInterface/MIPCbcSolver/lib/Release
+/MIPSolverInterface/MIPCpxSolver/lib/Release
