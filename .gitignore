@@ -1,6 +1,11 @@
 /setDepsPath.bat
 /MIPModeler.pro.user
 /Makefile
+/GAMSModeler/debug
+/GAMSModeler/release
+/GAMSModeler/Makefile
+/GAMSModeler/Makefile.Debug
+/GAMSModeler/Makefile.Release
 /MIPModelerCore/debug
 /MIPModelerCore/release
 /MIPModelerCore/Makefile
