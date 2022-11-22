@@ -92,6 +92,7 @@ mkdir %EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPMskSolver
 
 copy /Y doc\*.pdf 							%EXPORT_DIR%\doc
 copy /Y GAMSModeler\*.h 					%EXPORT_DIR%\src\MIPModeler\GAMSModeler
+copy /Y GAMSModeler\*.bat 					%EXPORT_DIR%\src\MIPModeler\GAMSModeler
 copy /Y MIPModelerCore\*.h 					%EXPORT_DIR%\src\MIPModeler\MIPModelerCore
 copy /Y MIPSolverInterface\*.bat 			%EXPORT_DIR%\src\MIPModeler\MIPSolverInterface
 copy /Y MIPSolverInterface\MIPClpSolver\*.h %EXPORT_DIR%\src\MIPModeler\MIPSolverInterface\MIPClpSolver

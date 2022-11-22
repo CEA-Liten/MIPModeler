@@ -16,7 +16,9 @@ echo %PATH% | findstr "Visual" > file.txt
     Echo the file is not empty
 )) || (
     Echo the file is empty
-	call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+	::call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+	call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" x64
+
 )
 del file.txt
 
