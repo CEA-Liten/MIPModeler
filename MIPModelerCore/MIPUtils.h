@@ -55,7 +55,6 @@ bool MIPMODELERSHARED_EXPORT
  Description: Piecewise linearisation to compute
  1D interpolation of y =f(x).
 */
-
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPExpression1D& xInputExpr,

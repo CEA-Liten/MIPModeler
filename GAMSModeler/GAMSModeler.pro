@@ -26,6 +26,6 @@ SOURCES += GAMSData.cpp \
            GAMSModel.cpp \
            GAMSModeler.cpp
 
-DESTDIR     = $$(MIPMODELER_HOME)/lib/$$(OPTION)
+DESTDIR     =  ../lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT

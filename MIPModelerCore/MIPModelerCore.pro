@@ -4,9 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
-
-TARGET = MIPModeler
+QT      -= gui
+TARGET   = MIPModeler
 TEMPLATE = lib
 
 INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif
@@ -14,8 +13,8 @@ INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif
 DEFINES     += USE_GAMS
 LIBS        += $$(GAMS_HOME)/apifiles/C++/lib/vs2019/gamscpp.lib
 INCLUDEPATH += $$(GAMS_HOME)/apifiles/C++/api
-LIBS        += $$(MIPMODELER_HOME)/lib/$$(OPTION)/GAMSModeler39.lib
-INCLUDEPATH += $$(MIPMODELER_HOME)/GAMSModeler
+LIBS        += ../lib/$$(OPTION)/GAMSModeler39.lib
+INCLUDEPATH += ../GAMSModeler
 
 SOURCES += \
         MIPConstraint.cpp \
@@ -48,7 +47,7 @@ HEADERS += \
 DEFINES += MIPMODELER_LIBRARY
 DEFINES += EIGEN_MPL2_ONLY
 
-DESTDIR     = $$(MIPMODELER_HOME)/lib/$$(OPTION)
+DESTDIR      = ../lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 

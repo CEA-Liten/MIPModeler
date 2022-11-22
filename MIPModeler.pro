@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-CONFIG += ordered
+CONFIG  += ordered
 
 localoption = $$(OPTION)
 equals (localoption, "debug" ){
@@ -12,7 +12,6 @@ MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
 MIPSolverInterface\MIPMskSolver\
 }
-
 equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\

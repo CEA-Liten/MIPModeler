@@ -11,21 +11,20 @@
 namespace MIPModeler {
 // --------------------------------------------------------------------------
 MIPModel::MIPModel(const std::string& modelName)
-    : mNumCols(0),
-      mNumRows(0),
+    : mObjectiveDirection(MIP_MINIMIZE),
+      mNumCols(0),
       mNumIntegerCols(0),
-      mObjectiveDirection(MIP_MINIMIZE),
+      mNumRows(0),
+      mNumObj(0),
       mProblemBuilt(false),
-      mModelName(modelName),
-      mNumObj(0)
+      mModelName(modelName)
 {
 #ifdef USE_GAMS
     mGAMSModel = new GAMSModeler::GAMSModel("./");
 #endif
 }
 // --------------------------------------------------------------------------
-void MIPModel::setObjective(const MIPExpression& objective,
-                            const  MIPDirection& objectiveDirection) {
+void MIPModel::setObjective(const MIPExpression& objective, const  MIPDirection& objectiveDirection) {
     mObjectiveExpression = objective;
     mObjectiveDirection = objectiveDirection;
     mNumObj += 1;
@@ -153,10 +152,20 @@ void MIPModel::buildProblem() {
     std::list<Node> constraintNodes;
     std::list<Node> allConstraintNodes;
     std::list<MIPConstraint>::iterator itConstr = mConstraints.begin();
+
     for (; itConstr != mConstraints.end(); itConstr++){
         constraintNodes = itConstr->getExpression().getNode();
-        allConstraintNodes.insert(allConstraintNodes.end(),
-                                  constraintNodes.begin(), constraintNodes.end());
+        for (std::list<Node>::iterator it = constraintNodes.begin(); it != constraintNodes.end(); it++)
+        {
+            if (it->row() <0  || it->col() <0)
+            {
+                qDebug()<< " == ERROR constraint == "
+                        << QString::fromStdString(itConstr->getName())
+                        << " reference to bad variable "
+                        << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
+            }
+        }
+        allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
         mRhs.push_back(itConstr->getConstPart());
         mSense.push_back(itConstr->getSense());
         mRowNames.push_back(itConstr->getName());
@@ -176,10 +185,10 @@ void MIPModel::buildProblem() {
 // --------------------------------------------------------------------------
 MIPModel::~MIPModel() {
 
-    if (mNumCols > 0)
-      delete [] mObjectiveCoefficients ;
-    if (mNumRows > 0)
-       delete [] mLengths ;
+//    if (mNumCols > 0)
+//      delete [] mObjectiveCoefficients ;
+//    if (mNumRows > 0)
+//       delete [] mLengths ;
 
     mColIntegers.clear();
     mColLowerBounds.clear();

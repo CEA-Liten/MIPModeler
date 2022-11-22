@@ -8,6 +8,7 @@
 
 #include "MIPCpxSolver.h"
 #include <cstring>
+
 // --------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8
 #define GAP 1e-4
@@ -25,7 +26,8 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mLocation("cplex"),
       mWriteMipStart(false),
       mFileMipStart(""),
-      mReadParamFile(false)
+      mReadParamFile(false),
+      mTerminate(NULL)
 {
     if (mModel->isProblemBuilt() == false)
         mModel->buildProblem();
@@ -48,6 +50,14 @@ void MIPCpxSolver::setReadParamFile(){
     mReadParamFile = true;
 }
 
+void MIPCpxSolver::setTerminateSignal(int *terminate){
+    mTerminate=terminate;
+}
+
+int* MIPCpxSolver::getTerminateSignal(){
+    return mTerminate;
+}
+
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
     mFileMipStart = mipStartFile;
@@ -57,7 +67,16 @@ void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
 void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
-
+// --------------------------------------------------------------------------
+void MIPCpxSolver::setMaxNumberOfSolutions(const int &maxNumberOfSolutions){
+    if (maxNumberOfSolutions>=1){
+        mMaxNumberOfSolutions = maxNumberOfSolutions;
+    }
+    else{
+        mMaxNumberOfSolutions=1;
+    }
+}
+// --------------------------------------------------------------------------
 void MIPCpxSolver::setLocation(const char *location)
 {
     mLocation = location ;
@@ -99,6 +118,10 @@ void MIPCpxSolver::solve() {
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);
+
+    //give a pointer to terminate
+
+    status = CPXsetterminate (env, mTerminate);
 
     //create model
     lp = CPXcreateprob(env, &status, "problem");
@@ -331,6 +354,7 @@ void MIPCpxSolver::solve() {
 
         //solve mip or lp depending on problem type
         if(*(mModel->getNumSubobj())>1){
+            status = CPXsetintparam(env,CPXPARAM_MultiObjective_Display,2);
             status = CPXmultiobjopt(env,lp,NULL);
             if ( status ){
                 std::cerr<<"CPXmipopt: Failed when solving mutliobj optimisation problem"<<std::endl;
@@ -365,18 +389,21 @@ void MIPCpxSolver::solve() {
             mOptimisationStatus = "Abandoned";
         }
         else if (lpstat == CPX_STAT_UNBOUNDED ||
-                 lpstat == CPXMIP_UNBOUNDED){
+                 lpstat == CPXMIP_UNBOUNDED ||
+                 lpstat == CPXMIP_ABORT_RELAXATION_UNBOUNDED){
              mOptimisationStatus = "Unbounded";
         }
         else if (lpstat == CPX_STAT_INFEASIBLE ||
                  lpstat == CPX_STAT_INForUNBD ||
                  lpstat == CPXMIP_INForUNBD ||
                  lpstat == CPXMIP_OPTIMAL_INFEAS ||
-                 lpstat == CPXMIP_INFEASIBLE){
+                 lpstat == CPXMIP_INFEASIBLE ||
+                 lpstat == CPXMIP_ABORT_INFEAS){
             mOptimisationStatus = "Infeasible";
         }
         else if (lpstat == CPX_STAT_ABORT_TIME_LIM ||
-                 lpstat == CPXMIP_TIME_LIM_FEAS){
+                 lpstat == CPXMIP_TIME_LIM_FEAS||
+                 lpstat == CPXMIP_ABORT_FEAS ){
             mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
         }
         else if (lpstat == CPXMIP_FEASIBLE ||
@@ -387,7 +414,8 @@ void MIPCpxSolver::solve() {
             mOptimisationStatus = "Best Feasible (TreeMemoryLimit Reached)";
         }
         else{
-            mOptimisationStatus = "Unknown";
+
+            mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
         }
         if (mWriteMipStart){
             std::string mipStartFile = mLocation ;
@@ -407,6 +435,23 @@ void MIPCpxSolver::solve() {
         if ( status ){
             std::cerr <<"CPXgetbestobjval: Failed when getting best possible obj"<<std::endl;
             return;
+        }
+
+        int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);
+        std::cout <<"Number of solutions trouvees:"<< nbSolTrouvees<<std::endl;
+        if (nbSolTrouvees>mMaxNumberOfSolutions)
+            mNbSolutionsGardees=mMaxNumberOfSolutions;
+        else{
+            mNbSolutionsGardees=nbSolTrouvees;
+        }
+        std::cout <<"Number max of solutions gardees:"<< mMaxNumberOfSolutions<<std::endl;
+        std::cout <<"Number of solutions gardees:"<< mNbSolutionsGardees<<std::endl;
+        for(int i=0; i<mNbSolutionsGardees;i++){
+            mOtherSolutions.push_back((double*)malloc( numCols * sizeof(double) ));
+            status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i], 0,numCols-1);
+            mObjectiveOtherSolutions.push_back(0);
+            CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
+            std::cout <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i]<<std::endl;
         }
     }
 

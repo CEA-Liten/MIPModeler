@@ -99,11 +99,10 @@ public:
     const std::vector<double*> getSubobjectiveCoefficients() const {return mSubObjCoeff;}
     const std::vector<int*> getSubobjectiveIndices() const {return mSubObjIndices;}
 // --------------------------------------------------------------------------
-    #ifdef USE_GAMS
-        GAMSModeler::GAMSModel* getGAMSModel() {return mGAMSModel;}
-    #endif
+#ifdef USE_GAMS
+    GAMSModeler::GAMSModel* getGAMSModel() {return mGAMSModel;}
+#endif
 // --------------------------------------------------------------------------
-
 private:
     MIPExpression mObjectiveExpression;
     MIPDirection mObjectiveDirection;
