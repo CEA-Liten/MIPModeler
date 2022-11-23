@@ -20,7 +20,7 @@ MIPModel::MIPModel(const std::string& modelName)
       mModelName(modelName)
 {
 #ifdef USE_GAMS
-    mGAMSModel = new GAMSModeler::GAMSModel("./");
+    mGAMSModel = new GAMSModeler::GAMSModel();
 #endif
 }
 // --------------------------------------------------------------------------
@@ -199,6 +199,7 @@ MIPModel::~MIPModel() {
     mColNames.clear();
     mRowNames.clear();
     mListSubobjectives.clear();
+
 #ifdef USE_GAMS
     delete mGAMSModel;
 #endif

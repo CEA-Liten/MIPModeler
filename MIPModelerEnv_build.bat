@@ -34,9 +34,9 @@ set MIPMODELER_HOME=%~dp0
 echo "MIPMODELER_HOME=%MIPMODELER_HOME%"
 
 call %MIPMODELER_HOME%\QtEnv.bat
-call %MIPMODELER_HOME%\MIPSolverInterface\OsiEnv.bat
-call %MIPMODELER_HOME%\MIPSolverInterface\MosekEnv.bat
-call %MIPMODELER_HOME%\MIPSolverInterface\CplexEnv.bat
 call %MIPMODELER_HOME%\GAMSModeler\GAMSEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\CoinOREnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\CplexEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\MosekEnv.bat
 
 set PATH=%MIPMODELER_HOME%\lib\%OPTION%;%PATH%

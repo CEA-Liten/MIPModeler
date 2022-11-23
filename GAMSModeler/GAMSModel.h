@@ -159,8 +159,8 @@ public:
     /// Add text comment in gams file.
     /// \param text comment.
     void addComment(const std::string& text);
-	
-	/// Add text comment in gams file.
+
+    /// Add text comment in gams file.
     /// \param text comment.
     void addText(const std::string& text);
 

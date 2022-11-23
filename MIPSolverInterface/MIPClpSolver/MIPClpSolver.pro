@@ -4,11 +4,11 @@ TARGET = MIPClpSolver
 TEMPLATE = lib
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
-LIBS        += $$(COINOR_HOME)/lib/libCgl.lib
-LIBS        += $$(COINOR_HOME)/lib/libClp.lib
-LIBS        += $$(COINOR_HOME)/lib/libCoinUtils.lib
-LIBS        += $$(COINOR_HOME)/lib/libOsi.lib
-LIBS        += $$(COINOR_HOME)/lib/libOsiClp.lib
+LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libCgl.lib
+LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libClp.lib
+LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libCoinUtils.lib
+LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libOsi.lib
+LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libOsiClp.lib
 
 INCLUDEPATH += ../../MIPModelerCore/
 INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/

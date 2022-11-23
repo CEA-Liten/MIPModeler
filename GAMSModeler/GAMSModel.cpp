@@ -1,15 +1,18 @@
 #include "GAMSModel.h"
 #include <fstream>
+#include <QDebug>
 
 namespace GAMSModeler {
 
 GAMSModel::GAMSModel(const std::string& workingDir) :
+    mGMSModel(""),
     mProblemType("MIP"),
     mSolverName("CPLEX"),
     mThreads(0),
     mGap(1e-4),
     mTimeLimit(1e+8),
     mObjectiveSens(GAMS_MIN)
+
 {
     mWorkSpace = gams::GAMSWorkspace(workingDir);
     mDataBase  = mWorkSpace.addDatabase();
@@ -22,7 +25,6 @@ void GAMSModel::addData(std::vector<GAMSData*>& data, const bool& exportToGMS)
     for (size_t ii=0; ii < data.size (); ii++) {
 
         if (std::find(mDataLabels.begin(), mDataLabels.end(), data[ii]->name()) == mDataLabels.end()) {
-
             if (data[ii]->type() == GAMSDataType::GAMS_SET) {
                 GAMSDataSet* x = dynamic_cast<GAMSDataSet*>(data[ii]);
                 std::vector<std::string> reccords = x->getReccords();
@@ -38,11 +40,11 @@ void GAMSModel::addData(std::vector<GAMSData*>& data, const bool& exportToGMS)
             }
 
             if (data[ii]->type() == GAMSDataType::GAMS_PARAM1D) {
-                int i = 0;
                 GAMSDataParam1D* x = dynamic_cast<GAMSDataParam1D*>(data[ii]);
                 std::vector<double> values = x->getValue();
                 gams::GAMSSet set = mDataBase.getSet(x->getSet());
                 gams::GAMSParameter param = mDataBase.addParameter(data[ii]->name(), "", set);
+                int i = 0;
                 for (gams::GAMSSetRecord rec : set){
                      param.addRecord(rec.key(0)).setValue(values[i]);
                      i++;
@@ -50,15 +52,15 @@ void GAMSModel::addData(std::vector<GAMSData*>& data, const bool& exportToGMS)
             }
 
             if (data[ii]->type() == GAMSDataType::GAMS_PARAM2D) {
-                int i = 0;
-                int j = 0;
                 GAMSDataParam2D* x = dynamic_cast<GAMSDataParam2D*>(data[ii]);
                 std::vector<std::vector<double>> values = x->getValue();
                 std::vector<std::string> sets = x->getSet();
                 gams::GAMSSet set1 = mDataBase.getSet(sets[0]);
                 gams::GAMSSet set2 = mDataBase.getSet(sets[1]);
                 gams::GAMSParameter param = mDataBase.addParameter(data[ii]->name(), "", set1, set2);
+                int i = 0;
                 for (gams::GAMSSetRecord rec1 : set1){
+                    int j = 0;
                     for (gams::GAMSSetRecord rec2 : set2){
                         param.addRecord(rec1.key(0), rec2.key(0)).setValue(values[i][j]);
                         j++;
@@ -68,9 +70,6 @@ void GAMSModel::addData(std::vector<GAMSData*>& data, const bool& exportToGMS)
             }
 
             if (data[ii]->type() == GAMSDataType::GAMS_PARAM3D) {
-                int i = 0;
-                int j = 0;
-                int k = 0;
                 GAMSDataParam3D* x = dynamic_cast<GAMSDataParam3D*>(data[ii]);
                 std::vector<std::vector<std::vector<double>>> values = x->getValue();
                 std::vector<std::string> sets = x->getSet();
@@ -78,8 +77,11 @@ void GAMSModel::addData(std::vector<GAMSData*>& data, const bool& exportToGMS)
                 gams::GAMSSet set2 = mDataBase.getSet(sets[1]);
                 gams::GAMSSet set3 = mDataBase.getSet(sets[2]);
                 gams::GAMSParameter param = mDataBase.addParameter(data[ii]->name(), "", set1, set2, set3);
+                int i = 0;
                 for (gams::GAMSSetRecord rec1 : set1){
+                    int j = 0;
                     for (gams::GAMSSetRecord rec2 : set2){
+                        int k = 0;
                         for (gams::GAMSSetRecord rec3 : set3){
                             param.addRecord(rec1.key(0), rec2.key(0), rec3.key(0)).setValue(values[i][j][k]);
                             k++;
@@ -228,7 +230,6 @@ void GAMSModel::clear()
     mGMSModel = "";
     mDataLabels.clear();
     mDataBase.clear();
-    mDataBase = mWorkSpace.addDatabase();
 }
 
 void GAMSModel::exportDataBase(const std::string& GDXfilename)
@@ -245,11 +246,10 @@ void GAMSModel::exportGMSModel(const std::string& GMSfilename)
 
 GAMSModel::~GAMSModel()
 {
-    mDataLabels.clear();
-    mDataLabels.clear();
     mGMSModel = "";
+    mDataLabels.clear();
+    mDataBase.clear();
 }
 
 }
-
 
