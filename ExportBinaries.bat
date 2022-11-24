@@ -42,21 +42,24 @@ mkdir %EXPORT_DIR%\External\CoinOR\Cgl
 mkdir %EXPORT_DIR%\External\CoinOR\Clp
 mkdir %EXPORT_DIR%\External\CoinOR\CoinUtils
 mkdir %EXPORT_DIR%\External\CoinOR\Osi
+mkdir %EXPORT_DIR%\External\Eigen
 
 copy /Y doc\*.pdf 									%EXPORT_DIR%\doc
 copy /Y GAMSModeler\*.h 							%EXPORT_DIR%\GAMSModeler
 copy /Y GAMSModeler\*.bat 							%EXPORT_DIR%\GAMSModeler
 copy /Y MIPModelerCore\*.h 							%EXPORT_DIR%\MIPModelerCore
-copy /Y MIPSolverInterface\*.bat 					%EXPORT_DIR%\MIPSolverInterface
 copy /Y MIPSolverInterface\MIPClpSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPClpSolver
 copy /Y MIPSolverInterface\MIPCbcSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPCbcSolver
 copy /Y MIPSolverInterface\MIPCpxSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPCpxSolver
+copy /Y MIPSolverInterface\MIPCpxSolver\*.bat 		%EXPORT_DIR%\MIPSolverInterface\MIPCpxSolver
 copy /Y MIPSolverInterface\MIPMskSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPMskSolver
+copy /Y MIPSolverInterface\MIPMskSolver\*.bat 		%EXPORT_DIR%\MIPSolverInterface\MIPMskSolver
 xcopy /Y /E /I External\CoinOR\Cbc\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Cbc\src
 xcopy /Y /E /I External\CoinOR\Cgl\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Cgl\src
 xcopy /Y /E /I External\CoinOR\Clp\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Clp\src
 xcopy /Y /E /I External\CoinOR\CoinUtils\src\*.h* 	%EXPORT_DIR%\External\CoinOR\CoinUtils\src
 xcopy /Y /E /I External\CoinOR\Osi\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Osi\src
+xcopy /Y /E /I External\Eigen				 		%EXPORT_DIR%\External\Eigen
 
 mkdir %EXPORT_DIR%\lib
 mkdir %EXPORT_DIR%\lib\%OPTION%\
@@ -120,21 +123,24 @@ mkdir %EXPORT_DIR%\External\CoinOR\Cgl
 mkdir %EXPORT_DIR%\External\CoinOR\Clp
 mkdir %EXPORT_DIR%\External\CoinOR\CoinUtils
 mkdir %EXPORT_DIR%\External\CoinOR\Osi
+mkdir %EXPORT_DIR%\External\Eigen
 
 copy /Y doc\*.pdf 									%EXPORT_DIR%\doc
 copy /Y GAMSModeler\*.h 							%EXPORT_DIR%\GAMSModeler
 copy /Y GAMSModeler\*.bat 							%EXPORT_DIR%\GAMSModeler
 copy /Y MIPModelerCore\*.h 							%EXPORT_DIR%\MIPModelerCore
-copy /Y MIPSolverInterface\*.bat 					%EXPORT_DIR%\MIPSolverInterface
 copy /Y MIPSolverInterface\MIPClpSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPClpSolver
 copy /Y MIPSolverInterface\MIPCbcSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPCbcSolver
 copy /Y MIPSolverInterface\MIPCpxSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPCpxSolver
+copy /Y MIPSolverInterface\MIPCpxSolver\*.bat 		%EXPORT_DIR%\MIPSolverInterface\MIPCpxSolver
 copy /Y MIPSolverInterface\MIPMskSolver\*.h 		%EXPORT_DIR%\MIPSolverInterface\MIPMskSolver
+copy /Y MIPSolverInterface\MIPMskSolver\*.bat 		%EXPORT_DIR%\MIPSolverInterface\MIPMskSolver
 xcopy /Y /E /I External\CoinOR\Cbc\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Cbc\src
 xcopy /Y /E /I External\CoinOR\Cgl\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Cgl\src
 xcopy /Y /E /I External\CoinOR\Clp\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Clp\src
 xcopy /Y /E /I External\CoinOR\CoinUtils\src\*.h* 	%EXPORT_DIR%\External\CoinOR\CoinUtils\src
 xcopy /Y /E /I External\CoinOR\Osi\src\*.h* 		%EXPORT_DIR%\External\CoinOR\Osi\src
+xcopy /Y /E /I External\Eigen				 		%EXPORT_DIR%\External\Eigen
 
 mkdir %EXPORT_DIR%\lib
 mkdir %EXPORT_DIR%\lib\%OPTION%\

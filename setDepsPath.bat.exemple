@@ -1,4 +1,4 @@
-@echo off
+echo off
 
 ::Change the following line to set your own path to SOLVER_DEPS root diretory (parent of Solvers (Cplex, Mosek, Osi) and Eigen)
 set SOLVER_DEPS=F:\TNR_Pegase\TNR_Sources\trunk\Deps\External

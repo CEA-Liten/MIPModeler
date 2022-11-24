@@ -2,13 +2,13 @@ QT       -= gui
 
 TEMPLATE = lib
 
-TARGET      = MIPMskSolver81
-LIBS        += $$(MOSEK_HOME_81_LIB)/mosek64_8_1.lib
-INCLUDEPATH += $$(MOSEK_HOME_81)/h/
+TARGET      = MIPMskSolver$$(MOSEK_LIB_VERSION)
+LIBS        += $$(MOSEK_HOME_LIB)/mosek64$$(MOSEK_LIB_VERSION).lib
+INCLUDEPATH += $$(MOSEK_HOME)/h/
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += ../../MIPModelerCore/
-INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/
+INCLUDEPATH += ../../External/Eigen/3.2.9/
 
 DEFINES += MIPMSKSOLVER_LIBRARY
 

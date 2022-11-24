@@ -2,13 +2,13 @@ QT       -= gui
 
 TEMPLATE = lib
 
-TARGET      = MIPCpxSolver201
-LIBS        += $$(CPLEX_HOME_LIB)/cplex2010.lib
+TARGET      = MIPCpxSolver$$(CPLEX_LIB_VERSION)
+LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_LIB_VERSION).lib
 INCLUDEPATH += $$(CPLEX_HOME)/include/ilcplex
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += ../../MIPModelerCore/
-INCLUDEPATH += $$(SOLVER_DEPS)/Eigen/3.2.9-modif/
+INCLUDEPATH += ../../External/Eigen/3.2.9/
 
 DEFINES += MIPCPXSOLVER_LIBRARY
 

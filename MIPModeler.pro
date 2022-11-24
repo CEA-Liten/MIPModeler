@@ -28,9 +28,7 @@ test\
 }
 
 message("GAMS_HOME                     ": $$(GAMS_HOME))
-message("SOLVER_DEPS path to eigen     ": $$(SOLVER_DEPS))
-message("COIN_OR                       ": $$(COINOR_HOME))
 message("MIPMODELER_HOME               ": $$(MIPMODELER_HOME))
-message("MIPCpxSolver using cplex 20.1 ": $$(CPLEX_HOME))
-message("MIPMskSolver using mosek 8.1  ": $$(MOSEK_HOME_81)))
+message("MIPCpxSolver using cplex      ": $$(CPLEX_HOME))
+message("MIPMskSolver using mosek      ": $$(MOSEK_HOME)))
 

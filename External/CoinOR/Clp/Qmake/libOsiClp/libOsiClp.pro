@@ -9,16 +9,16 @@ TARGET = libOsiClp
 TEMPLATE = lib
 #CONFIG += staticlib
 
-INCLUDEPATH += $$(COINOR_HOME)/Clp/src
-INCLUDEPATH += $$(COINOR_HOME)/Clp/src/OsiClp
-INCLUDEPATH += $$(COINOR_HOME)/Osi/src
-INCLUDEPATH += $$(COINOR_HOME)/Osi/src/Osi
-INCLUDEPATH += $$(COINOR_HOME)/CoinUtils/src
-INCLUDEPATH += $$(COINOR_HOME)/BuildTools/headers
+INCLUDEPATH += ../../../Clp/src
+INCLUDEPATH += ../../../Clp/src/OsiClp
+INCLUDEPATH += ../../../Osi/src
+INCLUDEPATH += ../../../Osi/src/Osi
+INCLUDEPATH += ../../../CoinUtils/src
+INCLUDEPATH += ../../../BuildTools/headers
 
-LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libClp.lib
-LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libOsi.lib
-LIBS        += $$(COINOR_HOME)/lib/$$(OPTION)/libCoinUtils.lib
+LIBS        += ../../../lib/$$(OPTION)/libClp.lib
+LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
+LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
 
 DEFINES += OSI_BUILD
 DEFINES += WIN32
@@ -28,9 +28,9 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES += _CRT_SECURE_NO_DEPRECATE
 
 SOURCES += \
-    ..\..\src\OsiClp\OsiClpSolverInterface.cpp \
+    ../../src/OsiClp/OsiClpSolverInterface.cpp \
 
 HEADERS +=  \
-    ..\..\src\OsiClp\OsiClpSolverInterface.hpp \
+    ../../src/OsiClp/OsiClpSolverInterface.hpp \
 
-DESTDIR = $$(COINOR_HOME)/lib/$$(OPTION)
+DESTDIR = ../../../lib/$$(OPTION)
