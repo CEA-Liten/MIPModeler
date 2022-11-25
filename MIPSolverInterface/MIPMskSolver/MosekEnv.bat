@@ -1,13 +1,25 @@
 set MOSEK_HOME=
 set MOSEK_HOME_LIB=
 set MOSEK_HOME_BIN=
-set MOSEK_LIB_VERSION=
+set MOSEK_VERSION=
 
-rem if Mosek 8.1
-if exist %SOLVER_DEPS%\mosek\mosek_8.1\bin\mosek64_8_1.dll (
-	set MOSEK_HOME=%SOLVER_DEPS%\mosek\mosek_8.1\
-	set MOSEK_HOME_BIN=%SOLVER_DEPS%\mosek\mosek_8.1\\bin
-	set MOSEK_HOME_LIB=%SOLVER_DEPS%\mosek\mosek_8.1\\bin
-	set MOSEK_LIB_VERSION=_8_1
+REM Find cplex installation using system environement variable
+
+REM TEMPLATE
+REM if exist %MOSEK_XX_BINDIR%\mosek64_XX.dll (
+	REM set MOSEK_HOME=%MOSEK_XX_INSTALLDIR%\tools\platform\win64x86
+	REM set MOSEK_HOME_BIN=%MOSEK_XX_BINDIR%
+	REM set MOSEK_HOME_LIB=%MOSEK_XX_BINDIR%
+	REM set MOSEK_VERSION=XX
+	REM goto :END
+REM )
+
+if exist %MOSEK_8_1_BINDIR%\mosek64_8_1.dll (
+	set MOSEK_HOME=%MOSEK_8_1_INSTALLDIR%\tools\platform\win64x86
+	set MOSEK_HOME_BIN=%MOSEK_8_1_BINDIR%
+	set MOSEK_HOME_LIB=%MOSEK_8_1_BINDIR%
+	set MOSEK_VERSION=_8_1
 )
+
+:END
 set PATH=%PATH%;%MOSEK_HOME_BIN%

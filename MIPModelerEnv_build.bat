@@ -16,17 +16,6 @@ if "%OPTION%" == "debug" (
 set extension=_debug
 )
 
-if /i "%SOLVER_DEPS%" == "" call setDepsPath
-
-if "%SOLVER_DEPS%" == "" (
-   echo command file setDepsPath.bat missing in directory
-   echo You have to create one by copying setDepsPath.bat.exemple to setDepsPath.bat
-   echo Then change the SOLVER_DEPS and PERSEE_APP variable in setDepsPath.bat
-   EXIT /B 1
-)
-
-echo " Solver_deps = %SOLVER_DEPS%"
-
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 rem set MIPModeler solvers environement 
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

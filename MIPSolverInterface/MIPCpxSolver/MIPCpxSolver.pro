@@ -2,8 +2,8 @@ QT       -= gui
 
 TEMPLATE = lib
 
-TARGET      = MIPCpxSolver$$(CPLEX_LIB_VERSION)
-LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_LIB_VERSION).lib
+TARGET      = MIPCpxSolver$$(CPLEX_VERSION)
+LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib
 INCLUDEPATH += $$(CPLEX_HOME)/include/ilcplex
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
