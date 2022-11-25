@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-09-13T09:54:02
-#
-#-------------------------------------------------
 QT       -= gui
 
 TARGET = libCgl
@@ -26,7 +21,6 @@ INCLUDEPATH += ../../../Osi/src/Osi
 INCLUDEPATH += ../../../Clp/src/OsiClp
 INCLUDEPATH += ../../../Clp/src
 INCLUDEPATH += ../../../CoinUtils/src
-INCLUDEPATH += ../../../BuildTools/headers
 
 LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
 LIBS        += ../../../lib/$$(OPTION)/libOsiClp.lib

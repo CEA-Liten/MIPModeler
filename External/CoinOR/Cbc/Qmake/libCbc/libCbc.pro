@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-09-13T09:54:02
-#
-#-------------------------------------------------
 QT       -= gui
 
 TARGET = libCbc
@@ -30,7 +25,6 @@ INCLUDEPATH += ../../../Clp/src
 INCLUDEPATH += ../../../Clp/src/OsiClp
 INCLUDEPATH += ../../../Osi/src/Osi
 INCLUDEPATH += ../../../CoinUtils/src
-INCLUDEPATH += ../../../BuildTools/headers
 INCLUDEPATH += ../../../Cgl/src/CglResidualCapacity
 INCLUDEPATH += ../../../Cgl/src/CglRedSplit2
 

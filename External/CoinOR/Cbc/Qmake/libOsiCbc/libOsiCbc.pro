@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-09-13T09:54:02
-#
-#-------------------------------------------------
 QT       -= gui
 
 TARGET = libOsiCbc
@@ -10,7 +5,6 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 INCLUDEPATH += ../../../Osi/src/Osi
-INCLUDEPATH += ../../../BuildTools/headers
 INCLUDEPATH += ../../../CoinUtils/src
 INCLUDEPATH += ../../../Clp/src
 INCLUDEPATH += ../../../Clp/src/OsiClp

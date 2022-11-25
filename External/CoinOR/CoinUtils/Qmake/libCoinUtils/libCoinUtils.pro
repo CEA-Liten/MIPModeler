@@ -4,8 +4,6 @@ TARGET = libCoinUtils
 TEMPLATE = lib
 #CONFIG += staticlib
 
-INCLUDEPATH += ../../../BuildTools/headers
-
 DEFINES += COINUTILS_BUILD
 DEFINES += WIN32
 DEFINES += NDEBUG

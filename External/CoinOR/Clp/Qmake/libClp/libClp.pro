@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-09-13T09:54:02
-#
-#-------------------------------------------------
 QT       -= gui
 
 TARGET = libClp
@@ -10,8 +5,6 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 INCLUDEPATH += ../../../CoinUtils/src
-INCLUDEPATH += ../../../BuildTools/headers
-
 LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
 
 DEFINES += CLP_BUILD

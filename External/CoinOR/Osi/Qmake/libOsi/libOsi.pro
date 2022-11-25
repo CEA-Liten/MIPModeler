@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-09-13T09:54:02
-#
-#-------------------------------------------------
 QT       -= gui
 
 TARGET = libOsi
@@ -10,7 +5,6 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 INCLUDEPATH += ../../../CoinUtils/src
-INCLUDEPATH += ../../../BuildTools/headers
 INCLUDEPATH += ../../../Osi/src/Osi
 
 LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
