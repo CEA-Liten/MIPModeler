@@ -14,7 +14,7 @@
     <ProjectGuid>{05177983-828B-35A7-8B50-320A8655E072}</ProjectGuid>
     <RootNamespace>MIPCpxSolver201</RootNamespace>
     <Keyword>QtVS_v304</Keyword>
-    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.22621.0</WindowsTargetPlatformMinVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
@@ -46,15 +46,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyCplex.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-	<Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-	<Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyCplex.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-	<Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-	<Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -87,7 +87,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>      
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
