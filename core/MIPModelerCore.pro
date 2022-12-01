@@ -8,7 +8,7 @@ QT      -= gui
 TARGET   = MIPModeler
 TEMPLATE = lib
 
-INCLUDEPATH += ../External/Eigen/3.2.9
+INCLUDEPATH += ../external/Eigen/3.2.9
 
 DEFINES     += USE_GAMS
 LIBS        += $$(GAMS_HOME)/apifiles/C++/lib/vs2019/gamscpp.lib
