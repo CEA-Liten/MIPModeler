@@ -5,7 +5,7 @@ localoption = $$(OPTION)
 equals (localoption, "debug" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-External/CoinOR\
+#external/CoinOR\
 GAMSModeler\
 core\
 MIPSolverInterface\MIPCbcSolver\
@@ -17,7 +17,7 @@ test\
 equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-External/CoinOR\
+#external/CoinOR\
 GAMSModeler\
 core\
 MIPSolverInterface\MIPCbcSolver\
