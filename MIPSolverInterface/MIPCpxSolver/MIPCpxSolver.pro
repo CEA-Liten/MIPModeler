@@ -21,3 +21,4 @@ DESTDIR  = ../../lib/$$(OPTION)
 
 QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 
+message($$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib)

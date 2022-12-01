@@ -7,7 +7,7 @@ message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
 External/CoinOR\
 GAMSModeler\
-MIPModelerCore\
+core\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
@@ -19,7 +19,7 @@ message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
 External/CoinOR\
 GAMSModeler\
-MIPModelerCore\
+core\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\

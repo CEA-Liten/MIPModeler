@@ -17,7 +17,7 @@ REM )
 if exist "%CPLEX_STUDIO_DIR201%\cplex\bin\x64_win64\cplex2010.dll" (
 	set CPLEX_HOME=%CPLEX_STUDIO_DIR201%\cplex
 	set CPLEX_HOME_BIN=%CPLEX_STUDIO_DIR201%\cplex\bin\x64_win64
-	set CPLEX_HOME_LIB=%CPLEX_STUDIO_DIR201%\lib\x64_windows_msvc14\stat_mda
+	set CPLEX_HOME_LIB=%CPLEX_STUDIO_DIR201%\cplex\lib\x64_windows_msvc14\stat_mda
 	set CPLEX_VERSION=2010
 	goto :END
 )
