@@ -1,2 +1,0 @@
-set COINUTILS_HOME=%~dp0
-set PATH=%COINUTILS_HOME%\lib;%PATH%
