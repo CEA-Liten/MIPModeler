@@ -7,8 +7,8 @@ LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib
 INCLUDEPATH += $$(CPLEX_HOME)/include/ilcplex
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
-INCLUDEPATH += ../../MIPModelerCore/
-INCLUDEPATH += ../../External/Eigen/3.2.9/
+INCLUDEPATH += ../../core/
+INCLUDEPATH += ../../external/Eigen/3.2.9/
 
 DEFINES += MIPCPXSOLVER_LIBRARY
 

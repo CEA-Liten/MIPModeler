@@ -7,8 +7,8 @@ LIBS        += $$(MOSEK_HOME_LIB)/mosek64$$(MOSEK_VERSION).lib
 INCLUDEPATH += $$(MOSEK_HOME)/h/
 
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
-INCLUDEPATH += ../../MIPModelerCore/
-INCLUDEPATH += ../../External/Eigen/3.2.9/
+INCLUDEPATH += ../../core/
+INCLUDEPATH += ../../external/Eigen/3.2.9/
 
 DEFINES += MIPMSKSOLVER_LIBRARY
 
