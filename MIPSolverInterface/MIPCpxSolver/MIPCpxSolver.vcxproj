@@ -48,6 +48,7 @@
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -55,20 +56,17 @@
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+    <Import Project="..\..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)\Deps\MIPModelerLib\lib\$(Configuration)\</OutDir>
-    <IntDir>lib\$(Configuration)\</IntDir>
     <TargetName>MIPCpxSolver201</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)\Deps\MIPModelerLib\lib\$(Configuration)\</OutDir>
-    <IntDir>lib\$(Configuration)\</IntDir>
     <TargetName>MIPCpxSolver201</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
@@ -86,7 +84,6 @@
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
