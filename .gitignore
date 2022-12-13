@@ -81,3 +81,11 @@
 /external/CoinOR/CoinUtils/Qmake/libCoinUtils/Makefile
 /external/CoinOR/CoinUtils/Qmake/libCoinUtils/Makefile.debug
 /external/CoinOR/CoinUtils/Qmake/libCoinUtils/Makefile.release
+/.vs/MIPModeler/v17
+/lib/Debug
+/lib/Release
+/MIPModelerCore
+/MIPSolverInterface/lib/Debug
+/MIPSolverInterface/MIPCbcSolver/lib
+/MIPSolverInterface/MIPCpxSolver/lib
+*.user
