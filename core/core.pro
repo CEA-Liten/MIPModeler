@@ -10,7 +10,7 @@ TEMPLATE = lib
 
 INCLUDEPATH += ../external/Eigen/3.2.9
 
-DEFINES     += USE_GAMS
+#DEFINES     += USE_GAMS
 LIBS        += $$(GAMS_HOME)/apifiles/C++/lib/vs2019/gamscpp.lib
 INCLUDEPATH += $$(GAMS_HOME)/apifiles/C++/api
 LIBS        += ../lib/$$(OPTION)/GAMSModeler39.lib
