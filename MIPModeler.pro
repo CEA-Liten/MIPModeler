@@ -8,11 +8,11 @@ SUBDIRS +=\
 #external/CoinOR\
 GAMSModeler\
 core\
-MIPSolverInterface\MIPCbcSolver\
-MIPSolverInterface\MIPClpSolver\
+#MIPSolverInterface\MIPCbcSolver\
+#MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
-MIPSolverInterface\MIPMskSolver\
-test\
+#MIPSolverInterface\MIPMskSolver\
+#test\
 }
 equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler)
@@ -23,8 +23,8 @@ core\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
-MIPSolverInterface\MIPMskSolver\
-test\
+#MIPSolverInterface\MIPMskSolver\
+#test\
 }
 
 message("GAMS_HOME                     ": $$(GAMS_HOME))
