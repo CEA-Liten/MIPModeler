@@ -20,8 +20,8 @@ SUBDIRS +=\
 #external/CoinOR\
 GAMSModeler\
 core\
-MIPSolverInterface\MIPCbcSolver\
-MIPSolverInterface\MIPClpSolver\
+#MIPSolverInterface\MIPCbcSolver\
+#MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
