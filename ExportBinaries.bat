@@ -25,7 +25,7 @@ set DOC_DIR=%EXPORT_DIR%\doc
 copy /Y MIPModelerEnv_build.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
-rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 
+rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat
 rem ---------------------------------------------------------------
 mkdir %EXPORT_DIR%\doc
 mkdir %EXPORT_DIR%\lib
@@ -93,7 +93,7 @@ copy /Y external\CoinOR\lib\%OPTION%\libOsi*.lib 		%EXPORT_DIR%\external\CoinOR\
 ::if not /i "%PERSEE_DEPS%" == "" (
 
 :persee
-set PERSEE_DEPS=%PERSEE_APP%\Deps
+set PERSEE_DEPS=%PERSEE_APP%\Deps\External
 set EXPORT_DIR=%PERSEE_DEPS%\MIPModeler
 set DOC_DIR=%EXPORT_DIR%\doc
 
@@ -102,7 +102,7 @@ echo "Exporting to %EXPORT_DIR% "
 copy /Y MIPModelerEnv_build.bat   %EXPORT_DIR%\
 
 rem ---------------------------------------------------------------
-rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat 
+rem MIPModeler & MIPSolverInterface *.h, *.lib *.dll, *.pdf, *.bat
 rem ---------------------------------------------------------------
 mkdir %EXPORT_DIR%\doc
 mkdir %EXPORT_DIR%\lib
