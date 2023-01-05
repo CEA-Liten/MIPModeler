@@ -17,10 +17,12 @@ echo %PATH% | findstr "Visual" > file.txt
 )) || (
     Echo the file is empty
 	::call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+	if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" x64
 	if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
-
 )
 del file.txt
+
+if "%CPLEX_STUDIO_DIR201%" == "" set CPLEX_STUDIO_DIR201=%~dp0\..\Deps\External\Cplex\CPLEX_Studio201
 
 call QtEnv.bat
 
