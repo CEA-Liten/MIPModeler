@@ -1,6 +1,14 @@
 TEMPLATE = subdirs
 CONFIG  += ordered
 
+_GAMS_HOME=$$(GAMS_HOME)
+
+!isEmpty(_GAMS_HOME) {
+message(Using $$(GAMS_HOME) configuration for GAMSModeler)
+SUBDIRS +=\
+GAMSModeler\
+}
+
 localoption = $$(OPTION)
 equals (localoption, "debug" ){
 message(Using $$(OPTION) configuration for MIPModeler)
@@ -23,13 +31,6 @@ core\
 MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
-}
-_GAMS_HOME=$$(GAMS_HOME)
-
-!isEmpty(_GAMS_HOME) {
-message(Using $$(GAMS_HOME) configuration for GAMSModeler)
-SUBDIRS +=\
-GAMSModeler\
 }
 message("GAMS_HOME                     ": $$(GAMS_HOME))
 message("MIPMODELER_HOME               ": $$(MIPMODELER_HOME))
