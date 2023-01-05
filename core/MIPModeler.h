@@ -1,9 +1,9 @@
 /**
  * @file MIPModeler.h
  * @brief header that include all MIPModeler headers and revision number
- * @version 1.0
+ * @version 3.1.0
  * @author Yacine Gaoua (yacine.gaoua@cea.fr)
- * @date 02/2020
+ * @date 01/2023
 */
 
 #ifndef MIPMODELER_H
@@ -21,6 +21,6 @@
 #include "MIPModel.h"
 #include "MIPUtils.h"
 
-static std::string MIPModeler_Release("3.0.2") ;
+static std::string MIPModeler_Release("3.1.0") ;
 
 #endif // MIPMODELER_H
