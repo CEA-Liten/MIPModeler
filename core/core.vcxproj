@@ -45,17 +45,12 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyGAMS.props" />
+    <Import Project="$(SolutionDir)lib\import\MIPModeler\external\PropertyEigen.props" />
+    <Import Project="PropertyMIPModeler.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyGAMS.props" />
+    <Import Project="$(SolutionDir)lib\import\MIPModeler\external\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -63,6 +58,8 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -148,7 +145,6 @@
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>GAMSModeler39.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
