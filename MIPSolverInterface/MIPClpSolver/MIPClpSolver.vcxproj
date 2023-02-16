@@ -40,13 +40,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyMIPModeler.props" />
     <Import Project="PropertyClp.props" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\external\PropertyEigen.props" />
+    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyMIPModeler.props" />
     <Import Project="PropertyClp.props" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\external\PropertyEigen.props" />
+    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -89,6 +89,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
+	  <AdditionalDependencies>libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -126,6 +127,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
+	  <AdditionalDependencies>libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>

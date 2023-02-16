@@ -26,8 +26,8 @@ message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
 #external/CoinOR\
 core\
-#MIPSolverInterface\MIPCbcSolver\
-#MIPSolverInterface\MIPClpSolver\
+MIPSolverInterface\MIPCbcSolver\
+MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
