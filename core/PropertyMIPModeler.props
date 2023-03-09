@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\import\MIPModeler\core\;$(SolutionDir)lib\import\MIPModeler\MIPSolverInterface\MIPCpxSolver;$(SolutionDir)lib\import\MIPModeler\MIPSolverInterface\MIPCbcSolver;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MILPMODELER_HOME)\MIPModeler\core\;$(MILPMODELER_HOME)\MIPModeler\MIPSolverInterface\MIPCpxSolver;$(MILPMODELER_HOME)\MIPModeler\MIPSolverInterface\MIPCbcSolver;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MILPCOMPONENT_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <COINOR_HOME>$(SolutionDir)lib\import\MIPModeler\external\CoinOR</COINOR_HOME>
+    <COINOR_HOME>$(MILPMODELER_HOME)\MIPModeler\external\CoinOR</COINOR_HOME>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
@@ -11,7 +11,7 @@
       <PreprocessorDefinitions>USE_CBC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(COINOR_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>      
+      <AdditionalLibraryDirectories>$(COINOR_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

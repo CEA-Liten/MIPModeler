@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <EIGEN_HOME>$(SolutionDir)lib\import\MIPModeler\external\Eigen\3.2.9\</EIGEN_HOME>
+    <EIGEN_HOME>$(MILPMODELER_HOME)\MIPModeler\external\Eigen\3.2.9\</EIGEN_HOME>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>

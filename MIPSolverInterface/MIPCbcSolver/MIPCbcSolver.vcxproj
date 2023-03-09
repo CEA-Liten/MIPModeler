@@ -24,7 +24,7 @@
     <OutputDirectory>\lib\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>    
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PrimaryOutput>MIPCbcSolver</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -32,7 +32,7 @@
     <OutputDirectory>\lib\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>    
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PrimaryOutput>MIPCbcSolver</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -42,15 +42,17 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCbc.props" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyEigen.props" />    	
+    <Import Project="..\..\..\..\DefImportExport.props" />
+    <Import Project="..\..\core\PropertyMIPModeler.props" />
+    <Import Project="PropertyCbc.props" />
+    <Import Project="..\..\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCbc.props" />
-    <Import Project="$(SolutionDir)lib\import\MIPModeler\core\PropertyEigen.props" />    	
+    <Import Project="..\..\..\..\DefImportExport.props" />
+    <Import Project="..\..\core\PropertyMIPModeler.props" />
+    <Import Project="PropertyCbc.props" />
+    <Import Project="..\..\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -93,7 +95,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>      
+      <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -128,7 +130,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>      
+      <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
