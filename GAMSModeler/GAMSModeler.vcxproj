@@ -44,13 +44,13 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyGAMS.props" />
+    <Import Project="$(SolutionDir)lib\DefImportExport.props" />
+    <Import Project="PropertyGAMS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyPerseeComponent.props" />
-    <Import Project="..\..\Dev\VisualStudio\PropertyGAMS.props" />
+    <Import Project="$(SolutionDir)lib\DefImportExport.props" />
+    <Import Project="PropertyGAMS.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
