@@ -1,0 +1,17 @@
+# set MIPModeler solvers environement
+export extension=
+
+# MIPModeler env
+echo -e "\n$YELLOW➡  Setting MIPModeler environnement $RESET"
+export MIPMODELER_HOME=${IMPORT_HOME}/MIPModeler
+echo -e "$MAGENTA \t☸  MIPModeler directory\t\t: $QTDIR $RESET"
+
+# Cplex env
+source ${MIPMODELER_HOME}/MIPSolverInterface/MIPCpxSolver/CplexEnv.sh
+
+# Add CPlex and MIPModeler to PATH
+export PATH=${MIPMODELER_HOME}/lib/${OPTION}:${PATH}:${CPLEX_HOME_BIN}
+echo -e "$GREEN \t✅ CPlex is\t\t\t: ${MIPMODELER_HOME}/lib/${OPTION} $RESET"
+echo -e "$GREEN \t✅ MIPModeler is\t\t: ${MIPMODELER_HOME}/lib/${OPTION} $RESET"
+
+# TODO : export PATH=${MIPMODELER_HOME}/external/CoinOR/lib/${OPTION}:${PATH}

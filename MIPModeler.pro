@@ -13,23 +13,23 @@ localoption = $$(OPTION)
 equals (localoption, "debug" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-#external/CoinOR\
 core\
+MIPSolverInterface\MIPCpxSolver\
+#external/CoinOR\
 #MIPSolverInterface\MIPCbcSolver\
 #MIPSolverInterface\MIPClpSolver\
-MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
 }
 equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-#external/CoinOR\
 core\
-MIPSolverInterface\MIPCbcSolver\
-MIPSolverInterface\MIPClpSolver\
 MIPSolverInterface\MIPCpxSolver\
-#MIPSolverInterface\MIPMskSolver\
+#external/CoinOR\
+#MIPSolverInterface\MIPCbcSolver\
+#MIPSolverInterface\MIPClpSolver\
+##MIPSolverInterface\MIPMskSolver\
 #test\
 }
 message("GAMS_HOME                     ": $$(GAMS_HOME))
