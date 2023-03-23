@@ -1,3 +1,10 @@
+
+# File extensions to ignore everywhere
+*.o
+*.so
+*.log
+
+#
 /setDepsPath.bat
 /MIPModeler.pro.user
 /Makefile
