@@ -8,10 +8,10 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(GAMS_HOME)/apifiles/C++/api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GAMS_HOME)/apifiles/C++/api;../GAMSModeler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>	  
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>../lib/$(Configuration);$(GAMS_HOME)/apifiles/C++/lib/vs2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\;$(GAMS_HOME)/apifiles/C++/lib/vs2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(GAMS_HOME_LIB);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
