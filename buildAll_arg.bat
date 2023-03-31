@@ -22,7 +22,7 @@ echo %PATH% | findstr "Visual" > file.txt
 )
 del file.txt
 
-if "%CPLEX_STUDIO_DIR201%" == "" set CPLEX_STUDIO_DIR201=%~dp0\..\Deps\External\Cplex\CPLEX_Studio201
+::if "%CPLEX_STUDIO_DIR201%" == "" set CPLEX_STUDIO_DIR201=%~dp0\..\Deps\External\Cplex\CPLEX_Studio201
 
 call QtEnv.bat
 
