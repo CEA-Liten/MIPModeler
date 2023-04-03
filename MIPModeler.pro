@@ -28,7 +28,10 @@ SUBDIRS +=\
 core\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
-MIPSolverInterface\MIPCpxSolver\
+_CPLEX_HOME=$$(CPLEX_HOME)
+!isEmpty(_CPLEX_HOME) {
+	MIPSolverInterface\MIPCpxSolver\
+}
 #MIPSolverInterface\MIPMskSolver\
 #test\
 }

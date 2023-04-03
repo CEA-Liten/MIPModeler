@@ -3,6 +3,10 @@ set CPLEX_HOME_LIB=
 set CPLEX_HOME_BIN=
 set CPLEX_VERSION=
 
+set CPLEX_STUDIO_DIR201=
+set CPLEX_STUDIO_DIR129=
+
+
 REM Find cplex installation using system environement variable
 
 REM TEMPLATE
