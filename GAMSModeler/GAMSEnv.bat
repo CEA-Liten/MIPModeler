@@ -2,7 +2,7 @@ rem @echo off
 set GAMS_HOME=
 set USE_GAMS=
 
-if %NOGAMS%==1 goto sortie
+::if %NOGAMS%==1 goto sortie
 
 if exist C:\GAMS\39 set GAMS_HOME=C:\GAMS\39
 if %GAMS_HOME%=="" goto sortie	
