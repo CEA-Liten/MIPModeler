@@ -3,8 +3,7 @@ set CPLEX_HOME_LIB=
 set CPLEX_HOME_BIN=
 set CPLEX_VERSION=
 
-:: set CPLEX_STUDIO_DIR201=
-:: set CPLEX_STUDIO_DIR129=
+if %NOCPLEX%==1 goto sortie
 
 
 REM Find cplex installation using system environement variable
@@ -36,3 +35,4 @@ if exist "%CPLEX_STUDIO_DIR129%\cplex\bin\x64_win64\cplex1290.dll" (
 :END
 echo " - Add Cplex to path: %CPLEX_HOME_BIN% "
 set PATH=%PATH%;%CPLEX_HOME_BIN%
+:sortie
