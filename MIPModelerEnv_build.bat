@@ -30,8 +30,8 @@ set NOCPLEX=%2
 if "%NOCPLEX%" == "" set NOCPLEX=0
 if "%NOCPLEX%" == "false" set NOCPLEX=0
 if "%NOCPLEX%" == "true" set NOCPLEX=1
-echo "NOGAMS=%NOGAMS%, NOCPLEX=%NOCPLEX%"
 
+echo "MIPModeler build Settings are : NOGAMS=%NOGAMS%, NOCPLEX=%NOCPLEX%"
 
 call %MIPMODELER_HOME%\GAMSModeler\GAMSEnv.bat
 call %MIPMODELER_HOME%\MIPSolverInterface\MIPCpxSolver\CplexEnv.bat
