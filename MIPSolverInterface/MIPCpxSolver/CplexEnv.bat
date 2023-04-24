@@ -22,7 +22,7 @@ if exist "%CPLEX_STUDIO_DIR201%\cplex\bin\x64_win64\cplex2010.dll" (
 	set CPLEX_HOME_BIN=%CPLEX_STUDIO_DIR201%\cplex\bin\x64_win64
 	set CPLEX_HOME_LIB=%CPLEX_STUDIO_DIR201%\cplex\lib\x64_windows_msvc14\stat_mda
 	set CPLEX_VERSION=2010
-	goto :END
+	goto END
 )
 
 if exist "%CPLEX_STUDIO_DIR129%\cplex\bin\x64_win64\cplex1290.dll" (
@@ -30,7 +30,7 @@ if exist "%CPLEX_STUDIO_DIR129%\cplex\bin\x64_win64\cplex1290.dll" (
 	set CPLEX_HOME_BIN=%CPLEX_STUDIO_DIR129%\bin\x64_win64
 	set CPLEX_HOME_LIB=%CPLEX_STUDIO_DIR129%\lib\x64_windows_vs2015\stat_mda
 	set CPLEX_VERSION=1290
-	goto :END
+	goto END
 )
 :END
 echo " - Add Cplex to path: %CPLEX_HOME_BIN% "
