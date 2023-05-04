@@ -131,10 +131,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-<<<<<<< HEAD
       <AdditionalLibraryDirectories>$(COINOR_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
->>>>>>> dev-halias
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
