@@ -22,9 +22,20 @@ rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 set MIPMODELER_HOME=%~dp0
 echo "MIPMODELER_HOME=%MIPMODELER_HOME%"
 
-rem call %MIPMODELER_HOME%\GAMSModeler\GAMSEnv.bat
+set NOGAMS=%1
+if "%NOGAMS%" == "" set NOGAMS=0
+if "%NOGAMS%" == "false" set NOGAMS=0
+if "%NOGAMS%" == "true" set NOGAMS=1
+set NOCPLEX=%2
+if "%NOCPLEX%" == "" set NOCPLEX=0
+if "%NOCPLEX%" == "false" set NOCPLEX=0
+if "%NOCPLEX%" == "true" set NOCPLEX=1
+
+echo "MIPModeler build Settings are : NOGAMS=%NOGAMS%, NOCPLEX=%NOCPLEX%"
+
+call %MIPMODELER_HOME%\GAMSModeler\GAMSEnv.bat
 call %MIPMODELER_HOME%\MIPSolverInterface\MIPCpxSolver\CplexEnv.bat
-rem call %MIPMODELER_HOME%\MIPSolverInterface\MIPMskSolver\MosekEnv.bat
+call %MIPMODELER_HOME%\MIPSolverInterface\MIPMskSolver\MosekEnv.bat
 
 set PATH=%MIPMODELER_HOME%\external\CoinOR\lib\%OPTION%;%PATH%
 set PATH=%MIPMODELER_HOME%\lib\%OPTION%;%PATH%

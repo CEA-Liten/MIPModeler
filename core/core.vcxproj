@@ -45,12 +45,12 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    
+    <Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -59,8 +59,6 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
@@ -107,7 +105,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
-      <SuppressStartupBanner>true</SuppressStartupBanner>     
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
@@ -115,7 +114,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;MIPMODELER_LIBRARY;EIGEN_MPL2_ONLY;NDEBUG;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;USE_GAMS;MIPMODELER_LIBRARY;EIGEN_MPL2_ONLY;NDEBUG;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,6 +143,7 @@
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalDependencies>GAMSModeler39.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>

@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 CONFIG  += ordered
 
 _GAMS_HOME=$$(GAMS_HOME)
+_CPLEX_HOME=$$(CPLEX_HOME)
 
 !isEmpty(_GAMS_HOME) {
 message(Using $$(GAMS_HOME) configuration for GAMSModeler)
@@ -17,7 +18,6 @@ SUBDIRS +=\
 core\
 #MIPSolverInterface\MIPCbcSolver\
 #MIPSolverInterface\MIPClpSolver\
-MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
 }
@@ -28,10 +28,16 @@ SUBDIRS +=\
 core\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
-MIPSolverInterface\MIPCpxSolver\
+#MIPSolverInterface\MIPCpxSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
 }
+
+!isEmpty(_CPLEX_HOME) {
+SUBDIRS +=MIPSolverInterface\MIPCpxSolver\
+}
+
+
 message("GAMS_HOME                     ": $$(GAMS_HOME))
 message("MIPMODELER_HOME               ": $$(MIPMODELER_HOME))
 message("MIPCpxSolver using cplex      ": $$(CPLEX_HOME))
