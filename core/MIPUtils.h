@@ -58,42 +58,54 @@ bool MIPMODELERSHARED_EXPORT
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPExpression1D& xInputExpr,
-                                          const MIPData1D& xTable, const MIPData1D& yTable,
+                                          const MIPData1D& xTable,
+                                          const MIPData1D& yTable, 
+                                          std::string aname = "",
                                           const MIPLinearType& type = MIP_SOS,
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPExpression& xInputExpr,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname = "",
                                         const MIPLinearType& type = MIP_SOS,
                                         const bool& relaxedForm = false,
                                         MIPVariable1D xSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPData1D& xInputData,
-                                          const MIPData1D& xTable, const MIPData1D& yTable,
-                                          const MIPLinearType& type  = MIP_SOS,
+                                          const MIPData1D& xTable,
+                                          const MIPData1D& yTable, 
+                                          std::string aname = "",
+                                          const MIPLinearType& type = MIP_SOS,
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const double& xInputData,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname = "",
                                         const MIPLinearType& type  = MIP_SOS,
                                         const bool& relaxedForm = false,
                                         MIPVariable1D xSOS  = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
                 MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPVariable1D& xInputVar,
-                                          const MIPData1D& xTable, const MIPData1D& yTable,
+                                          const MIPData1D& xTable,
+                                          const MIPData1D& yTable, 
+                                          std::string aname = "",
                                           const MIPLinearType& type  = MIP_SOS,
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
               MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPVariable0D& xInputVar,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname = "",
                                         const MIPLinearType& type  = MIP_SOS,
                                         const bool& relaxedForm = false,
                                         MIPVariable1D xSOS  = MIPVariable1D());
