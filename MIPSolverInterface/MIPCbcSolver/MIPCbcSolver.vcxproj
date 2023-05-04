@@ -25,7 +25,6 @@
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <IntermediateDirectory>release\</IntermediateDirectory>
     <PrimaryOutput>MIPCbcSolver</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -34,7 +33,6 @@
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <IntermediateDirectory>debug\</IntermediateDirectory>
     <PrimaryOutput>MIPCbcSolver</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -44,6 +42,7 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+<<<<<<< HEAD
     <Import Project="..\..\..\Dev\VisualStudio\PropertyCbc.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
@@ -55,6 +54,19 @@
     <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
     <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+=======
+	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
+	<Import Project="PropertyCbc.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
+	<Import Project="PropertyCbc.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
+>>>>>>> dev-halias
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -98,7 +110,6 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(COINOR_HOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -106,7 +117,6 @@
       <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)\MIPCbcSolver.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -135,7 +145,10 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>libCbc.lib;libCbcSolver.lib;libCgl.lib;libClp.lib;libCoinUtils.lib;libOsi.lib;libOsiCbc.lib;libOsiClp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+<<<<<<< HEAD
       <AdditionalLibraryDirectories>$(COINOR_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+=======
+>>>>>>> dev-halias
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
