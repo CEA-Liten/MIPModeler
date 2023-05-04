@@ -42,19 +42,6 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-<<<<<<< HEAD
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyCbc.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyCbc.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
-=======
 	<Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
 	<Import Project="PropertyCbc.props" />
@@ -66,7 +53,6 @@
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
 	<Import Project="PropertyCbc.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
->>>>>>> dev-halias
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
