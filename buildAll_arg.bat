@@ -26,7 +26,7 @@ del file.txt
 
 call QtEnv.bat
 
-call MIPModelerEnv_build
+call MIPModelerEnv_build %2 %3
 
 call build .\
 

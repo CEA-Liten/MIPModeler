@@ -49,7 +49,7 @@ bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
     }
 }
 //-----------------------------------------------------------------------------------------------------
-void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos) {
+void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos, std::string aname="") {
     int nbSOSVar = sos.getNumElements();
 
     // linearisation form using log(n-1) binary variables
@@ -61,8 +61,7 @@ void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos) {
     }
 
     MIPVariable1D binVar(binVarSize, 0.0, 1.0, MIP_INT);
-    model->add(binVar);
-
+    model->add(binVar, "lambda_" + aname);
     // build bijective function (using gray code)
     std::vector<std::vector<int>> injectiveTable(nbSOSVar, std::vector<int>(binVarSize));
     for (int i = 0; i < nbSOSVar; i++)
@@ -123,7 +122,9 @@ void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos) {
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPExpression1D& xInputExpr,
-                                          const MIPData1D& xTable, const MIPData1D& yTable,
+                                          const MIPData1D& xTable,
+                                          const MIPData1D& yTable, 
+                                          std::string aname,
                                           const MIPLinearType& type,
                                           const bool& relaxedForm,
                                           MIPVariable2D xSOS){
@@ -141,7 +142,9 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
             MIPExpression1D yOutputExpr(length);
 
             MIPVariable2D xVar(length, xTableSize, 0., 1.);
-            model.add(xVar);
+
+            //std::string aname = #xInputExpr;
+            model.add(xVar, "Discretized_"+aname);
 
             for (int t = 0 ; t < length ; t++) {
                 MIPExpression expression_X;
@@ -153,14 +156,14 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                     convexity_X += xVar(t, i);
                     sos2_X.add(xVar(t, i));
                 }
-                model.add( xInputExpr[t] == expression_X );
+                model.add( xInputExpr[t] == expression_X, aname+std::to_string(t));
                 expression_X.close();
-                model.add( convexity_X == 1 );
+                model.add( convexity_X == 1, "Convexity_"+aname);
                 convexity_X.close();
 
                 if (relaxedForm == false) {
                     if (type == MIP_LOG)
-                        useLogarithmicForm(&model, sos2_X);
+                        useLogarithmicForm(&model, sos2_X, aname);
                     else
                         model.add(sos2_X, MIP_SOS2);
                 }
@@ -179,7 +182,9 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPExpression& xInputExpr,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
                                         MIPVariable1D xSOS){
@@ -196,7 +201,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
             MIPExpression yOutputExpr;
 
             MIPVariable1D xVar(xTableSize, 0., 1.);
-            model.add(xVar);
+            model.add(xVar, "Discretized_" + aname);
 
             MIPExpression expression_X;
             MIPExpression convexity_X;
@@ -207,7 +212,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                 convexity_X += xVar(i);
                 sos2_X.add(xVar(i));
             }
-            model.add( xInputExpr == expression_X );
+            model.add( xInputExpr == expression_X, "C_" + aname );
             expression_X.close();
             model.add( convexity_X == 1 );
             convexity_X.close();
@@ -232,7 +237,9 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPData1D& xInputData,
-                                         const MIPData1D& xTable, const MIPData1D& yTable,
+                                         const MIPData1D& xTable,
+                                         const MIPData1D& yTable,
+                                         std::string aname,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
                                          MIPVariable2D xSOS){
@@ -241,22 +248,26 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
     for (int i = 0; i < length; i++)
         xInputExpr[i] = xInputData[i];
 
-    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const double& xInputData,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
                                         MIPVariable1D xSOS){
     MIPExpression xInputExpr = xInputData;
-    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPVariable1D& xInputVar,
-                                         const MIPData1D& xTable, const MIPData1D& yTable,
+                                         const MIPData1D& xTable,
+                                         const MIPData1D& yTable, 
+                                         std::string aname,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
                                          MIPVariable2D xSOS){
@@ -265,18 +276,20 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
     for (int i = 0; i < length; i++)
         xInputExpr[i] += xInputVar(i);
 
-    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPVariable0D& xInputVar,
-                                        const MIPData1D& xTable, const MIPData1D& yTable,
+                                        const MIPData1D& xTable,
+                                        const MIPData1D& yTable, 
+                                        std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
                                         MIPVariable1D xSOS){
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
-    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,

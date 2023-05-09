@@ -89,3 +89,6 @@
 /MIPSolverInterface/MIPCbcSolver/lib
 /MIPSolverInterface/MIPCpxSolver/lib
 *.user
+/core/x64/Debug/qmake
+/MIPSolverInterface/MIPCbcSolver/x64/Debug/qmake
+*.stash

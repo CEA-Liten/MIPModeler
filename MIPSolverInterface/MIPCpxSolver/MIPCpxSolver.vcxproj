@@ -25,7 +25,6 @@
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <IntermediateDirectory>release\</IntermediateDirectory>
     <PrimaryOutput>MIPCpxSolver201</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -34,7 +33,6 @@
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <IntermediateDirectory>debug\</IntermediateDirectory>
     <PrimaryOutput>MIPCpxSolver201</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -44,17 +42,17 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyCplex.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
+	<Import Project="PropertyCplex.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	    
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyCplex.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyEigen.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyUtilities.props" />
-    <Import Project="..\..\..\Dev\VisualStudio\PropertyMIPModeler.props" />
+	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
+	<Import Project="PropertyCplex.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    		        
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -124,12 +122,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;MIPCPXSOLVER_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>

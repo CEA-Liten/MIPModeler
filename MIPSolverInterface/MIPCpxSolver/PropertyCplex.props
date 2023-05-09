@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <CPLEX_VERSION>2010</CPLEX_VERSION>
+    <CPLEX_HOME>C:\Program Files\IBM\ILOG\CPLEX_Studio201\cplex</CPLEX_HOME>
+    <CPLEX_LIB>MIPCpxSolver$(CPLEX_VERSION).lib</CPLEX_LIB>
+    <CPLEX_HOME_LIB>$(CPLEX_HOME)\lib\x64_windows_msvc14\stat_mda</CPLEX_HOME_LIB>
+    <CPLEX_HOME_BIN>$(CPLEX_HOME)\bin\x64_win64</CPLEX_HOME_BIN>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>PropertyCplex</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CPLEX_HOME)/include/ilcplex/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_CPLEX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="CPLEX_VERSION">
+      <Value>$(CPLEX_VERSION)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPLEX_HOME">
+      <Value>$(CPLEX_HOME)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPLEX_LIB">
+      <Value>$(CPLEX_LIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPLEX_HOME_LIB">
+      <Value>$(CPLEX_HOME_LIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPLEX_HOME_BIN">
+      <Value>$(CPLEX_HOME_BIN)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
