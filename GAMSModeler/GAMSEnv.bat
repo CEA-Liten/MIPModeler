@@ -1,6 +1,6 @@
 rem @echo off
-set GAMS_HOME=""
-set USE_GAMS=""
+set GAMS_HOME=
+set USE_GAMS=
 
 if %NOGAMS%==1 goto sortie
 
