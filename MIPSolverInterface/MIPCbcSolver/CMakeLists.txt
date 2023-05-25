@@ -14,7 +14,7 @@
 #   to populate the interface of the target for include directories at build time
 
 # Component name (i.e. target name)
-set(COMPONENT MIPCpxSolver)
+set(COMPONENT MIPCbcSolver)
 message("-- Set up for ${PROJECT_NAME}_${COMPONENT} library ...\n")
 
 # ------ source directories for current component ------
@@ -37,7 +37,7 @@ target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
 # Links with non-Pegase libraries
 # Qt, FBSF, MipModeler, Persee, Eigen, ....
 find_package(Qt REQUIRED)
-find_package(CPLEX REQUIRED)
+find_package(CBC REQUIRED)
 
 # -- Specific Eigen to MIPModeler
 target_include_directories(${COMPONENT} PRIVATE
