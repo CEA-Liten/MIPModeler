@@ -42,17 +42,17 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCbc.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
+    <Import Project="PropertyCbc.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCbc.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
+    <Import Project="PropertyCbc.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -115,6 +115,10 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;MIPCBCSOLVER_LIBRARY;NDEBUG;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Message>copy Cbc </Message>
+      <Command>copy /Y $(COINOR_HOME)\lib\$(Configuration)\*.dll $(OutDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -149,6 +153,12 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;MIPCBCSOLVER_LIBRARY;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy /Y $(COINOR_HOME)\lib\$(Configuration)\*.dll $(OutDir)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>copy Cbc</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MIPCbcSolver.cpp" />
