@@ -40,15 +40,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyClp.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	
+    <Import Project="PropertyClp.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyClp.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	           
+    <Import Project="PropertyClp.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -152,7 +152,7 @@
     <ClCompile Include="MIPClpSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MIPClpSolver.h" />
+    <QtMoc Include="MIPClpSolver.h" />
     <ClInclude Include="MIPClpSolver_global.h" />
   </ItemGroup>
   <ItemGroup>

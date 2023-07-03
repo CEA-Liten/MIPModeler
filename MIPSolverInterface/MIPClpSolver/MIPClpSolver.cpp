@@ -9,15 +9,40 @@
 
 namespace MIPSolverInterface {
 // --------------------------------------------------------------------------
-MIPClpSolver::MIPClpSolver(MIPModeler::MIPModel* model)
-    : mModel(model),
+MIPClpSolver::MIPClpSolver()
+    : mModel(nullptr),
       mSolver(new OsiClpSolverInterface()),
       mLpFile(false),
       mSolverPrint(1)
-{
-    if (mModel->isProblemBuilt() == false)
-        mModel->buildProblem();
+{   
 }
+
+
+QString MIPClpSolver::Infos()
+{
+    return "Clp";
+}
+
+int MIPClpSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results)
+{
+    int vRet = -1;
+    if (ap_Model) {
+        mModel = ap_Model;
+        if (mModel->isProblemBuilt() == false)
+            mModel->buildProblem();
+
+        for (auto& vParam : a_Params) {                                    
+            if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
+            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();
+        }
+        solve();
+
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
+        vRet = 0;
+    }
+    return vRet;
+}
+
 //--------------------------------------------------------------------------
 void MIPClpSolver::setSolverPrint(const int& solverPrint) {
     mSolverPrint = solverPrint;

@@ -14,18 +14,45 @@
 
 namespace MIPSolverInterface {
 //---------------------------------------------------------------------------
-MIPCbcSolver::MIPCbcSolver(MIPModeler::MIPModel* model)
-    : mModel(model),
+MIPCbcSolver::MIPCbcSolver()
+    : mModel(nullptr),
       mSolver(new OsiClpSolverInterface()),
       mTimeLimit(TIME_LIMIT),
       mGap(GAP),
       mThreads(THREADS),
       mLpFile(false),
       mSolverPrint(1)
-{
-    if (mModel->isProblemBuilt() == false)
-        mModel->buildProblem();
+{   
 }
+
+QString MIPCbcSolver::Infos()
+{
+    return "Cbc";
+}
+
+int MIPCbcSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results)
+{
+    int vRet = -1;
+    if (ap_Model) {
+        mModel = ap_Model;
+        if (mModel->isProblemBuilt() == false)
+            mModel->buildProblem();
+
+        for (auto& vParam : a_Params) {
+            if (vParam.first == "Gap") setGap(vParam.second.value);
+            else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
+            else if (vParam.first == "Threads") setThreads(vParam.second.value);            
+            else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
+            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();            
+        }
+        solve();
+
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
+        vRet = 0;
+    }
+    return vRet;
+}
+
 //---------------------------------------------------------------------------
 void MIPCbcSolver::setSolverPrint(const int& solverPrint) {
     mSolverPrint = solverPrint;

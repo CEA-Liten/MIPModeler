@@ -11,18 +11,28 @@
 #include "MIPModeler.h"
 #include <iostream>
 #include <QtCore>
+#include "IMIPSolver.h"
 
 #ifndef MIPCPXSOLVER_H
 #define MIPCPXSOLVER_H
 
 namespace MIPSolverInterface {
 
-class MIPCPXSOLVERSHARED_EXPORT MIPCpxSolver {
+class MIPCPXSOLVERSHARED_EXPORT MIPCpxSolver : public QObject, 
+                                               public IMIPSolver
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
+    Q_INTERFACES(IMIPSolver)
+
 public:
 // --------------------------------------------------------------------------
-    MIPCpxSolver(MIPModeler::MIPModel* model);
+    MIPCpxSolver();
     ~MIPCpxSolver();
 // --------------------------------------------------------------------------
+    QString Infos();
+    int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
+
     void solve();
     void writeLp();
     void writeMipStart();

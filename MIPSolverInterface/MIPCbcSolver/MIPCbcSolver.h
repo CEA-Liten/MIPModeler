@@ -12,7 +12,7 @@
 #include <CbcModel.hpp>
 #include <CbcSolver.hpp>
 #include <CbcSOS.hpp>
-#include "MIPModeler.h"
+#include "IMIPSolver.h"
 #include <iostream>
 
 #ifndef MIPCBCSOLVER_H
@@ -20,12 +20,21 @@
 
 namespace MIPSolverInterface {
 
-class MIPCBCSOLVERSHARED_EXPORT MIPCbcSolver {
+class MIPCBCSOLVERSHARED_EXPORT MIPCbcSolver : public QObject,
+    public IMIPSolver
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
+    Q_INTERFACES(IMIPSolver)
+
 public:
 //---------------------------------------------------------------------------
-    MIPCbcSolver(MIPModeler::MIPModel* model);
+    MIPCbcSolver();
     ~MIPCbcSolver();
 //---------------------------------------------------------------------------
+    QString Infos();
+    int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
+
     void solve();
     void writeLp();
 //---------------------------------------------------------------------------

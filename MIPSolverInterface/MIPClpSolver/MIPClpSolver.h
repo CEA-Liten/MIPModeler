@@ -9,7 +9,7 @@
 #include "MIPClpSolver_global.h"
 #include <OsiSolverInterface.hpp>
 #include <OsiClpSolverInterface.hpp>
-#include "MIPModeler.h"
+#include "IMIPSolver.h"
 #include <iostream>
 
 #ifndef MIPCLPSOLVER_H
@@ -17,12 +17,21 @@
 
 namespace MIPSolverInterface {
 
-class MIPCLPSOLVERSHARED_EXPORT MIPClpSolver {
+class MIPCLPSOLVERSHARED_EXPORT MIPClpSolver : public QObject,
+    public IMIPSolver
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
+    Q_INTERFACES(IMIPSolver)
+
 public:
 //---------------------------------------------------------------------------
-    MIPClpSolver(MIPModeler::MIPModel* model);
+    MIPClpSolver();
     ~MIPClpSolver();
 //---------------------------------------------------------------------------
+    QString Infos();
+    int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
+
     void solve();
     void writeLp();
 //---------------------------------------------------------------------------

@@ -16,8 +16,8 @@
 
 namespace MIPSolverInterface {
 // --------------------------------------------------------------------------
-MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
-    : mModel(model),
+MIPCpxSolver::MIPCpxSolver()
+    : mModel(nullptr),
       mTimeLimit(TIME_LIMIT),
       mGap(GAP),
       mThreads(THREADS),
@@ -28,10 +28,52 @@ MIPCpxSolver::MIPCpxSolver(MIPModeler::MIPModel* model)
       mFileMipStart(""),
       mReadParamFile(false),
       mTerminate(NULL)
-{
-    if (mModel->isProblemBuilt() == false)
-        mModel->buildProblem();
+{    
 }
+
+QString MIPCpxSolver::Infos()
+{
+    return "Cplex";
+}
+
+int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results)
+{
+    int vRet = -1;
+    if (ap_Model) {
+        mModel = ap_Model;
+        if (mModel->isProblemBuilt() == false)
+            mModel->buildProblem();
+
+        for (auto& vParam : a_Params) {
+            if (vParam.first == "Gap") setGap(vParam.second.value);
+            else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
+            else if (vParam.first == "Threads") setThreads(vParam.second.value);
+            else if (vParam.first == "Location") {
+                std::string fname = vParam.second.str.QString::toStdString();
+                setLocation(fname.c_str());
+            }
+            else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
+            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();
+            else if (vParam.first == "ReadParamFile") if (vParam.second.value) setReadParamFile();
+            else if (vParam.first == "WriteMipStart") if (vParam.second.value) writeMipStart();
+            else if (vParam.first == "FileMipStart") {
+                if (vParam.second.str != "") {
+                    std::string fname = vParam.second.str.QString::toStdString();
+                    setFileMipStart(fname.c_str());
+                }
+            }
+            else if (vParam.first == "TerminateSignal") setTerminateSignal(vParam.second.signal);             
+        }
+        solve();
+
+        // TODO: si erreur dans solve comment sont les résultats ?
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
+        vRet = 0;
+    }        
+    return vRet;
+}
+
+
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setSolverPrint(const bool& solverPrint){
     mSolverPrint = solverPrint;
@@ -467,5 +509,6 @@ void MIPCpxSolver::solve() {
 MIPCpxSolver::~MIPCpxSolver() {
 
 }
+
 // --------------------------------------------------------------------------
 }

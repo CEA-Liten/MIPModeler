@@ -164,7 +164,7 @@
     <ClCompile Include="MIPCbcSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MIPCbcSolver.h" />
+    <QtMoc Include="MIPCbcSolver.h" />
     <ClInclude Include="MIPCbcSolver_global.h" />
   </ItemGroup>
   <ItemGroup>

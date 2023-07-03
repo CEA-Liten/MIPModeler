@@ -92,3 +92,5 @@
 /core/x64/Debug/qmake
 /MIPSolverInterface/MIPCbcSolver/x64/Debug/qmake
 *.stash
+/MIPSolverInterface/MIPSolver/Debug
+/MIPSolverInterface/MIPSolver/x64/Debug

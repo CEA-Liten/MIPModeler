@@ -42,17 +42,17 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCplex.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    	    
+    <Import Project="PropertyCplex.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-	<Import Project="$(SolutionDir)DefImportExport.props" />
+    <Import Project="$(SolutionDir)DefImportExport.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
-	<Import Project="PropertyCplex.props" />
-    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />    		        
+    <Import Project="PropertyCplex.props" />
+    <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -160,7 +160,7 @@
     <ClCompile Include="MIPCpxSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MIPCpxSolver.h" />
+    <QtMoc Include="MIPCpxSolver.h" />
     <ClInclude Include="MIPCpxSolver_global.h" />
   </ItemGroup>
   <ItemGroup>
