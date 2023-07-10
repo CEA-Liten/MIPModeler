@@ -16,11 +16,13 @@ set OLD_PATH=%PATH%
 
 cd "%BUILD_PATH%"
 
-REM Set path for Qt, FBSF and Pegase
-REM call AppEnv.bat -> replaced by PegaseEnv
-
 REM clean
-if exist Makefile call jom distclean
+if %OPTION%==debug (
+if exist Makefile call jom -f Makefile.Debug distclean
+)
+if %OPTION%==release (
+if exist Makefile call jom -f Makefile.Release distclean
+)
 
 set log_file="%CUR_PATH%\compile.%OPTION%.log"
 echo "Compiling %BUILD_PATH% in mode %OPTION%" > %log_file%
@@ -34,6 +36,7 @@ call jom debug >> %log_file%
 if not !ERRORLEVEL! == 0 goto sortie
 call jom.exe -f Makefile.Debug install
 )
+
 if %OPTION%==release (
 call jom >> %log_file%
 if not !ERRORLEVEL! == 0 goto sortie
@@ -43,6 +46,8 @@ call jom.exe -f Makefile.Release install
 cd %CUR_PATH%
 set PATH=%OLD_PATH%
 
+EXIT /B 0
+ 
 :sortie
  echo "FATAL COMPILATION OF %BUILD_PATH% in mode %OPTION%" 
  EXIT /B 1
