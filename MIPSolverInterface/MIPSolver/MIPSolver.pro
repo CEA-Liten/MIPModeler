@@ -5,6 +5,7 @@ TEMPLATE = lib
 
 
 INCLUDEPATH += ../../core/
+INCLUDEPATH += ../../external/Eigen/3.2.9/
 
 DEFINES += MIPSOLVER_LIBRARY
 
