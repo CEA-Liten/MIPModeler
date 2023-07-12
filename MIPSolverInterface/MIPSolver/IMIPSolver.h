@@ -5,7 +5,6 @@
 
 class MIPSolverParams {
 public:
-    //typedef QString u_SolverParam;
     struct MIPSolverParam {
         double value;
         QString str;

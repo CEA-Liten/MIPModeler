@@ -9,6 +9,7 @@ INCLUDEPATH += $$(CPLEX_HOME)/include/ilcplex
 LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += ../../core/
 INCLUDEPATH += ../../external/Eigen/3.2.9/
+INCLUDEPATH += ../MIPSolver
 
 DEFINES += MIPCPXSOLVER_LIBRARY
 

@@ -8,19 +8,10 @@ std::map<QString, MIPSolverFactory::SolverDescriptor> MIPSolverFactory::m_PlugIn
 
 MIPSolverFactory::MIPSolverFactory()
 {
-    // recherche les solvers parmi les dll
-    QDir vDir(QCoreApplication::applicationDirPath(), "*.dll");
-    QFileInfoList vFiles(vDir.entryInfoList());
-    for (auto& vFile : vFiles) {
-        if (vFile.baseName().startsWith("MIP")) {
-            if (vFile.baseName().contains("Solver")) {
-                SolverDescriptor vPlugIn;
-                if (vPlugIn.Init(vFile.absoluteFilePath())) {
-                    QString vKey = vPlugIn.getInfos();
-                    m_PlugIns[vKey] = vPlugIn;
-                }
-            }
-        }
+    // recherche les solvers
+    if (!findSolvers(QCoreApplication::applicationDirPath())) {
+        QString appDir = qEnvironmentVariable("PERSEE_BIN", QDir::currentPath());
+        findSolvers(appDir);
     }    
 }
 
@@ -30,18 +21,39 @@ void MIPSolverFactory::getAllInfos(QStringList& a_Infos)
     t_mapPlugIns::iterator end = m_PlugIns.end();
     for (t_mapPlugIns::iterator it = m_PlugIns.begin(); it != end; it++) {
         a_Infos.push_back(it->second.getInfos());
-    }
+    }    
 }
 
 int MIPSolverFactory::solve(const QString& a_Cmd, MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results)
 {
-    int vRet = -1;    
+    int vRet = -1;        
     t_mapPlugIns::iterator vIter = m_PlugIns.find(a_Cmd);
     if (vIter != m_PlugIns.end()) {
         vRet = vIter->second.solve(ap_Model, a_Params, a_Results);
     }    
     else {
         qWarning() << "cannot find solver " << a_Cmd;
+    }
+    return vRet;
+}
+
+bool MIPSolverFactory::findSolvers(const QString& a_Path)
+{
+    bool vRet = false;
+    QDir vDir(a_Path, "*.dll");
+    qDebug() << "Search solvers in: " << a_Path;
+    QFileInfoList vFiles(vDir.entryInfoList());
+    for (auto& vFile : vFiles) {
+        if (vFile.baseName().startsWith("MIP")) {
+            if (vFile.baseName().contains("Solver")) {
+                SolverDescriptor vPlugIn;
+                if (vPlugIn.Init(vFile.absoluteFilePath())) {
+                    QString vKey = vPlugIn.getInfos();
+                    m_PlugIns[vKey] = vPlugIn;
+                    vRet = true; 
+                }
+            }
+        }
     }
     return vRet;
 }

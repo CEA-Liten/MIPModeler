@@ -21,6 +21,7 @@ INCLUDEPATH += ../../external/CoinOR/Osi/src/Osi/
 INCLUDEPATH += ../../external/CoinOR/Cbc/src/
 INCLUDEPATH += ../../external/CoinOR/Clp/src/OsiClp
 INCLUDEPATH += ../../external/CoinOR/Clp/src/
+INCLUDEPATH += ../MIPSolver
 
 DEFINES += MIPCBCSOLVER_LIBRARY
 
