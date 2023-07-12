@@ -26,6 +26,9 @@ protected:
         IMIPSolver* m_IPlugIn;
         QString m_Infos;
     };
+
+
+    static bool findSolvers(const QString& a_Path);
     typedef std::map<QString, SolverDescriptor> t_mapPlugIns;
     static t_mapPlugIns m_PlugIns;    
 };
