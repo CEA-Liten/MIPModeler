@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros">
-    <GAMS_HOME>C:\GAMS\39</GAMS_HOME>
-    <GAMS_HOME_LIB>gamscpp.lib</GAMS_HOME_LIB>
-  </PropertyGroup>
-  <PropertyGroup />
+  <ImportGroup Label="PropertySheets" /> 
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(GAMS_HOME)/apifiles/C++/api;../GAMSModeler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>	  
+      <AdditionalIncludeDirectories>$(GAMS_HOME)/apifiles/C++/api;../GAMSModeler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\;$(GAMS_HOME)/apifiles/C++/lib/vs2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\;$(GAMS_HOME_PATHLIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(GAMS_HOME_LIB);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-  </ItemDefinitionGroup>
-  <ItemGroup>
-    <BuildMacro Include="GAMS_HOME">
-      <Value>$(GAMS_HOME)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="GAMS_HOME_LIB">
-      <Value>$(GAMS_HOME_LIB)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-  </ItemGroup>
+  </ItemDefinitionGroup>  
 </Project>
