@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MILPMODELER_HOME)\core\;$(MILPMODELER_HOME)\MIPSolverInterface\MIPSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPCpxSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPClpSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPCbcSolver;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MILPMODELER_HOME)\core\;$(MILPMODELER_HOME)\ModelerInterface;$(MILPMODELER_HOME)\MIPSolverInterface\MIPSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPCpxSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPClpSolver;$(MILPMODELER_HOME)\MIPSolverInterface\MIPCbcSolver;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MILPCOMPONENT_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

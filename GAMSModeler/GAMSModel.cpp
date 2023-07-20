@@ -1,6 +1,7 @@
 #include "GAMSModel.h"
 #include <fstream>
 #include <QDebug>
+#include <QDir>
 
 namespace GAMSModeler {
 
@@ -230,6 +231,74 @@ void GAMSModel::clear()
     mGMSModel = "";
     mDataLabels.clear();
     mDataBase.clear();
+}
+
+std::string GAMSModel::Infos()
+{
+    return "GAMS";
+}
+
+void GAMSModel::init(const ModelerParams& a_params)
+{
+    QString gamslib = qEnvironmentVariable("GAMSLIB", QDir::currentPath());
+    addText("$\t setGlobal gamslib " + gamslib.toStdString() + "\n;\n");
+    addText("Sets year, k \n;\n");
+    addText("Scalars DiscountRate \n;\n");
+    addText("Parameters TimeStep(k) \n;\n");
+
+    std::vector<GAMSModeler::GAMSData*> modelData;
+    ModelerParams::t_MIPModelerParams::const_iterator vIter = a_params.find("NbYear");
+    if (vIter != a_params.end()) {
+        int nbYears = (int)vIter->second.value;
+        std::vector<std::string> yearSet(nbYears);
+        for (int i = 0; i < nbYears; i++)
+            yearSet[i] = "year" + std::to_string(i);
+        modelData.push_back(new GAMSModeler::GAMSDataSet("year", yearSet));
+    }
+    vIter = a_params.find("nbTimeSteps");
+    if (vIter != a_params.end()) {
+        int nbTimeSteps = (int)vIter->second.value;
+        std::vector<std::string> kSet(nbTimeSteps);
+        for (int i = 0; i < nbTimeSteps; i++)
+            kSet[i] = "k" + std::to_string(i);
+        modelData.push_back(new GAMSModeler::GAMSDataSet("k", kSet));
+    }
+    vIter = a_params.find("TimeSteps");
+    if (vIter != a_params.end()) {
+        modelData.push_back(new GAMSModeler::GAMSDataParam1D("TimeStep", "k", vIter->second.values));
+    }
+    vIter = a_params.find("DiscountRate");
+    if (vIter != a_params.end()) {
+        modelData.push_back(new GAMSModeler::GAMSDataScalar("DiscountRate", vIter->second.value));        
+    }
+    addData(modelData, true);
+    modelData.clear();
+}
+
+void GAMSModel::setParams(const ModelerParams& a_params)
+{
+    for (auto& vParam : a_params) {
+        if (vParam.first == "ObjectiveDirection") {
+            if (vParam.second.value == -1)
+                setObjectiveDirection("Max");
+            else
+                setObjectiveDirection("Min");
+        }
+        else if (vParam.first == "ObjContribution") {
+            addText("");
+            addComment("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            addComment(" Objective Function");
+            addComment("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            addText("Variables Problem_v_Objective \n;\n");
+            addText("Equations Problem_eq_Objective \n;\n");
+            addText("Problem_eq_Objective..");
+            addText("\t Problem_v_Objective");
+            addText("\t =E=");
+            for (size_t ii = 0; ii < vParam.second.strs.size(); ii++)
+                addText("\t + " + vParam.second.strs[ii]);
+            addText(";");
+        }
+    }
 }
 
 void GAMSModel::exportDataBase(const std::string& GDXfilename)

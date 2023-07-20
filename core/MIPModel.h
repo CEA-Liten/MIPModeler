@@ -19,9 +19,7 @@
 #include "MIPWarmStart.h"
 #include <Eigen/SparseCore>
 
-#ifdef USE_GAMS
-#include "GAMSModeler.h"
-#endif
+#include "ModelerInterface.h"
 
 #ifndef MIPMODEL_H
 #define MIPMODEL_H
@@ -53,6 +51,8 @@ public:
 // --------------------------------------------------------------------------
     MIPModel(const std::string& modelName = "");
     virtual ~MIPModel();
+    void setExternalModeler(ModelerInterface *ap_modeler);
+    ModelerInterface* getExternalModeler() { return mExternalModeler; }
 // --------------------------------------------------------------------------
     void add(MIPVariable0D& variable0D, const std::string& name = "");
     void add(MIPVariable1D& variable1D, const std::string& name = "");
@@ -98,11 +98,7 @@ public:
     const std::vector<MIPSubobjective> getListSubobjectives() const {return mListSubobjectives;}
     const std::vector<double*> getSubobjectiveCoefficients() const {return mSubObjCoeff;}
     const std::vector<int*> getSubobjectiveIndices() const {return mSubObjIndices;}
-// --------------------------------------------------------------------------
-#ifdef USE_GAMS
-    GAMSModeler::GAMSModel* getGAMSModel() {return mGAMSModel;}
-#endif
-// --------------------------------------------------------------------------
+
 private:
     MIPExpression mObjectiveExpression;
     MIPDirection mObjectiveDirection;
@@ -142,10 +138,7 @@ private:
     bool mProblemBuilt;
 
     std::string mModelName;
-
-#ifdef USE_GAMS
-    GAMSModeler::GAMSModel* mGAMSModel;
-#endif
+    ModelerInterface* mExternalModeler{ nullptr };
 };
 
 }
