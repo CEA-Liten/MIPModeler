@@ -48,18 +48,16 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             if (vParam.first == "Gap") setGap(vParam.second.value);
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
-            else if (vParam.first == "Location") {
-                std::string fname = vParam.second.str.QString::toStdString();
-                setLocation(fname.c_str());
+            else if (vParam.first == "Location") {                
+                setLocation(vParam.second.str.QString::toStdString());
             }
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
             else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();
             else if (vParam.first == "ReadParamFile") if (vParam.second.value) setReadParamFile();
             else if (vParam.first == "WriteMipStart") if (vParam.second.value) writeMipStart();
             else if (vParam.first == "FileMipStart") {
-                if (vParam.second.str != "") {
-                    std::string fname = vParam.second.str.QString::toStdString();
-                    setFileMipStart(fname.c_str());
+                if (vParam.second.str != "") {                    
+                    setFileMipStart(vParam.second.str.QString::toStdString());
                 }
             }
             else if (vParam.first == "TerminateSignal") setTerminateSignal(vParam.second.signal);             
@@ -101,7 +99,7 @@ int* MIPCpxSolver::getTerminateSignal(){
 }
 
 // --------------------------------------------------------------------------
-void MIPCpxSolver::setFileMipStart(const char* mipStartFile){
+void MIPCpxSolver::setFileMipStart(const std::string &mipStartFile){
     mFileMipStart = mipStartFile;
 }
 // --------------------------------------------------------------------------
@@ -119,7 +117,7 @@ void MIPCpxSolver::setMaxNumberOfSolutions(const int &maxNumberOfSolutions){
     }
 }
 // --------------------------------------------------------------------------
-void MIPCpxSolver::setLocation(const char *location)
+void MIPCpxSolver::setLocation(const std::string& location)
 {
     mLocation = location ;
 }
@@ -148,15 +146,8 @@ void MIPCpxSolver::solve() {
         std::cerr <<"CPXopenCPLEX: Failed to open Cplex env. " << errmsg <<std::endl;
         return;
     }
-    std::string optimFile = mLocation ;
-    optimFile += "_optim.log";
-    char* stdLocation ;
-    stdLocation = new char [optimFile.size()+1];
-    std::strcpy( stdLocation, optimFile.c_str() );
-    char const *filename = stdLocation ;
-//    char const *mode ;
-//    std::cout << "Writting to location file " << *filename ;
-    CPXsetlogfilename (env, filename, "w");
+    std::string optimFile = mLocation + "_optim.log";    
+    CPXsetlogfilename (env, optimFile.c_str(), "w");
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);
@@ -350,29 +341,17 @@ void MIPCpxSolver::solve() {
         //write .lp file for debugg
         if (mLpFile)
         {
-            std::string optimFile = mLocation ;
-            optimFile += "_model.lp";
-            char* stdLocation ;
-            stdLocation = new char [optimFile.size()+1];
-            std::strcpy( stdLocation, optimFile.c_str() );
-            char const *filename = stdLocation ;
-
-            CPXwriteprob(env, lp, filename, NULL);
+            std::string optimFile = mLocation + "_model.lp";            
+            CPXwriteprob(env, lp, optimFile.c_str(), NULL);
         }
         if(mFileMipStart!=""){
-            status = CPXreadcopymipstarts(env,lp,mFileMipStart);
+            status = CPXreadcopymipstarts(env,lp,mFileMipStart.c_str());
         }
         //set mip parameters
         if (mModel->isMip()) {
             if(mReadParamFile){
-                std::string paramFile = mLocation ;
-                paramFile += "_cplexParam.prm";
-                char* stdLocation ;
-                stdLocation = new char [paramFile.size()+1];
-                std::strcpy( stdLocation, paramFile.c_str() );
-                char const *filename = stdLocation ;
-
-                CPXreadcopyparam(env, filename);
+                std::string paramFile = mLocation + "_cplexParam.prm";                
+                CPXreadcopyparam(env, paramFile.c_str());
             }
             //set gap limit
             status = CPXsetdblparam(env, CPX_PARAM_EPGAP, mGap);
@@ -460,14 +439,8 @@ void MIPCpxSolver::solve() {
             mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
         }
         if (mWriteMipStart){
-            std::string mipStartFile = mLocation ;
-            mipStartFile += "_mipstart.mst";
-            char* stdLocation ;
-            stdLocation = new char [mipStartFile.size()+1];
-            std::strcpy( stdLocation, mipStartFile.c_str() );
-            char const *filename = stdLocation ;
-
-            CPXwritemipstarts(env, lp, filename, 0,0);
+            std::string mipStartFile = mLocation + "_mipstart.mst";            
+            CPXwritemipstarts(env, lp, mipStartFile.c_str(), 0, 0);
         }
 
         mObjectiveValue = objval;

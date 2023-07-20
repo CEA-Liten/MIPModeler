@@ -41,7 +41,7 @@ void MIPModel::setObjectiveDirection(const MIPDirection& objectiveDirection){
     mObjectiveDirection = objectiveDirection;
     if (mExternalModeler) {
         ModelerParams vParam;
-        vParam.addParam("ObjectiveDirection", objectiveDirection);
+        vParam.addParam("ObjectiveDirection", (double)objectiveDirection);
         mExternalModeler->setParams(vParam);
     }
 }

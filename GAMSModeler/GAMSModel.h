@@ -229,6 +229,9 @@ public:
 
     virtual void init(const ModelerParams& a_params);
     virtual void setParams(const ModelerParams& a_params);
+    virtual void setModelData(const ModelerParams& a_params);
+    virtual int solve(const ModelerParams& a_Params, ModelerResults& a_Results);
+    virtual void addModelFromFile(const std::string& fileName, const std::string& modelName, const ModelerParams& a_params);
     // --------------------------------------------------------------------------
 
 

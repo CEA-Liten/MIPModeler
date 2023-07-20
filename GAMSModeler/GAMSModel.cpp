@@ -301,6 +301,64 @@ void GAMSModel::setParams(const ModelerParams& a_params)
     }
 }
 
+void GAMSModel::setModelData(const ModelerParams& a_params)
+{
+    std::vector<GAMSModeler::GAMSData*> modelData;
+    for (auto& vParam : a_params) {
+        switch (vParam.second.type)
+        {
+        case ModelerParams::eScalar:
+            modelData.push_back(new GAMSModeler::GAMSDataScalar(vParam.first, vParam.second.value));
+            break;
+        case ModelerParams::eBool:
+            modelData.push_back(new GAMSModeler::GAMSDataScalar(vParam.first, vParam.second.flag));
+            break;
+        case ModelerParams::eString:
+            //modelData.push_back(new GAMSModeler::GAMSDataScalar(vParam.first, vParam.second.str));
+            break;
+        case ModelerParams::eVector:            
+            modelData.push_back(new GAMSModeler::GAMSDataParam1D(vParam.first, vParam.second.str, vParam.second.values));
+            break;
+        case ModelerParams::eStrings:
+            modelData.push_back(new GAMSModeler::GAMSDataSet(vParam.first, vParam.second.strs));
+            break;        
+        }        
+    }
+    addData(modelData);
+    modelData.clear();
+}
+
+int GAMSModel::solve(const ModelerParams& a_Params, ModelerResults& a_Results)
+{
+    for (auto& vParam : a_Params) {
+        if (vParam.first == "Gap") setGap(vParam.second.value);
+        else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
+        else if (vParam.first == "Threads") setThreads(vParam.second.value);        
+        else if (vParam.first == "SolverName") setSolver(vParam.second.str);
+        else if (vParam.first == "ProblemType") setProblemType(vParam.second.str);        
+    }
+    buildProblem();
+
+    ModelerParams::t_MIPModelerParams::const_iterator vIter = a_Params.find("location");
+    if (vIter != a_Params.end()) {
+        exportGMSModel(vIter->second.str + ".gms");
+        exportDataBase(vIter->second.str + ".gdx");
+    }     
+    solve();
+    a_Results.setResults(getModelStatus(), getSolveStatus());
+    return 0;
+}
+
+void GAMSModel::addModelFromFile(const std::string& fileName, const std::string& modelName, const ModelerParams& a_params)
+{
+    std::stringstream ss;
+    ss << "\n$\t batInclude " << fileName << " " << modelName;    
+    for (auto& vParam : a_params) {
+        ss << " " << vParam.second.str;
+    }
+    mGMSModel += ss.str();
+}
+
 void GAMSModel::exportDataBase(const std::string& GDXfilename)
 {
     mDataBase.doExport(GDXfilename);
