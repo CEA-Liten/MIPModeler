@@ -41,8 +41,8 @@ public:
     void setTimeLimit(const double& timeLimit);
     void setGap(const double& gap);
     void setThreads(const int& threads);
-    void setLocation(const char* location);
-    void setFileMipStart(const char* mipStartFile);
+    void setLocation(const std::string &location);
+    void setFileMipStart(const std::string &mipStartFile);
     void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
     void setReadParamFile();
     void setTerminateSignal(int* terminate);
@@ -67,7 +67,7 @@ private:
     std::vector<double> mObjectiveOtherSolutions;
     double mLpValue;
     std::string mOptimisationStatus;
-    const char* mFileMipStart;
+    std::string mFileMipStart;
 
     double mTimeLimit;
     double mGap;
@@ -79,7 +79,7 @@ private:
     int mMaxNumberOfSolutions;
     int* mTerminate;
 
-    const char* mLocation ;
+    std::string mLocation ;
 };
 
 }
