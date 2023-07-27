@@ -147,6 +147,8 @@ void MIPCpxSolver::solve() {
         return;
     }
     std::string optimFile = mLocation + "_optim.log";    
+    std::string lpFile = mLocation + "_model.lp";
+
     CPXsetlogfilename (env, optimFile.c_str(), "w");
 
     // show solving information
@@ -340,9 +342,8 @@ void MIPCpxSolver::solve() {
 
         //write .lp file for debugg
         if (mLpFile)
-        {
-            std::string optimFile = mLocation + "_model.lp";            
-            CPXwriteprob(env, lp, optimFile.c_str(), NULL);
+        {            
+            CPXwriteprob(env, lp, lpFile.c_str(), NULL);
         }
         if(mFileMipStart!=""){
             status = CPXreadcopymipstarts(env,lp,mFileMipStart.c_str());
