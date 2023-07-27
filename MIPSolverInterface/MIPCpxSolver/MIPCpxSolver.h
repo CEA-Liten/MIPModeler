@@ -11,6 +11,7 @@
 #include "MIPModeler.h"
 #include <iostream>
 #include <QtCore>
+#include <fstream>
 #include "IMIPSolver.h"
 
 #ifndef MIPCPXSOLVER_H
@@ -48,9 +49,9 @@ public:
     void setTerminateSignal(int* terminate);
     int* getTerminateSignal();
 // --------------------------------------------------------------------------
-    const double* getOptimalSolution() const {return mOptimalSolution;}
+    const double* getOptimalSolution() const {return mOptimalSolution.data(); }
     int getNbSolutionsGardees(){return mNbSolutionsGardees;}
-    std::vector<double*> getOtherSolutions() const {return mOtherSolutions;}
+    std::vector<double*> getOtherSolutions() const {return pOtherSolutions;}
     std::vector<double> getObjectiveOtherSolutions() const {return mObjectiveOtherSolutions;}
     double getObjectiveValue() const {return mObjectiveValue;}
     double getLpValue() const {return mLpValue;}
@@ -59,13 +60,14 @@ public:
 private:
     MIPModeler::MIPModel* mModel;
 
-    const double* mOptimalSolution;
-    std::vector<double*> mOtherSolutions;
+    std::vector<double> mOptimalSolution;
+    std::vector<double*> pOtherSolutions;
+    std::vector<std::vector<double>> mOtherSolutions;
 
-    double mObjectiveValue;
-    int mNbSolutionsGardees;
+    double mObjectiveValue{ 0 };
+    int mNbSolutionsGardees{ 0 };
     std::vector<double> mObjectiveOtherSolutions;
-    double mLpValue;
+    double mLpValue {0};
     std::string mOptimisationStatus;
     std::string mFileMipStart;
 
@@ -76,10 +78,19 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    int mMaxNumberOfSolutions;
+    int mMaxNumberOfSolutions{ 1 };
     int* mTerminate;
 
     std::string mLocation ;
+    
+    std::fstream *mlogFile {nullptr};
+    enum logLevel
+    {
+        INFO = 0,
+        ERR = 1
+    };
+    void log(logLevel level, const std::string msg);
+    void log(logLevel level, const std::string msg, double value);
 };
 
 }

@@ -72,9 +72,10 @@ bool MIPSolverFactory::SolverDescriptor::Init(const QString& a_Name)
     QObject* plugin = loader.instance();
     if (plugin) {
         m_IPlugIn = qobject_cast<IMIPSolver*>(plugin);
-        if (m_IPlugIn) {
+        if (m_IPlugIn) {            
             // Récupère les infos du driver
             m_Infos = m_IPlugIn->Infos();
+            qDebug() << "Find solver " << m_Infos << " in " << a_Name;
             vRet = true;
         }
     }

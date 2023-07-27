@@ -98,6 +98,27 @@ int* MIPCpxSolver::getTerminateSignal(){
     return mTerminate;
 }
 
+void MIPCpxSolver::log(logLevel level, const std::string msg)
+{
+    if (mlogFile == nullptr) {        
+        mlogFile = new std::fstream(mLocation + "_cplex.log", std::ios_base::out);
+    }
+    if (mlogFile->is_open()) {
+        if (level==INFO)
+            *mlogFile << "INFO: ";
+        else
+            *mlogFile << "ERROR: ";
+        *mlogFile << msg << std::endl;
+    }
+}
+
+void MIPCpxSolver::log(logLevel level, const std::string msg, double value)
+{
+    std::stringstream vMsg;
+    vMsg << msg << value;
+    log(level, vMsg.str());
+}
+
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setFileMipStart(const std::string &mipStartFile){
     mFileMipStart = mipStartFile;
@@ -132,8 +153,12 @@ void MIPCpxSolver::writeMipStart() {
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::solve() {
-    std::cout<<"Start Solving using Cplex"<<std::endl;
-
+    
+    log(INFO, "Start Solving using Cplex");
+    std::string optimFile = mLocation + "_optim.log";
+    std::string lpFile = mLocation + "_model.lp";
+    std::string paramFile = mLocation + "_cplexParam.prm";
+    std::string mipStartFile = mLocation + "_mipstart.mst";
     CPXENVptr env = NULL;
     CPXLPptr lp = NULL;
     int status;
@@ -141,13 +166,12 @@ void MIPCpxSolver::solve() {
     //create cplex environment
     env = CPXopenCPLEX(&status);
     if ( env == NULL ) {
-        char errmsg[1024];
-        CPXgeterrorstring (env, status, errmsg);
-        std::cerr <<"CPXopenCPLEX: Failed to open Cplex env. " << errmsg <<std::endl;
+        std::string errmsg; errmsg.resize(1024);
+        CPXgeterrorstring (env, status, (char*)errmsg.c_str());
+        log(ERR, "CPXopenCPLEX: Failed to open Cplex env. " + errmsg);
         return;
     }
-    std::string optimFile = mLocation + "_optim.log";    
-    std::string lpFile = mLocation + "_model.lp";
+   
 
     CPXsetlogfilename (env, optimFile.c_str(), "w");
 
@@ -161,13 +185,13 @@ void MIPCpxSolver::solve() {
     //create model
     lp = CPXcreateprob(env, &status, "problem");
     if ( lp == NULL ){
-        std::cerr <<"CPXcreateprob: Failed to create model"<<std::endl;
+        log(ERR, "CPXcreateprob: Failed to create model");
         return;
     }
     else {
         //create variables
         int numCols = mModel->getNumCols();
-        char * coltype = new char[numCols];
+        std::vector<char> coltype(numCols);
         for (int i=0 ; i< numCols; i++)
             coltype[i] = 'C';
 
@@ -188,10 +212,10 @@ void MIPCpxSolver::solve() {
                              mModel->getObjectiveCoefficients(),
                              mModel->getColLowerBounds(),
                              mModel->getColUpperBounds(),
-                             coltype,
+                             coltype.data(),
                              colNames.data());   //variable names
         if (status){
-            std::cerr<<"CPXnewcols: Failed when creating variables"<<std::endl;
+            log(ERR, "CPXnewcols: Failed when creating variables");
             return;
         }
         //add subobjectives
@@ -199,9 +223,9 @@ void MIPCpxSolver::solve() {
             CPXsetnumobjs (env, lp, *(mModel->getNumSubobj()));
             for(int i = 0 ; i< *(mModel->getNumSubobj()); i++){
                 MIPModeler::MIPSubobjective subObj = mModel->getListSubobjectives()[i];
-                std::string name(subObj.getName());
+                /*std::string name(subObj.getName());
                 char* charName = new char[name.length() + 1];
-                strcpy(charName, name.c_str());
+                strcpy(charName, name.c_str());*/
                 int rank = subObj.getRank();
                 int cpxNumObj = CPXgetnumobjs(env,lp);
                 if (rank >= cpxNumObj){
@@ -217,9 +241,9 @@ void MIPCpxSolver::solve() {
                                            subObj.getRank(),
                                            subObj.getAbsTol(),
                                            subObj.getRelTol(),
-                                           charName);
+                                           subObj.getName().c_str());
                 if (status){
-                    std::cerr<<"CPXmutliobjsetobj: Failed when creating subobj"<<name<<std::endl;
+                    log(ERR, "CPXmutliobjsetobj: Failed when creating subobj" + subObj.getName());
                 }
             }
 
@@ -242,7 +266,7 @@ void MIPCpxSolver::solve() {
                              mModel->getNonZeroElements(),
                              NULL, rowNames.data()); //variables and constraint names
         if (status){
-            std::cerr<<"CPXaddrows: Failed when creating constraints"<<std::endl;
+            log(ERR, "CPXaddrows: Failed when creating constraints");
             return;
         }
 
@@ -293,7 +317,7 @@ void MIPCpxSolver::solve() {
                                CPX_sosWeights.data(),
                                NULL);
             if (status){
-                std::cerr<<"CPXaddsos: Failed when setting SOS variables"<<std::endl;
+                log(ERR, "CPXaddsos: Failed when setting SOS variables");
                 return;
             }
         }
@@ -328,7 +352,7 @@ void MIPCpxSolver::solve() {
                                      CPX_effortlevel.data(),
                                      NULL);
             if (status){
-                std::cerr<<"CPXaddmipstarts: Failed when adding warm start solutions"<<std::endl;
+                log(ERR, "CPXaddmipstarts: Failed when adding warm start solutions");
                 return;
             }
         }
@@ -350,26 +374,25 @@ void MIPCpxSolver::solve() {
         }
         //set mip parameters
         if (mModel->isMip()) {
-            if(mReadParamFile){
-                std::string paramFile = mLocation + "_cplexParam.prm";                
+            if(mReadParamFile){                
                 CPXreadcopyparam(env, paramFile.c_str());
             }
             //set gap limit
             status = CPXsetdblparam(env, CPX_PARAM_EPGAP, mGap);
             if (status){
-                std::cout<< "Failed to set Cplex gap"<<std::endl;
+                log(ERR, "Failed to set Cplex gap");
             }
 
             // set time limit option
             status = CPXsetdblparam(env, CPXPARAM_TimeLimit, mTimeLimit);
             if (status){
-                 std::cout<<"Failed to set Cplex time limit"<<std::endl;
+                 log(ERR, "Failed to set Cplex time limit");
             }
             status = CPXsetdblparam(env,CPXPARAM_MIP_Limits_TreeMemory,50000);
             // set number of threads
             status = CPXsetintparam(env, CPXPARAM_Threads, mThreads);
             if (status){
-                std::cout<<"Failed to set Cplex number of threads"<<std::endl;
+                log(ERR, "Failed to set Cplex number of threads");
             }
 
         }
@@ -379,25 +402,25 @@ void MIPCpxSolver::solve() {
             status = CPXsetintparam(env,CPXPARAM_MultiObjective_Display,2);
             status = CPXmultiobjopt(env,lp,NULL);
             if ( status ){
-                std::cerr<<"CPXmipopt: Failed when solving mutliobj optimisation problem"<<std::endl;
+                log(ERR, "CPXmipopt: Failed when solving mutliobj optimisation problem");
                 return;
              }
         }
         else{
             status = CPXmipopt(env, lp);
             if ( status ){
-                std::cerr<<"CPXmipopt: Failed when solving optimisation problem"<<std::endl;
+                log(ERR, "CPXmipopt: Failed when solving optimisation problem");
                 return;
              }
         }
-        double* x = (double*)malloc( numCols * sizeof(double) );
+        mOptimalSolution.resize(numCols, 0);
         double objval;
         int lpstat;
         status = CPXsolution (env,
                               lp,
                               &lpstat,
                               &objval,
-                              x,
+                              mOptimalSolution.data(),
                               NULL, NULL, NULL);
 
 
@@ -439,35 +462,37 @@ void MIPCpxSolver::solve() {
 
             mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
         }
-        if (mWriteMipStart){
-            std::string mipStartFile = mLocation + "_mipstart.mst";            
+        if (mWriteMipStart){            
             CPXwritemipstarts(env, lp, mipStartFile.c_str(), 0, 0);
         }
 
-        mObjectiveValue = objval;
-        mOptimalSolution = x;
+        mObjectiveValue = objval;        
 
         status = CPXgetbestobjval(env, lp, &mLpValue);
         if ( status ){
-            std::cerr <<"CPXgetbestobjval: Failed when getting best possible obj"<<std::endl;
+            log(ERR, "CPXgetbestobjval: Failed when getting best possible obj");
             return;
         }
 
-        int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);
-        std::cout <<"Number of solutions trouvees:"<< nbSolTrouvees<<std::endl;
+        int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);        
+        log(INFO, "Number of solutions trouvees:", nbSolTrouvees);
         if (nbSolTrouvees>mMaxNumberOfSolutions)
             mNbSolutionsGardees=mMaxNumberOfSolutions;
         else{
             mNbSolutionsGardees=nbSolTrouvees;
         }
-        std::cout <<"Number max of solutions gardees:"<< mMaxNumberOfSolutions<<std::endl;
-        std::cout <<"Number of solutions gardees:"<< mNbSolutionsGardees<<std::endl;
+        
+        log(INFO, "Number max of solutions gardees:",  mMaxNumberOfSolutions);        
+        log(INFO, "Number of solutions gardees:",  mNbSolutionsGardees);        
         for(int i=0; i<mNbSolutionsGardees;i++){
-            mOtherSolutions.push_back((double*)malloc( numCols * sizeof(double) ));
-            status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i], 0,numCols-1);
+            mOtherSolutions.push_back(std::vector<double>( numCols, 0 ));
+            pOtherSolutions.push_back(mOtherSolutions[i].data());
+            status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i].data(), 0, numCols - 1);
             mObjectiveOtherSolutions.push_back(0);
             CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
-            std::cout <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i]<<std::endl;
+            std::stringstream msg1;
+            msg1 <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i];            
+            log(INFO, msg1.str());
         }
     }
 
@@ -477,7 +502,9 @@ void MIPCpxSolver::solve() {
     if (env)
         CPXcloseCPLEX (&env);
 
-    std::cout <<"Finish solving using Cplex"<<std::endl;
+    log(INFO, "Finish solving using Cplex");    
+    if (mlogFile) mlogFile->close();
+    mlogFile = nullptr;
 }
 // --------------------------------------------------------------------------
 MIPCpxSolver::~MIPCpxSolver() {
