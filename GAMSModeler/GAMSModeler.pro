@@ -7,6 +7,7 @@ _GAMS_HOME=$$(GAMS_HOME)
 !isEmpty(_GAMS_HOME) {
 LIBS        += $$(GAMS_HOME)/apifiles/C++/lib/vs2019/gamscpp.lib
 INCLUDEPATH += $$(GAMS_HOME)/apifiles/C++/api
+INCLUDEPATH += ../ModelerInterface
 
 DEFINES += GAMSMODELER_LIBRARY
 

@@ -9,6 +9,7 @@ TARGET   = MIPModeler
 TEMPLATE = lib
 
 INCLUDEPATH += ../external/Eigen/3.2.9
+INCLUDEPATH += ../ModelerInterface
 
 _GAMS_HOME=$$(GAMS_HOME)
 

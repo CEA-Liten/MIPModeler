@@ -10,6 +10,7 @@ LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += ../../core/
 INCLUDEPATH += ../../external/Eigen/3.2.9/
 INCLUDEPATH += ../MIPSolver
+INCLUDEPATH += ../../ModelerInterface
 
 DEFINES += MIPCPXSOLVER_LIBRARY
 
