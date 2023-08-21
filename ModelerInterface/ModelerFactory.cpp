@@ -5,6 +5,8 @@
 
 #include "ModelerFactory.h"
 
+ModelerFactory::t_mapPlugIns ModelerFactory::m_PlugIns;
+
 ModelerFactory::ModelerFactory()
 {
     // recherche les modelers externe
@@ -49,6 +51,7 @@ bool ModelerFactory::findModelers(const QString& a_Path)
                 if (vPlugIn != nullptr) {
                     QString vKey = QString(vPlugIn->Infos().c_str());
                     m_PlugIns[vKey] = vPlugIn;
+                    qDebug() << "Find modeler " << vKey << " in: " << a_Path;
                     vRet = true;
                 }
             }

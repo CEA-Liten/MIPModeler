@@ -21,12 +21,5 @@ protected:
     
     typedef std::map<QString, ModelerInterface*> t_mapPlugIns;
     static t_mapPlugIns m_PlugIns;
-
-    //template <typename  First, typename  Second, typename ... Rest>
-    //void addModelFromFile(const First& fileName, const Second& modelName, const Rest&... modelOption);
-
-    //
-    //void addData(std::vector<GAMSData*>& data, const bool& importToGMS = false);
-
-
+    
 };

@@ -69,13 +69,7 @@ public:
     virtual void addData(const std::vector<std::string&>& data, const bool& importToGMS = false) = 0;
 
     virtual void addModelFromFile(const std::string& fileName, const std::string& modelName, const ModelerParams& a_params) = 0;
-
-    // solver
-    //virtual int solve(const SolverParams& a_Params, SolverResults& a_Results) = 0;
-
-    //void setObjectiveDirection(const std::string& objectiveSens);
-
-    //virtual int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results) = 0;
+   
 };
 
 
