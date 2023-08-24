@@ -33,7 +33,9 @@ int MIPClpSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
 
         for (auto& vParam : a_Params) {                                    
             if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
-            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();
+            else if (vParam.first == "WriteLp") {
+                if (vParam.second.value) writeLp();
+            }
         }
         solve();
 

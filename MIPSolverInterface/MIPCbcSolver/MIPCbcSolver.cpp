@@ -43,7 +43,9 @@ int MIPCbcSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);            
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
-            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();            
+            else if (vParam.first == "WriteLp") {
+                if (vParam.second.value) writeLp();
+            }
         }
         solve();
 

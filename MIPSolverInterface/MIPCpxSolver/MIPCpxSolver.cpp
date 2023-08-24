@@ -45,6 +45,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             mModel->buildProblem();
 
         for (auto& vParam : a_Params) {
+
             if (vParam.first == "Gap") setGap(vParam.second.value);
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
@@ -52,15 +53,23 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 setLocation(vParam.second.str.QString::toStdString());
             }
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
-            else if (vParam.first == "WriteLp") if (vParam.second.value) writeLp();
-            else if (vParam.first == "ReadParamFile") if (vParam.second.value) setReadParamFile();
-            else if (vParam.first == "WriteMipStart") if (vParam.second.value) writeMipStart();
+            else if (vParam.first == "WriteLp") {
+                if (vParam.second.value) writeLp();
+            }
+            else if (vParam.first == "ReadParamFile") {
+                if (vParam.second.value) setReadParamFile();
+            }
+            else if (vParam.first == "WriteMipStart") {
+                if (vParam.second.value) writeMipStart();
+            }
             else if (vParam.first == "FileMipStart") {
                 if (vParam.second.str != "") {                    
                     setFileMipStart(vParam.second.str.QString::toStdString());
                 }
             }
-            else if (vParam.first == "TerminateSignal") setTerminateSignal(vParam.second.signal);             
+            else if (vParam.first == "TerminateSignal") {
+                setTerminateSignal(vParam.second.signal);
+            }
         }
         solve();
 
