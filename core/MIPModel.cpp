@@ -18,10 +18,12 @@ MIPModel::MIPModel(const std::string& modelName)
       mNumObj(0),
       mProblemBuilt(false),
       mModelName(modelName)
+{    
+}
+
+void MIPModel::setExternalModeler(ModelerInterface* ap_modeler)
 {
-#ifdef USE_GAMS
-    mGAMSModel = new GAMSModeler::GAMSModel();
-#endif
+    mExternalModeler = ap_modeler;
 }
 // --------------------------------------------------------------------------
 void MIPModel::setObjective(const MIPExpression& objective, const  MIPDirection& objectiveDirection) {
@@ -37,6 +39,11 @@ void MIPModel::setObjective(const MIPExpression& objective, const  MIPDirection&
 //---------------------------------------------------------------------------
 void MIPModel::setObjectiveDirection(const MIPDirection& objectiveDirection){
     mObjectiveDirection = objectiveDirection;
+    if (mExternalModeler) {
+        ModelerParams vParam;
+        vParam.addParam("ObjectiveDirection", (double)objectiveDirection);
+        mExternalModeler->setParams(vParam);
+    }
 }
 //---------------------------------------------------------------------------
 void MIPModel::addSubobjective(MIPSubobjective &subobj){
@@ -199,10 +206,6 @@ MIPModel::~MIPModel() {
     mColNames.clear();
     mRowNames.clear();
     mListSubobjectives.clear();
-
-#ifdef USE_GAMS
-    delete mGAMSModel;
-#endif
 }
 //---------------------------------------------------------------------------
 }

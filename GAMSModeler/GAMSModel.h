@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <sstream>
+#include "ModelerInterface.h"
 
 #include "gams.h"
 #include "GAMSModeler_global.h"
@@ -22,7 +23,7 @@
 
 namespace GAMSModeler {
 
-class GAMSMODELERSHARED_EXPORT GAMSModel {
+class GAMSMODELERSHARED_EXPORT GAMSModel : public ModelerInterface {
 
     enum GAMSDirection {GAMS_MIN, GAMS_MAX};
 
@@ -221,6 +222,19 @@ public:
 
     /// Clear gams database.
     void clear();
+
+
+    // --------------------------------------------------------------------------
+    virtual std::string Infos();
+
+    virtual void init(const ModelerParams& a_params);
+    virtual void setParams(const ModelerParams& a_params);
+    virtual void setModelData(const ModelerParams& a_params);
+    virtual int solve(const ModelerParams& a_Params, ModelerResults& a_Results);
+    virtual void addModelFromFile(const std::string& fileName, const std::string& modelName, const ModelerParams& a_params);
+    // --------------------------------------------------------------------------
+
+
 
 private:
         std::vector<std::string> mDataLabels;
