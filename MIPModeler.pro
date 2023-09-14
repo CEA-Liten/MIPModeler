@@ -14,8 +14,8 @@ localoption = $$(OPTION)
 equals (localoption, "debug" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-#external/CoinOR\
 core\
+#external/CoinOR\
 ModelerInterface\
 MIPSolverInterface\MIPSolver\
 #MIPSolverInterface\MIPCbcSolver\
@@ -26,14 +26,13 @@ MIPSolverInterface\MIPSolver\
 equals (localoption, "release" ){
 message(Using $$(OPTION) configuration for MIPModeler)
 SUBDIRS +=\
-#external/CoinOR\
 core\
 ModelerInterface\
 MIPSolverInterface\MIPSolver\
 MIPSolverInterface\MIPCbcSolver\
 MIPSolverInterface\MIPClpSolver\
 #MIPSolverInterface\MIPCpxSolver\
-#MIPSolverInterface\MIPMskSolver\
+##MIPSolverInterface\MIPMskSolver\
 #test\
 }
 

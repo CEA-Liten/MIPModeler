@@ -3,10 +3,18 @@ QT       -= gui
 TEMPLATE = lib
 
 TARGET      = MIPCpxSolver$$(CPLEX_VERSION)
-LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib
+win32 {
+    LIBS        += $$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib
+    LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
+
+}
+unix {
+    LIBS        += $$(CPLEX_HOME_LIB)/libcplex.a
+    LIBS        += ../../lib/$$(OPTION)/libMIPModeler.so
+}
+
 INCLUDEPATH += $$(CPLEX_HOME)/include/ilcplex
 
-LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
 INCLUDEPATH += ../../core/
 INCLUDEPATH += ../../external/Eigen/3.2.9/
 INCLUDEPATH += ../MIPSolver
@@ -21,6 +29,6 @@ HEADERS += MIPCpxSolver_global.h \
 
 DESTDIR  = ../../lib/$$(OPTION)
 
-QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+# QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 
 message($$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib)
