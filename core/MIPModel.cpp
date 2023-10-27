@@ -114,10 +114,26 @@ void MIPModel::buildProblem() {
     mColNames.reserve(mNumCols);
     std::list<MIPVariable0D*>::iterator itVar = mVariables.begin();
     for (; itVar != mVariables.end(); itVar++){
+        //Check for NAN values
+        if (isnan((*itVar)->getLowerBound())) {
+            mProblemBuilt = false;
+            qCritical() << "The Lower Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+        }
+        
+        if (isnan((*itVar)->getUpperBound())) {
+            mProblemBuilt = false;
+            qCritical() << "The Upper Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+        }
+            
         mColLowerBounds.push_back((*itVar)->getLowerBound());
         mColUpperBounds.push_back((*itVar)->getUpperBound());
         mColNames.push_back((*itVar)->getName());
+
         if ((*itVar)->isInteger()){
+            if ( isnan(static_cast<float>( (*itVar)->getColIdx() )) ) {
+                mProblemBuilt = false;
+                qCritical() << "The index of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+            }
             mColIntegers.push_back((*itVar)->getColIdx());
             mNumIntegerCols ++;
         }
@@ -132,6 +148,10 @@ void MIPModel::buildProblem() {
     int* idx = sprarseMatrixObjective.innerIndexPtr();
     mObjectiveCoefficients = new double[mNumCols]();
     for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
+        if (isnan(value[i])) {
+            mProblemBuilt = false;
+            qCritical() << "The Objective Coefficient of " + QString::fromStdString(mColNames[i]) + " is NAN!";
+        }
         mObjectiveCoefficients[idx[i]] = value[i];
     }
 
@@ -152,6 +172,10 @@ void MIPModel::buildProblem() {
             }
         }
     }
+
+    //Throw exception
+    if (!mProblemBuilt)
+        throw (QString("An error has found while building the optimal problem: NAN value!"));
 
     //constraint matrix information
     mRhs.reserve(mNumRows);

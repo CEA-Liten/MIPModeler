@@ -28,8 +28,15 @@ int MIPClpSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
     int vRet = -1;
     if (ap_Model) {
         mModel = ap_Model;
-        if (mModel->isProblemBuilt() == false)
-            mModel->buildProblem();
+        if (mModel->isProblemBuilt() == false) {
+            try {
+                mModel->buildProblem();
+            }
+            catch (...) {
+                qCritical() << "An Exception is detected in MIPModel::buildProblem()!";
+                return -1;
+            }
+        }
 
         for (auto& vParam : a_Params) {                                    
             if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
