@@ -17,18 +17,18 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES += _CRT_SECURE_NO_DEPRECATE
 
 SOURCES += \
-    ../../src\Osi/OsiAuxInfo.cpp \
-    ../../src\Osi/OsiBranchingObject.cpp \
-    ../../src\Osi/OsiChooseVariable.cpp \
-    ../../src\Osi/OsiColCut.cpp \
-    ../../src\Osi/OsiCut.cpp \
-    ../../src\Osi/OsiCuts.cpp \
-    ../../src\Osi/OsiNames.cpp \
-    ../../src\Osi/OsiPresolve.cpp \
-    ../../src\Osi/OsiRowCut.cpp \
-    ../../src\Osi/OsiRowCutDebugger.cpp \
-    ../../src\Osi/OsiSolverBranch.cpp \
-    ../../src\Osi/OsiSolverInterface.cpp \
+    ../../src/Osi/OsiAuxInfo.cpp \
+    ../../src/Osi/OsiBranchingObject.cpp \
+    ../../src/Osi/OsiChooseVariable.cpp \
+    ../../src/Osi/OsiColCut.cpp \
+    ../../src/Osi/OsiCut.cpp \
+    ../../src/Osi/OsiCuts.cpp \
+    ../../src/Osi/OsiNames.cpp \
+    ../../src/Osi/OsiPresolve.cpp \
+    ../../src/Osi/OsiRowCut.cpp \
+    ../../src/Osi/OsiRowCutDebugger.cpp \
+    ../../src/Osi/OsiSolverBranch.cpp \
+    ../../src/Osi/OsiSolverInterface.cpp \
 
 HEADERS +=  \
     ../../src/Osi/OsiAuxInfo.hpp \
@@ -39,7 +39,7 @@ HEADERS +=  \
     ../../src/Osi/OsiConfig.h \
     ../../src/Osi/OsiCut.hpp \
     ../../src/Osi/OsiCuts.hpp \
-    ../../src/Osi/OsiOpbdpSolve.hpp \
+#    ../../src/Osi/OsiOpbdpSolve.hpp \
     ../../src/Osi/OsiPresolve.hpp \
     ../../src/Osi/OsiRowCut.hpp \
     ../../src/Osi/OsiRowCutDebugger.hpp \

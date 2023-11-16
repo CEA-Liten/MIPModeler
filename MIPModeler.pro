@@ -16,8 +16,10 @@ SUBDIRS +=\
 core\
 MIPSolverInterface\MIPCpxSolver\
 #external/CoinOR\
-#MIPSolverInterface\MIPCbcSolver\
-#MIPSolverInterface\MIPClpSolver\
+ModelerInterface\
+MIPSolverInterface\MIPSolver\
+MIPSolverInterface\MIPCbcSolver\
+MIPSolverInterface\MIPClpSolver\
 #MIPSolverInterface\MIPMskSolver\
 #test\
 }
