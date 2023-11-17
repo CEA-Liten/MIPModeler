@@ -167,15 +167,17 @@ void MIPModel::buildProblem() {
             std::list<Node>::iterator it = objectiveNodes.begin();
             for (; it != objectiveNodes.end(); it++){
                 mSubObjIndices[j][i] = it->col();
+
+                if (isnan(it->value())) {
+                    mProblemBuilt = false;
+                    qCritical() << "A NAN value found in the subobjective expression: "+QString::fromStdString(mListSubobjectives[j].getName());
+                }
+
                 mSubObjCoeff[j][i] = it->value();
                 i++;
             }
         }
     }
-
-    //Throw exception
-    if (!mProblemBuilt)
-        throw (QString("An error has found while building the optimal problem: NAN value!"));
 
     //constraint matrix information
     mRhs.reserve(mNumRows);
@@ -195,14 +197,29 @@ void MIPModel::buildProblem() {
                         << " reference to bad variable "
                         << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
 
-                throw (QString("An error has found while creating the constraint matrix: a negative row or column index is detected!"));
+                throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
+            }
+
+            if (isnan(it->value())) {
+                mProblemBuilt = false;
+                qCritical() << "An NAN value found in the constraint: "+QString::fromStdString(itConstr->getName());
             }
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
+
+        if (isnan(itConstr->getConstPart())) {
+            mProblemBuilt = false;
+            qCritical() << "The Constant Part (coming from input data) of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!";
+        }
+
         mRhs.push_back(itConstr->getConstPart());
         mSense.push_back(itConstr->getSense());
         mRowNames.push_back(itConstr->getName());
     }
+
+    //Throw exception -- The exception is thrown at the end in order to report all NAN values in the .log before.
+    if (!mProblemBuilt)
+        throw (QString("An error has found while building the optimal problem: undefined value (NAN)!"));
 
     Eigen::SparseMatrix<double, Eigen::RowMajor>* sparseMatrixConstraints;
     sparseMatrixConstraints = new Eigen::SparseMatrix<double, Eigen::RowMajor>(mNumRows, mNumCols);
