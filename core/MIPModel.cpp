@@ -194,6 +194,8 @@ void MIPModel::buildProblem() {
                         << QString::fromStdString(itConstr->getName())
                         << " reference to bad variable "
                         << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
+
+                throw (QString("An error has found while creating the constraint matrix: a negative row or column index is detected!"));
             }
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
