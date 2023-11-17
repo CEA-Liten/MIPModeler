@@ -197,7 +197,7 @@ void MIPModel::buildProblem() {
                         << " reference to bad variable "
                         << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
 
-                throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
+                //throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
             }
 
             if (isnan(it->value())) {
@@ -207,10 +207,10 @@ void MIPModel::buildProblem() {
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
 
-        if (isnan(itConstr->getConstPart())) {
-            mProblemBuilt = false;
-            qCritical() << "The Constant Part (coming from input data) of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!";
-        }
+        //if (isnan(itConstr->getConstPart())) {
+        //    mProblemBuilt = false;
+        //    qCritical() << "The Constant Part of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!" << itConstr->getConstPart();
+        //}
 
         mRhs.push_back(itConstr->getConstPart());
         mSense.push_back(itConstr->getSense());
