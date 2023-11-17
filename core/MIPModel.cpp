@@ -197,7 +197,7 @@ void MIPModel::buildProblem() {
                         << " reference to bad variable "
                         << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
 
-                //throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
+                throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
             }
 
             if (isnan(it->value())) {
