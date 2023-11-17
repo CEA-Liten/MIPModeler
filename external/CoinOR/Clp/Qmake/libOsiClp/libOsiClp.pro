@@ -10,9 +10,16 @@ INCLUDEPATH += ../../../Osi/src
 INCLUDEPATH += ../../../Osi/src/Osi
 INCLUDEPATH += ../../../CoinUtils/src
 
-LIBS        += ../../../lib/$$(OPTION)/libClp.lib
-LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
-LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+win32 {
+    LIBS        += ../../../lib/$$(OPTION)/libClp.lib
+    LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
+    LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+}
+unix {
+    LIBS        += ../../../lib/$$(OPTION)/liblibClp.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibOsi.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibCoinUtils.so
+}
 
 DEFINES += OSI_BUILD
 DEFINES += WIN32

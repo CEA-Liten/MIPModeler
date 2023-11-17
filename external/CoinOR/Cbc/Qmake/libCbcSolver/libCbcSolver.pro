@@ -28,12 +28,22 @@ INCLUDEPATH += ../../../CoinUtils/src
 INCLUDEPATH += ../../../Cgl/src/CglResidualCapacity
 INCLUDEPATH += ../../../Cgl/src/CglRedSplit2
 
-LIBS        += ../../../lib/$$(OPTION)/libCbc.lib
-LIBS        += ../../../lib/$$(OPTION)/libCgl.lib
-LIBS        += ../../../lib/$$(OPTION)/libClp.lib
-LIBS        += ../../../lib/$$(OPTION)/libOsiClp.lib
-LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
-LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+win32 {
+    LIBS        += ../../../lib/$$(OPTION)/libCbc.lib
+    LIBS        += ../../../lib/$$(OPTION)/libCgl.lib
+    LIBS        += ../../../lib/$$(OPTION)/libClp.lib
+    LIBS        += ../../../lib/$$(OPTION)/libOsiClp.lib
+    LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
+    LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+}
+unix {
+    LIBS        += ../../../lib/$$(OPTION)/liblibCbc.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibCgl.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibClp.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibOsiClp.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibOsi.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibCoinUtils.so
+}
 
 DEFINES += CBC_BUILD
 DEFINES += WIN32

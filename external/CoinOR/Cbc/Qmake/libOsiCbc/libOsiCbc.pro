@@ -10,12 +10,23 @@ INCLUDEPATH += ../../../Clp/src
 INCLUDEPATH += ../../../Clp/src/OsiClp
 INCLUDEPATH += ../../../Cbc/src
 
-LIBS += ../../../lib/$$(OPTION)/libOsi.lib
-LIBS += ../../../lib/$$(OPTION)/libCoinUtils.lib
-LIBS += ../../../lib/$$(OPTION)/libClp.lib
-LIBS += ../../../lib/$$(OPTION)/libOsiClp.lib
-LIBS += ../../../lib/$$(OPTION)/libCbc.lib
-LIBS += ../../../lib/$$(OPTION)/libCgl.lib
+
+win32 {
+    LIBS += ../../../lib/$$(OPTION)/libOsi.lib
+    LIBS += ../../../lib/$$(OPTION)/libCoinUtils.lib
+    LIBS += ../../../lib/$$(OPTION)/libClp.lib
+    LIBS += ../../../lib/$$(OPTION)/libOsiClp.lib
+    LIBS += ../../../lib/$$(OPTION)/libCbc.lib
+    LIBS += ../../../lib/$$(OPTION)/libCgl.lib
+}
+unix {
+    LIBS += ../../../lib/$$(OPTION)/liblibOsi.so
+    LIBS += ../../../lib/$$(OPTION)/liblibCoinUtils.so
+    LIBS += ../../../lib/$$(OPTION)/liblibClp.so
+    LIBS += ../../../lib/$$(OPTION)/liblibOsiClp.so
+    LIBS += ../../../lib/$$(OPTION)/liblibCbc.so
+    LIBS += ../../../lib/$$(OPTION)/liblibCgl.so
+}
 
 DEFINES += WIN32
 DEFINES += NDEBUG
