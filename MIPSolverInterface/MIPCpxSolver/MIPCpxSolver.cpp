@@ -182,7 +182,7 @@ void MIPCpxSolver::solve() {
     }
    
 
-    CPXsetlogfilename (env, optimFile.c_str(), "w");
+    CPXsetlogfilename (env, optimFile.c_str(), "a");
 
     // show solving information
     status = CPXsetintparam(env, CPX_PARAM_SCRIND, mSolverPrint);
