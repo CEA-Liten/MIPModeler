@@ -44,6 +44,9 @@ HEADERS += MIPCbcSolver.h \
 
 DESTDIR     = ../../lib/$$(OPTION)
 
-#QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+win32 {
+    QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+}
+
 
 

@@ -20,7 +20,7 @@ HEADERS += GAMSModeler_global.h \
            GAMSDataParam3D.h \
            GAMSModel.h \
            GAMSModeler.h
-		   
+
 SOURCES += GAMSData.cpp \
            GAMSDataSet.cpp \
            GAMSDataScalar.cpp \
@@ -33,4 +33,6 @@ SOURCES += GAMSData.cpp \
 
 DESTDIR     =  ../lib/$$(OPTION)
 
-QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+win32 {
+    QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+}
