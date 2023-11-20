@@ -40,11 +40,19 @@ int MIPSolverFactory::solve(const QString& a_Cmd, MIPModeler::MIPModel* ap_Model
 bool MIPSolverFactory::findSolvers(const QString& a_Path)
 {
     bool vRet = false;
-    QDir vDir(a_Path, "*.dll");
+    QString filterExt, filterStart;
+#if (defined (_WIN32) || defined (_WIN64))
+    filterExt = "*.dll";
+    filterStart = "MIP";
+#else
+    filterExt = "*.so";
+    filterStart = "libMIP";
+#endif
+    QDir vDir(a_Path, filterExt);
     qDebug() << "Search solvers in: " << a_Path;
     QFileInfoList vFiles(vDir.entryInfoList());
     for (auto& vFile : vFiles) {
-        if (vFile.baseName().startsWith("MIP")) {
+        if (vFile.baseName().startsWith(filterStart)) {
             if (vFile.baseName().contains("Solver")) {
                 SolverDescriptor vPlugIn;
                 if (vPlugIn.Init(vFile.absoluteFilePath())) {
