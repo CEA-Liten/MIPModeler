@@ -207,10 +207,10 @@ void MIPModel::buildProblem() {
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
 
-        //if (isnan(itConstr->getConstPart())) {
-        //    mProblemBuilt = false;
-        //    qCritical() << "The Constant Part of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!" << itConstr->getConstPart();
-        //}
+        if (isnan(itConstr->getConstPart())) {
+            mProblemBuilt = false;
+            qCritical() << "The Constant Part of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!" << itConstr->getConstPart();
+        }
 
         mRhs.push_back(itConstr->getConstPart());
         mSense.push_back(itConstr->getSense());
