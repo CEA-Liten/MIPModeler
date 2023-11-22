@@ -29,6 +29,8 @@ HEADERS += MIPCpxSolver_global.h \
 
 DESTDIR  = ../../lib/$$(OPTION)
 
-# QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+win32 {
+    QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+}
 
 message($$(CPLEX_HOME_LIB)/cplex$$(CPLEX_VERSION).lib)

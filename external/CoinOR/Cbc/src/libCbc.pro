@@ -34,20 +34,29 @@ INCLUDEPATH += $$(COINOR_HOME)/BuildTools/headers
 INCLUDEPATH += $$(COINOR_HOME)/Cgl/src/CglResidualCapacity
 INCLUDEPATH += $$(COINOR_HOME)/Cgl/src/CglRedSplit2
 
-LIBS        += $$(COINOR_HOME)/lib/libCgl.lib
-LIBS        += $$(COINOR_HOME)/lib/libClp.lib
-LIBS        += $$(COINOR_HOME)/lib/libOsiClp.lib
-LIBS        += $$(COINOR_HOME)/lib/libOsi.lib
-LIBS        += $$(COINOR_HOME)/lib/libCoinUtils.lib
+
+win32 {
+    LIBS        += $$(COINOR_HOME)/lib/libCgl.lib
+    LIBS        += $$(COINOR_HOME)/lib/libClp.lib
+    LIBS        += $$(COINOR_HOME)/lib/libOsiClp.lib
+    LIBS        += $$(COINOR_HOME)/lib/libOsi.lib
+    LIBS        += $$(COINOR_HOME)/lib/libCoinUtils.lib
+    DEFINES += WIN32
+}
+unix {
+    LIBS        += $$(COINOR_HOME)/lib/liblibCgl.so
+    LIBS        += $$(COINOR_HOME)/lib/liblibClp.so
+    LIBS        += $$(COINOR_HOME)/lib/liblibOsiClp.so
+    LIBS        += $$(COINOR_HOME)/lib/liblibOsi.so
+    LIBS        += $$(COINOR_HOME)/lib/liblibCoinUtils.so
+}
 
 DEFINES += CBC_BUILD
-DEFINES += WIN32
 DEFINES += NDEBUG
 DEFINES += _NDEBUG
 DEFINES += COIN_FAST_CODE
 DEFINES += CLP_FAST_CODE
 DEFINES += COIN_NO_TEST_DUPLICATE
-DEFINES += WIN32
 DEFINES += _LIB
 DEFINES += USE_CBCCONFIG
 DEFINES += COIN_NO_CLP_MESSAGE

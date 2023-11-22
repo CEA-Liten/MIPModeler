@@ -22,10 +22,18 @@ INCLUDEPATH += ../../../Clp/src/OsiClp
 INCLUDEPATH += ../../../Clp/src
 INCLUDEPATH += ../../../CoinUtils/src
 
-LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
-LIBS        += ../../../lib/$$(OPTION)/libOsiClp.lib
-LIBS        += ../../../lib/$$(OPTION)/libClp.lib
-LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+win32 {
+    LIBS        += ../../../lib/$$(OPTION)/libOsi.lib
+    LIBS        += ../../../lib/$$(OPTION)/libOsiClp.lib
+    LIBS        += ../../../lib/$$(OPTION)/libClp.lib
+    LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+}
+unix {
+    LIBS        += ../../../lib/$$(OPTION)/liblibOsi.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibOsiClp.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibClp.so
+    LIBS        += ../../../lib/$$(OPTION)/liblibCoinUtils.so
+}
 
 DEFINES += CGL_BUILD
 DEFINES += WIN32
@@ -34,6 +42,7 @@ DEFINES += _LIB
 DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES += _CRT_SECURE_NO_DEPRECATE
 DEFINES += _SCL_SECURE_NO_WARNINGS
+DEFINES += HAVE_CMATH
 
 SOURCES += \
     ../../src/CglZeroHalf/CglZeroHalfTest.cpp \
