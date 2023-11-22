@@ -14,4 +14,6 @@ export PATH=${MIPMODELER_HOME}/lib/${OPTION}:${PATH}:${CPLEX_HOME_BIN}
 echo -e "$GREEN \t✅ CPlex is: ${MIPMODELER_HOME}/lib/${OPTION} $RESET"
 echo -e "$GREEN \t✅ MIPModeler is: ${MIPMODELER_HOME}/lib/${OPTION} $RESET"
 
-# TODO : export PATH=${MIPMODELER_HOME}/external/CoinOR/lib/${OPTION}:${PATH}
+export PATH=${MIPMODELER_HOME}/external/CoinOR/lib/${OPTION}:${PATH}
+export LD_LIBRARY_PATH=${MIPMODELER_HOME}/external/CoinOR/lib/${OPTION}:$LD_LIBRARY_PATH
+

@@ -5,10 +5,16 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 INCLUDEPATH += ../../../CoinUtils/src
-LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+
+win32 {
+    LIBS        += ../../../lib/$$(OPTION)/libCoinUtils.lib
+    DEFINES += WIN32
+}
+unix {
+    LIBS        += ../../../lib/$$(OPTION)/liblibCoinUtils.so
+}
 
 DEFINES += CLP_BUILD
-DEFINES += WIN32
 DEFINES += NDEBUG
 DEFINES += _LIB
 DEFINES += _CRT_SECURE_NO_WARNINGS
