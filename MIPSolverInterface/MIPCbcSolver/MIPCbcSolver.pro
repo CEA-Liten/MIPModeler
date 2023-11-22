@@ -7,6 +7,8 @@ win32 {
     LIBS        += ../../lib/$$(OPTION)/MIPModeler.lib
     LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libCbc.lib
     LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libCbcSolver.lib
+	LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libCgl.lib
+    LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libClp.lib
     LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libCoinUtils.lib
     LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libOsi.lib
     LIBS        += ../../external/CoinOR/lib/$$(OPTION)/libOsiCbc.lib
