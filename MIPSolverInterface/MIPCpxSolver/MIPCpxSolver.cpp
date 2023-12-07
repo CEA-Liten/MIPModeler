@@ -13,6 +13,7 @@
 #define TIME_LIMIT 10e+8
 #define GAP 1e-4
 #define THREADS 0
+#define TREEMEMORYLIMIT 50000
 
 namespace MIPSolverInterface {
 // --------------------------------------------------------------------------
@@ -21,6 +22,7 @@ MIPCpxSolver::MIPCpxSolver()
       mTimeLimit(TIME_LIMIT),
       mGap(GAP),
       mThreads(THREADS),
+      mTreeMemoryLimit(TREEMEMORYLIMIT),
       mLpFile(false),
       mSolverPrint(CPX_ON),
       mLocation("cplex"),
@@ -56,6 +58,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             if (vParam.first == "Gap") setGap(vParam.second.value);
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
+            else if (vParam.first == "TreeMemoryLimit") setTreeMemoryLimit(vParam.second.value);
             else if (vParam.first == "Location") {                
                 setLocation(vParam.second.str.QString::toStdString());
             }
@@ -143,6 +146,13 @@ void MIPCpxSolver::setFileMipStart(const std::string &mipStartFile){
 
 void MIPCpxSolver::setThreads(const int& threads) {
     mThreads = threads;
+}
+
+// --------------------------------------------------------------------------
+void MIPCpxSolver::setTreeMemoryLimit(const int& a_TreeMemoryLimit)
+{
+    if (a_TreeMemoryLimit > 0)
+        mTreeMemoryLimit = a_TreeMemoryLimit;
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setMaxNumberOfSolutions(const int &maxNumberOfSolutions){
@@ -404,7 +414,7 @@ void MIPCpxSolver::solve() {
             if (status){
                  log(ERR, "Failed to set Cplex time limit");
             }
-            status = CPXsetdblparam(env,CPXPARAM_MIP_Limits_TreeMemory,50000);
+            status = CPXsetdblparam(env,CPXPARAM_MIP_Limits_TreeMemory,mTreeMemoryLimit);
             // set number of threads
             status = CPXsetintparam(env, CPXPARAM_Threads, mThreads);
             if (status){

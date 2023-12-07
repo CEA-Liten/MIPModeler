@@ -42,6 +42,7 @@ public:
     void setTimeLimit(const double& timeLimit);
     void setGap(const double& gap);
     void setThreads(const int& threads);
+    void setTreeMemoryLimit(const int& a_TreeMemoryLimit);
     void setLocation(const std::string &location);
     void setFileMipStart(const std::string &mipStartFile);
     void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
@@ -74,6 +75,7 @@ private:
     double mTimeLimit;
     double mGap;
     int mThreads;
+    int mTreeMemoryLimit;
     bool mLpFile;
     bool mSolverPrint;
     bool mWriteMipStart;
