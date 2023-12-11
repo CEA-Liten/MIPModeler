@@ -27,18 +27,19 @@ set(${COMPONENT}_DIRS
 
 # ------ include interface ------
 set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES 
-	${${COMPONENT}_DIRS}	
+    .
+    ../ModelerInterface    
 )
 
 # -- create/setup component target --
 include(ComponentSetup)
 create_component(${COMPONENT})
 
-find_package(Qt REQUIRED)
+find_package(Qt REQUIRED Core)
 if (${USE_GAMS})
-	target_link_libraries(${COMPONENT} PRIVATE GAMSModeler)
-	target_compile_definitions(${COMPONENT} PRIVATE -DUSE_GAMS)
-	find_package(GAMS)
+    target_link_libraries(${COMPONENT} PRIVATE GAMSModeler)
+    target_compile_definitions(${COMPONENT} PRIVATE -DUSE_GAMS)
+    find_package(GAMS)
 endif()
 
 # -- Specific Eigen to MIPModeler
@@ -46,6 +47,8 @@ target_include_directories(${COMPONENT} PRIVATE
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/Eigen/3.2.9>)
 target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
 
+
+target_link_libraries(${COMPONENT} PRIVATE ModelerInterface)
 
 # ---- Installation ----
 # Call component_install_setup(<COMPONENT>)

@@ -22,17 +22,21 @@ message("-- Set up for ${PROJECT_NAME}_${COMPONENT} library ...\n")
 # List here all directories that contain sources files for current component.
 # Path must be relative to component path (i.e. to CMAKE_CURRENT_SOURCE_DIR)
 set(${COMPONENT}_DIRS
- . 
+ .  
 )
 
 # ------ include interface ------
-set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES ${${COMPONENT}_DIRS})
+set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES 
+   .
+   ../MIPSolver
+)
 
 # -- create/setup component target --
 include(ComponentSetup)
 create_component(${COMPONENT})
 
 target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
+target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 
 # Links with non-Pegase libraries
 # Qt, FBSF, MipModeler, Persee, Eigen, ....

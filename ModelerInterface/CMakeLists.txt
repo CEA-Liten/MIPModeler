@@ -14,7 +14,7 @@
 #   to populate the interface of the target for include directories at build time
 
 # Component name (i.e. target name)
-set(COMPONENT MIPCbcSolver)
+set(COMPONENT ModelerInterface)
 message("-- Set up for ${PROJECT_NAME}_${COMPONENT} library ...\n")
 
 # ------ source directories for current component ------
@@ -27,26 +27,15 @@ set(${COMPONENT}_DIRS
 
 # ------ include interface ------
 set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES 
-  .
-  ../MIPSolver
+    ${${COMPONENT}_DIRS}	
 )
 
 # -- create/setup component target --
 include(ComponentSetup)
 create_component(${COMPONENT})
+target_compile_definitions(${COMPONENT} PRIVATE -DMODELERINTERFACE_LIB)
 
-target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
-target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
-
-# Links with non-Pegase libraries
-# Qt, FBSF, MipModeler, Persee, Eigen, ....
 find_package(Qt REQUIRED)
-find_package(CBC REQUIRED)
-
-# -- Specific Eigen to MIPModeler
-target_include_directories(${COMPONENT} PRIVATE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.2.9>)
-target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
 
 
 # ---- Installation ----
