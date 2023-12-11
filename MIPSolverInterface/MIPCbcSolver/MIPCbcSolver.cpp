@@ -16,7 +16,6 @@ namespace MIPSolverInterface {
 //---------------------------------------------------------------------------
 MIPCbcSolver::MIPCbcSolver()
     : mModel(nullptr),
-      mSolver(new OsiClpSolverInterface()),
       mTimeLimit(TIME_LIMIT),
       mGap(GAP),
       mThreads(THREADS),
@@ -54,10 +53,8 @@ int MIPCbcSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 if (vParam.second.value) writeLp();
             }
         }
-        solve();
-
-        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
-        vRet = 0;
+        vRet = solve();
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());        
     }
     return vRet;
 }
@@ -83,7 +80,9 @@ void MIPCbcSolver::writeLp() {
     mLpFile = true;
 }
 //---------------------------------------------------------------------------
-void MIPCbcSolver::solve() {
+int MIPCbcSolver::solve() {
+    
+    int vRet = -1;
     std::cout<<"Start Solving using Cbc"<<std::endl;
 
     //constraint matrix
@@ -99,8 +98,8 @@ void MIPCbcSolver::solve() {
                             mModel->getLengths());
 
     //variable and constraint informations
-    double* rowlb = new double[numRows];
-    double* rowub = new double[numRows];
+    std::vector<double> rowlb(numRows);
+    std::vector<double> rowub(numRows);
     const double* rhs = mModel->getRhs();
     const char* sense = mModel->getSense();
     for(int i=0 ; i < numRows; i++) {
@@ -119,42 +118,44 @@ void MIPCbcSolver::solve() {
     }
 
     //OsiSolverInterface optimisation problem
-	mSolver->loadProblem(matrix,
+    OsiClpSolverInterface vSolver;
+
+	vSolver.loadProblem(matrix,
                          mModel->getColLowerBounds(),
                          mModel->getColUpperBounds(),
                          mModel->getObjectiveCoefficients(),
-                         rowlb,
-                         rowub);
+                         rowlb.data(),
+                         rowub.data());
 
     //integer variables information
     if (mModel->isMip())
-        mSolver->setInteger(mModel->getColIntegers(),
+        vSolver.setInteger(mModel->getColIntegers(),
                             mModel->getNumIntegerCols());
 
     //optimisation direction
-    mSolver->setObjSense(mModel->getObjectiveDirection());
+    vSolver.setObjSense(mModel->getObjectiveDirection());
 
     //variable name informations (for high quality of LP file )
     std::vector<std::string> colNames = mModel->getColNames();
     for(int i = 0 ; i < numCols ; i++){
         if (!colNames[i].empty())
-            mSolver->setColName(i,colNames[i]);
+            vSolver.setColName(i,colNames[i]);
     }
 
     //constraint name informations (for high quality of LP file )
     std::vector<std::string> rowNames = mModel->getRowNames();
     for(int i = 0 ; i < numRows ; i++){
         if (!rowNames[i].empty())
-            mSolver->setRowName(i,rowNames[i]);
+            vSolver.setRowName(i,rowNames[i]);
     }
 
     //Lp File generation
     if (mLpFile)
-        mSolver->writeLp("cbc_model");
+        vSolver.writeLp("cbc_model");
 
     //CBCModel generation
-    mCbcModel = new CbcModel(*mSolver);
-
+    CbcModel vCbcModel(vSolver);
+    
     //setting SOS variables
     std::vector<MIPModeler::MIPSpecialOrderedSet> sos;
     std::vector<MIPModeler::MIPSOSType> sosType;
@@ -166,19 +167,19 @@ void MIPCbcSolver::solve() {
         CbcObject **objects = new CbcObject*[nbSOS];
         for (int i = 0; i < nbSOS; i++) {
             if (sosType[i] == MIPModeler::MIP_SOS1)
-                objects[i] = new CbcSOS(mCbcModel,
+                objects[i] = new CbcSOS(&vCbcModel,
                                         sos[i].getNumElements (),
                                         sos[i].getVarColIdx().data(),
                                         NULL,
                                         i, 1);
             else if (sosType[i] == MIPModeler::MIP_SOS2)
-                objects[i] = new CbcSOS(mCbcModel,
+                objects[i] = new CbcSOS(&vCbcModel,
                                         sos[i].getNumElements(),
                                         sos[i].getVarColIdx().data(),
                                         NULL,
                                         i, 2);
         }
-        mCbcModel->addObjects(nbSOS, objects);
+        vCbcModel.addObjects(nbSOS, objects);
         for (int i = 0; i < nbSOS; i++)
             delete objects[i];
         delete[] objects;
@@ -186,51 +187,57 @@ void MIPCbcSolver::solve() {
 
     // set mip parmameters
     if (mModel->isMip()){
-        mCbcModel->setMaximumSeconds(mTimeLimit);
-        mCbcModel->setAllowableGap(mGap);
-        mCbcModel->setNumberThreads(mThreads);
+        vCbcModel.setMaximumSeconds(mTimeLimit);
+        vCbcModel.setAllowableGap(mGap);
+        vCbcModel.setNumberThreads(mThreads);
     }
 
     // solve problem
-    mCbcModel->messageHandler()->setLogLevel(mSolverPrint);
+    vCbcModel.messageHandler()->setLogLevel(mSolverPrint);
     const char *args[] = { "cbcModel", "-solve", "-quit" };
-    CbcMain0(*mCbcModel);
-    CbcMain1(3, args, *mCbcModel);
+    CbcMain0(vCbcModel);
+    CbcMain1(3, args, vCbcModel);
 
-    if (mCbcModel->isProvenInfeasible()){
+    if (vCbcModel.isProvenInfeasible()){
         mOptimisationStatus = "Infeasible";
+        vRet = 1;
     }
-    else if (mCbcModel->isAbandoned()){
+    else if (vCbcModel.isAbandoned()){
         mOptimisationStatus = "Abandoned (numerical difficulties)";
+        vRet = 1;
     }
-    else if (mCbcModel->isProvenDualInfeasible()){
+    else if (vCbcModel.isProvenDualInfeasible()){
         mOptimisationStatus = "Unbounded";
+        vRet = 1;
     }
-    else if (mCbcModel->isProvenOptimal()){
+    else if (vCbcModel.isProvenOptimal()){
         mOptimisationStatus = "Optimal";
-        mOptimalSolution = mCbcModel->getColSolution();
-		mObjectiveValue = mCbcModel->getObjValue();
-        mLpValue = mCbcModel->getBestPossibleObjValue();
+        mOptimalSolution = vCbcModel.getColSolution();
+		mObjectiveValue = vCbcModel.getObjValue();
+        mLpValue = vCbcModel.getBestPossibleObjValue();
+        vRet = 0;
 	}
-    else if (mCbcModel->isSecondsLimitReached()){
+    else if (vCbcModel.isSecondsLimitReached()){
         mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
-        mOptimalSolution = mCbcModel->getColSolution();
-        mObjectiveValue = mCbcModel->getObjValue();
-        mLpValue = mCbcModel->getBestPossibleObjValue();
+        mOptimalSolution = vCbcModel.getColSolution();
+        mObjectiveValue = vCbcModel.getObjValue();
+        mLpValue = vCbcModel.getBestPossibleObjValue();
+        vRet = 0;
     }
     else {
         mOptimisationStatus = "Best Feasible";
-        mOptimalSolution = mCbcModel->getColSolution();
-        mObjectiveValue = mCbcModel->getObjValue();
-        mLpValue = mCbcModel->getBestPossibleObjValue();
+        mOptimalSolution = vCbcModel.getColSolution();
+        mObjectiveValue = vCbcModel.getObjValue();
+        mLpValue = vCbcModel.getBestPossibleObjValue();
+        vRet = 0;
     }
 
     std::cout<<"Finish Solving using Cbc"<<std::endl;
+    return vRet;
 }
 //---------------------------------------------------------------------------
 MIPCbcSolver::~MIPCbcSolver()
-{
-
+{    
 }
 //---------------------------------------------------------------------------
 }

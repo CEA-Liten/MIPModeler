@@ -32,7 +32,7 @@ public:
     QString Infos();
     int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
 
-    void solve();
+    int solve();
     void writeLp();
 //---------------------------------------------------------------------------
     void setSolverPrint(const int& solverPrint);
@@ -43,10 +43,9 @@ public:
 //---------------------------------------------------------------------------
 private:
     MIPModeler::MIPModel* mModel;
-    OsiSolverInterface * mSolver;
 
-    const double* mOptimalSolution;
-    double mObjectiveValue;
+    const double* mOptimalSolution{ nullptr };
+    double mObjectiveValue{ 0.0 };
     std::string mOptimisationStatus;
     bool mLpFile;
     int mSolverPrint;

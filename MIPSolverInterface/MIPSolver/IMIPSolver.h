@@ -3,6 +3,10 @@
 #include <QString>
 #include "MIPModel.h"
 
+constexpr double OPTIM_HUGE_VAL = 1e100;
+constexpr double OPTIM_SMALL_VAL = 1e-100;
+
+
 class MIPSolverParams {
 public:
     struct MIPSolverParam {
@@ -36,9 +40,21 @@ public:
         m_OptimisationStatus = a_OptimisationStatus;
         m_OptimalSolution = ap_OptimalSolution;
     }
+    void modifyResults(MIPModeler::MIPModel* ap_Model) {
+        if (ap_Model) {
+            int numCols = ap_Model->getNumCols();
+            double sol = OPTIM_HUGE_VAL;
+            if (ap_Model->getObjectiveDirection() == MIPModeler::MIP_MAXIMIZE) {
+                sol = OPTIM_SMALL_VAL;
+            }
+            m_infeasiblesol.resize(numCols, sol);
+            m_OptimalSolution = m_infeasiblesol.data();
+        }
+    }
 protected:
     std::string m_OptimisationStatus;
     const double* m_OptimalSolution { nullptr };
+    std::vector<double> m_infeasiblesol;
 };
 
 

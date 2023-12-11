@@ -4,6 +4,7 @@
 #include <map>
 #include "IMIPSolver.h"
 
+
 class MIPSOLVERSHARED_EXPORT MIPSolverFactory
 {
 public:

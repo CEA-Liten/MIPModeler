@@ -35,7 +35,7 @@ public:
     QString Infos();
     int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
 
-    void solve();
+    int solve();
     void writeLp();
 //---------------------------------------------------------------------------
     void setSolverPrint(const int& solverPrint);
@@ -50,12 +50,10 @@ public:
 //---------------------------------------------------------------------------
 private:
     MIPModeler::MIPModel* mModel;
-    OsiSolverInterface* mSolver;
-    CbcModel* mCbcModel;
 
-    const double* mOptimalSolution;
-    double mObjectiveValue;
-    double mLpValue;
+    const double* mOptimalSolution{ nullptr };
+    double mObjectiveValue{ 0.0 };
+    double mLpValue{ 0.0 };
     std::string mOptimisationStatus;
 
     double mTimeLimit;

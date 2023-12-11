@@ -86,7 +86,14 @@ int MIPSolverFactory::SolverDescriptor::solve(MIPModeler::MIPModel* ap_Model, co
 {
     int vRet = -1;
     if (m_IPlugIn) {
+        // solve return -1 if critical , 0 if problem is Feasible, 1 if problem is Infeasible
         vRet = m_IPlugIn->solve(ap_Model, a_Params, a_Results);
+
+        // 
+        if (vRet == 1) {
+            // Transform results
+            a_Results.modifyResults(ap_Model);            
+        }
     }
     return vRet;
 }

@@ -34,7 +34,7 @@ public:
     QString Infos();
     int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
 
-    void solve();
+    int solve();
     void writeLp();
     void writeMipStart();
 // --------------------------------------------------------------------------
