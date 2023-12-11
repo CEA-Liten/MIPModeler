@@ -11,7 +11,6 @@ namespace MIPSolverInterface {
 // --------------------------------------------------------------------------
 MIPClpSolver::MIPClpSolver()
     : mModel(nullptr),
-      mSolver(new OsiClpSolverInterface()),
       mLpFile(false),
       mSolverPrint(1)
 {   
@@ -44,10 +43,8 @@ int MIPClpSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 if (vParam.second.value) writeLp();
             }
         }
-        solve();
-
-        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
-        vRet = 0;
+        vRet = solve();
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());        
     }
     return vRet;
 }
@@ -61,7 +58,8 @@ void MIPClpSolver::writeLp(){
     mLpFile = true;
 }
 //--------------------------------------------------------------------------
-void MIPClpSolver::solve() {
+int MIPClpSolver::solve() {
+    int vRet = -1;
     std::cout<<"Start Solving using Clp"<<std::endl;
 
     //constraint matrix
@@ -77,8 +75,8 @@ void MIPClpSolver::solve() {
                             mModel->getLengths());
 
     //variable and constraint informations
-    double* rowlb = new double[numRows];
-    double* rowub = new double[numRows];
+    std::vector<double> rowlb(numRows);
+    std::vector<double> rowub(numRows);
     const double* rhs = mModel->getRhs();
     const char* sense = mModel->getSense();
     for(int i=0 ; i < numRows; i++) {
@@ -97,49 +95,56 @@ void MIPClpSolver::solve() {
     }
 
     //OsiSolverInterface optimisation problem
-    mSolver->loadProblem(matrix,
+    OsiClpSolverInterface vSolver;
+    vSolver.loadProblem(matrix,
                          mModel->getColLowerBounds(),
                          mModel->getColUpperBounds(),
                          mModel->getObjectiveCoefficients(),
-                         rowlb,
-                         rowub);
+                         rowlb.data(),
+                         rowub.data());
 
     //optimisation direction
-    mSolver->setObjSense(mModel->getObjectiveDirection());
+    vSolver.setObjSense(mModel->getObjectiveDirection());
 
     //variable name informations (for high quality of LP file )
     std::vector<std::string> colNames = mModel->getColNames();
     for(int i = 0 ; i < numCols ; i++){
         if (!colNames[i].empty())
-            mSolver->setColName(i,colNames[i]);
+            vSolver.setColName(i,colNames[i]);
     }
 
     //variable name informations (for high quality of LP file )
     std::vector<std::string> rowNames = mModel->getRowNames();
     for(int i = 0 ; i < numRows ; i++){
         if (!rowNames[i].empty())
-            mSolver->setRowName(i,rowNames[i]);
+            vSolver.setRowName(i,rowNames[i]);
     }
 
     //Lp File generation
     if (mLpFile)
-        mSolver->writeLp("clp_model");
+        vSolver.writeLp("clp_model");
 
     // solve problem
-    mSolver->messageHandler()->setLogLevel(mSolverPrint);
-    mSolver->initialSolve();
+    vSolver.messageHandler()->setLogLevel(mSolverPrint);
+    vSolver.initialSolve();
 
-    if (mSolver->isProvenOptimal()) {
+    if (vSolver.isProvenOptimal()) {
         mOptimisationStatus = "Optimal";
-        mOptimalSolution = mSolver->getColSolution();
-        mObjectiveValue = mSolver->getObjValue();
+        mOptimalSolution = vSolver.getColSolution();
+        mObjectiveValue = vSolver.getObjValue();
+        vRet = 0;
     }
-    else if (mSolver->isAbandoned())
+    else if (vSolver.isAbandoned()) {
         mOptimisationStatus = "Abandoned";
-    else if (mSolver->isProvenPrimalInfeasible())
+        vRet = 1;
+    }
+    else if (vSolver.isProvenPrimalInfeasible()) {
         mOptimisationStatus = "Infeasible";
+        vRet = 1;
+    }
 
     std::cout<<"Finish Solving using Clp"<<std::endl;
+    return vRet;
 }
 //---------------------------------------------------------------------------
 MIPClpSolver::~MIPClpSolver() {

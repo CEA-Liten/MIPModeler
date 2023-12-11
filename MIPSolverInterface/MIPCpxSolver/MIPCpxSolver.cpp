@@ -81,11 +81,8 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 setTerminateSignal(vParam.second.signal);
             }
         }
-        solve();
-
-        // TODO: si erreur dans solve comment sont les résultats ?
-        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
-        vRet = 0;
+        vRet = solve();
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());        
     }        
     return vRet;
 }
@@ -178,8 +175,9 @@ void MIPCpxSolver::writeMipStart() {
     mWriteMipStart = true;
 }
 // --------------------------------------------------------------------------
-void MIPCpxSolver::solve() {
-    
+int MIPCpxSolver::solve() {
+
+    int vRet = -1;
     log(INFO, "Start Solving using Cplex");
     std::string optimFile = mLocation + "_optim.log";
     std::string lpFile = mLocation + "_model.lp";
@@ -195,7 +193,7 @@ void MIPCpxSolver::solve() {
         std::string errmsg; errmsg.resize(1024);
         CPXgeterrorstring (env, status, (char*)errmsg.c_str());
         log(ERR, "CPXopenCPLEX: Failed to open Cplex env. " + errmsg);
-        return;
+        return -1;
     }
    
 
@@ -212,7 +210,7 @@ void MIPCpxSolver::solve() {
     lp = CPXcreateprob(env, &status, "problem");
     if ( lp == NULL ){
         log(ERR, "CPXcreateprob: Failed to create model");
-        return;
+        return -1;
     }
     else {
         //create variables
@@ -242,7 +240,7 @@ void MIPCpxSolver::solve() {
                              colNames.data());   //variable names
         if (status){
             log(ERR, "CPXnewcols: Failed when creating variables");
-            return;
+            return -1;
         }
         //add subobjectives
         if(*(mModel->getNumSubobj())>1){
@@ -293,7 +291,7 @@ void MIPCpxSolver::solve() {
                              NULL, rowNames.data()); //variables and constraint names
         if (status){
             log(ERR, "CPXaddrows: Failed when creating constraints");
-            return;
+            return -1;
         }
 
         //setting SOS variables
@@ -344,7 +342,7 @@ void MIPCpxSolver::solve() {
                                NULL);
             if (status){
                 log(ERR, "CPXaddsos: Failed when setting SOS variables");
-                return;
+                return -1;
             }
         }
 
@@ -379,7 +377,7 @@ void MIPCpxSolver::solve() {
                                      NULL);
             if (status){
                 log(ERR, "CPXaddmipstarts: Failed when adding warm start solutions");
-                return;
+                return -1;
             }
         }
 
@@ -429,14 +427,14 @@ void MIPCpxSolver::solve() {
             status = CPXmultiobjopt(env,lp,NULL);
             if ( status ){
                 log(ERR, "CPXmipopt: Failed when solving mutliobj optimisation problem");
-                return;
+                return -1;
              }
         }
         else{
             status = CPXmipopt(env, lp);
             if ( status ){
                 log(ERR, "CPXmipopt: Failed when solving optimisation problem");
-                return;
+                return -1;
              }
         }
         mOptimalSolution.resize(numCols, 0);
@@ -455,14 +453,17 @@ void MIPCpxSolver::solve() {
             lpstat == CPXMIP_OPTIMAL_TOL ||
             lpstat == CPX_STAT_MULTIOBJ_OPTIMAL){
             mOptimisationStatus = "Optimal";
+            vRet = 0;
         }
         else if (lpstat == CPX_STAT_NUM_BEST){
             mOptimisationStatus = "Abandoned";
+            vRet = 1;
         }
         else if (lpstat == CPX_STAT_UNBOUNDED ||
                  lpstat == CPXMIP_UNBOUNDED ||
                  lpstat == CPXMIP_ABORT_RELAXATION_UNBOUNDED){
              mOptimisationStatus = "Unbounded";
+             vRet = 1;
         }
         else if (lpstat == CPX_STAT_INFEASIBLE ||
                  lpstat == CPX_STAT_INForUNBD ||
@@ -471,22 +472,26 @@ void MIPCpxSolver::solve() {
                  lpstat == CPXMIP_INFEASIBLE ||
                  lpstat == CPXMIP_ABORT_INFEAS){
             mOptimisationStatus = "Infeasible";
+            vRet = 1;
         }
         else if (lpstat == CPX_STAT_ABORT_TIME_LIM ||
                  lpstat == CPXMIP_TIME_LIM_FEAS||
                  lpstat == CPXMIP_ABORT_FEAS ){
             mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
+            vRet = 0;
         }
         else if (lpstat == CPXMIP_FEASIBLE ||
                  lpstat == CPX_STAT_FEASIBLE){
             mOptimisationStatus = "Best Feasible";
+            vRet = 0;
         }
         else if (lpstat == CPXMIP_MEM_LIM_FEAS){
             mOptimisationStatus = "Best Feasible (TreeMemoryLimit Reached)";
+            vRet = 0;
         }
         else{
-
             mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
+            vRet = 1;
         }
         if (mWriteMipStart){            
             CPXwritemipstarts(env, lp, mipStartFile.c_str(), 0, 0);
@@ -497,7 +502,7 @@ void MIPCpxSolver::solve() {
         status = CPXgetbestobjval(env, lp, &mLpValue);
         if ( status ){
             log(ERR, "CPXgetbestobjval: Failed when getting best possible obj");
-            return;
+            return -1;
         }
 
         int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);        
@@ -531,6 +536,7 @@ void MIPCpxSolver::solve() {
     log(INFO, "Finish solving using Cplex");    
     if (mlogFile) mlogFile->close();
     mlogFile = nullptr;
+    return vRet;
 }
 // --------------------------------------------------------------------------
 MIPCpxSolver::~MIPCpxSolver() {
