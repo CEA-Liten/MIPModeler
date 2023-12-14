@@ -144,7 +144,7 @@ void MIPModel::buildProblem() {
     std::list<Node> objectiveNodes = mObjectiveExpression.getNode();
     //checking mObjectiveExpression
     std::list<Node>::iterator itNode;
-    for (itNode = objectiveNodes.begin(); itNode != objectiveNodes.end() && itNode->col() < 0 && itNode->row() < 0 ; itNode++) {
+    for (itNode = objectiveNodes.begin(); itNode != objectiveNodes.end() && (itNode->col() < 0 || itNode->row() < 0) ; itNode++) {
         //throw exception 
         qCritical() << "error at the nodeObjective : col val  is -1 ";
         throw (QString("An error found after checking objectiveNodes col/row val (<-1) sparseMatrixObjective ! plesae check added model"));
