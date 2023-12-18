@@ -18,7 +18,7 @@ MIPModel::MIPModel(const std::string& modelName)
       mNumObj(0),
       mProblemBuilt(false),
       mModelName(modelName)
-{    
+{
 }
 
 void MIPModel::setExternalModeler(ModelerInterface* ap_modeler)
@@ -115,22 +115,22 @@ void MIPModel::buildProblem() {
     std::list<MIPVariable0D*>::iterator itVar = mVariables.begin();
     for (; itVar != mVariables.end(); itVar++){
         //Check for NAN values
-        if (isnan((*itVar)->getLowerBound())) {
+        if (std::isnan((*itVar)->getLowerBound())) {
             mProblemBuilt = false;
             qCritical() << "The Lower Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
         }
-        
-        if (isnan((*itVar)->getUpperBound())) {
+
+        if (std::isnan((*itVar)->getUpperBound())) {
             mProblemBuilt = false;
             qCritical() << "The Upper Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
         }
-            
+
         mColLowerBounds.push_back((*itVar)->getLowerBound());
         mColUpperBounds.push_back((*itVar)->getUpperBound());
         mColNames.push_back((*itVar)->getName());
 
         if ((*itVar)->isInteger()){
-            if ( isnan(static_cast<float>( (*itVar)->getColIdx() )) ) {
+            if ( std::isnan(static_cast<float>( (*itVar)->getColIdx() )) ) {
                 mProblemBuilt = false;
                 qCritical() << "The index of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
             }
@@ -148,7 +148,7 @@ void MIPModel::buildProblem() {
     int* idx = sprarseMatrixObjective.innerIndexPtr();
     mObjectiveCoefficients = new double[mNumCols]();
     for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
-        if (isnan(value[i])) {
+        if (std::isnan(value[i])) {
             mProblemBuilt = false;
             qCritical() << "The Objective Coefficient of " + QString::fromStdString(mColNames[i]) + " is NAN!";
         }
@@ -168,7 +168,7 @@ void MIPModel::buildProblem() {
             for (; it != objectiveNodes.end(); it++){
                 mSubObjIndices[j][i] = it->col();
 
-                if (isnan(it->value())) {
+                if (std::isnan(it->value())) {
                     mProblemBuilt = false;
                     qCritical() << "A NAN value found in the subobjective expression: "+QString::fromStdString(mListSubobjectives[j].getName());
                 }
@@ -200,14 +200,14 @@ void MIPModel::buildProblem() {
                 throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
             }
 
-            if (isnan(it->value())) {
+            if (std::isnan(it->value())) {
                 mProblemBuilt = false;
                 qCritical() << "An NAN value found in the constraint: "+QString::fromStdString(itConstr->getName());
             }
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
 
-        if (isnan(itConstr->getConstPart())) {
+        if (std::isnan(itConstr->getConstPart())) {
             mProblemBuilt = false;
             qCritical() << "The Constant Part of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!" << itConstr->getConstPart();
         }

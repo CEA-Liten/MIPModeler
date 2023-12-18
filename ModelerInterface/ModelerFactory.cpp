@@ -41,12 +41,20 @@ ModelerInterface* ModelerFactory::getModeler(QString& a_Name)
 bool ModelerFactory::findModelers(const QString& a_Path)
 {
     bool vRet = false;
-    QDir vDir(a_Path, "*.dll");
+    QString filterExt, filterStart;
+#if (defined (_WIN32) || defined (_WIN64))
+    filterExt = "*.dll";
+    filterStart = "MIP";
+#else
+    filterExt = "*.so";
+    filterStart = "libMIP";
+#endif
+    QDir vDir(a_Path, filterExt);    
     qDebug() << "Search modelers in: " << a_Path;
     QFileInfoList vFiles(vDir.entryInfoList());
     for (auto& vFile : vFiles) {
         if (vFile.baseName().contains("Modeler")) {
-            if (!vFile.baseName().startsWith("MIP")) {            
+            if (!vFile.baseName().startsWith(filterStart)) {
                 ModelerInterface *vPlugIn = load(vFile.absoluteFilePath());
                 if (vPlugIn != nullptr) {
                     QString vKey = QString(vPlugIn->Infos().c_str());
