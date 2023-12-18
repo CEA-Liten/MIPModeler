@@ -75,6 +75,7 @@ void MIPCbcSolver::setGap(const double& gap) {
 void MIPCbcSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
+
 //---------------------------------------------------------------------------
 void MIPCbcSolver::writeLp() {
     mLpFile = true;
@@ -212,29 +213,34 @@ int MIPCbcSolver::solve() {
     }
     else if (vCbcModel.isProvenOptimal()){
         mOptimisationStatus = "Optimal";
-        mOptimalSolution = vCbcModel.getColSolution();
-		mObjectiveValue = vCbcModel.getObjValue();
-        mLpValue = vCbcModel.getBestPossibleObjValue();
+        setOptimalSolution(numCols, vCbcModel);		
         vRet = 0;
 	}
     else if (vCbcModel.isSecondsLimitReached()){
         mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
-        mOptimalSolution = vCbcModel.getColSolution();
-        mObjectiveValue = vCbcModel.getObjValue();
-        mLpValue = vCbcModel.getBestPossibleObjValue();
+        setOptimalSolution(numCols, vCbcModel);  
         vRet = 0;
     }
     else {
         mOptimisationStatus = "Best Feasible";
-        mOptimalSolution = vCbcModel.getColSolution();
-        mObjectiveValue = vCbcModel.getObjValue();
-        mLpValue = vCbcModel.getBestPossibleObjValue();
+        setOptimalSolution(numCols, vCbcModel);        
         vRet = 0;
     }
 
     std::cout<<"Finish Solving using Cbc"<<std::endl;
     return vRet;
 }
+
+void MIPCbcSolver::setOptimalSolution(int numCols, const CbcModel& aCbcModel)
+{
+    mOptimalSolution.resize(numCols);
+    const double* x = aCbcModel.getColSolution();
+    mOptimalSolution.assign(x, x + numCols);
+
+    mObjectiveValue = aCbcModel.getObjValue();
+    mLpValue = aCbcModel.getBestPossibleObjValue();
+}
+
 //---------------------------------------------------------------------------
 MIPCbcSolver::~MIPCbcSolver()
 {    

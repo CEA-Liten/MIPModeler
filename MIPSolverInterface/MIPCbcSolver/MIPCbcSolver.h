@@ -43,7 +43,7 @@ public:
     void setGap(const double& gap);
     void setThreads(const int& threads);
 //---------------------------------------------------------------------------
-    const double* getOptimalSolution() const {return mOptimalSolution;}
+    const double* getOptimalSolution() const {return mOptimalSolution.data();}
     double getObjectiveValue() const {return mObjectiveValue;}
     double getLpValue() const {return mLpValue;}
     std::string getOptimisationStatus() const {return mOptimisationStatus;}
@@ -51,7 +51,8 @@ public:
 private:
     MIPModeler::MIPModel* mModel;
 
-    const double* mOptimalSolution{ nullptr };
+    void setOptimalSolution(int numCols, const CbcModel &aCbcModel);
+    std::vector<double> mOptimalSolution;
     double mObjectiveValue{ 0.0 };
     double mLpValue{ 0.0 };
     std::string mOptimisationStatus;

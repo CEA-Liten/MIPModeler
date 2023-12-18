@@ -37,14 +37,14 @@ public:
 //---------------------------------------------------------------------------
     void setSolverPrint(const int& solverPrint);
 //---------------------------------------------------------------------------
-    const double* getOptimalSolution() const {return mOptimalSolution;}
+    const double* getOptimalSolution() const {return mOptimalSolution.data();}
     double getObjectiveValue() const {return mObjectiveValue;}
     std::string getOptimisationStatus() const {return mOptimisationStatus;}
 //---------------------------------------------------------------------------
 private:
     MIPModeler::MIPModel* mModel;
 
-    const double* mOptimalSolution{ nullptr };
+    std::vector<double> mOptimalSolution;
     double mObjectiveValue{ 0.0 };
     std::string mOptimisationStatus;
     bool mLpFile;

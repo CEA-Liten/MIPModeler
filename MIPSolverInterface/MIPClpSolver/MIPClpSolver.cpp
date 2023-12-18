@@ -130,7 +130,9 @@ int MIPClpSolver::solve() {
 
     if (vSolver.isProvenOptimal()) {
         mOptimisationStatus = "Optimal";
-        mOptimalSolution = vSolver.getColSolution();
+        mOptimalSolution.resize(numCols);
+        const double *x = vSolver.getColSolution();
+        mOptimalSolution.assign(x, x + numCols);
         mObjectiveValue = vSolver.getObjValue();
         vRet = 0;
     }
