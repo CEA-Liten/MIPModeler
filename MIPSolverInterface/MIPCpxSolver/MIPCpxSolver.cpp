@@ -59,6 +59,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
             else if (vParam.first == "TreeMemoryLimit") setTreeMemoryLimit(vParam.second.value);
+            else if (vParam.first == "NbSolToKeep") setMaxNumberOfSolutions(vParam.second.value);
             else if (vParam.first == "Location") {                
                 setLocation(vParam.second.str.QString::toStdString());
             }
@@ -82,7 +83,8 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             }
         }
         vRet = solve();
-        a_Results.setResults(getOptimisationStatus(), getOptimalSolution());        
+        a_Results.setResults(getOptimisationStatus(), getOptimalSolution(), getNbSolutionsGardees());
+        a_Results.setOtherResults(mOtherSolutions);
     }        
     return vRet;
 }
@@ -517,7 +519,6 @@ int MIPCpxSolver::solve() {
         log(INFO, "Number of solutions gardees:",  mNbSolutionsGardees);        
         for(int i=0; i<mNbSolutionsGardees;i++){
             mOtherSolutions.push_back(std::vector<double>( numCols, 0 ));
-            pOtherSolutions.push_back(mOtherSolutions[i].data());
             status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i].data(), 0, numCols - 1);
             mObjectiveOtherSolutions.push_back(0);
             CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
