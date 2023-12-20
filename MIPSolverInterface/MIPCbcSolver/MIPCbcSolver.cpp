@@ -20,7 +20,8 @@ MIPCbcSolver::MIPCbcSolver()
       mGap(GAP),
       mThreads(THREADS),
       mLpFile(false),
-      mSolverPrint(1)
+      mSolverPrint(1),
+      mLpFileCycle(0)
 {   
 }
 
@@ -79,6 +80,10 @@ void MIPCbcSolver::setThreads(const int& threads) {
 //---------------------------------------------------------------------------
 void MIPCbcSolver::writeLp() {
     mLpFile = true;
+}
+// --------------------------------------------------------------------------
+void MIPCbcSolver::writeLpCycle(const int aStep) {
+    mLpFileCycle = aStep;
 }
 //---------------------------------------------------------------------------
 int MIPCbcSolver::solve() {

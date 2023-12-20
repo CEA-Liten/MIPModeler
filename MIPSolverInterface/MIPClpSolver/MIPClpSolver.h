@@ -34,6 +34,7 @@ public:
 
     int solve();
     void writeLp();
+    void writeLpCycle(const int aStep);
 //---------------------------------------------------------------------------
     void setSolverPrint(const int& solverPrint);
 //---------------------------------------------------------------------------
@@ -48,6 +49,7 @@ private:
     double mObjectiveValue{ 0.0 };
     std::string mOptimisationStatus;
     bool mLpFile;
+    int mLpFileCycle;
     int mSolverPrint;
 };
 

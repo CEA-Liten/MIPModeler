@@ -29,7 +29,8 @@ MIPCpxSolver::MIPCpxSolver()
       mWriteMipStart(false),
       mFileMipStart(""),
       mReadParamFile(false),
-      mTerminate(NULL)
+      mTerminate(NULL),
+      mLpFileCycle(0)
 {    
 }
 
@@ -65,6 +66,9 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
             else if (vParam.first == "WriteLp") {
                 if (vParam.second.value) writeLp();
+            }
+            else if (vParam.first == "WriteLpCycle") {
+                writeLpCycle(vParam.second.value);
             }
             else if (vParam.first == "ReadParamFile") {
                 if (vParam.second.value) setReadParamFile();
@@ -171,6 +175,10 @@ void MIPCpxSolver::writeLp() {
     mLpFile = true;
 }
 // --------------------------------------------------------------------------
+void MIPCpxSolver::writeLpCycle(const int aStep) {
+    mLpFileCycle = aStep;
+}
+// --------------------------------------------------------------------------
 void MIPCpxSolver::writeMipStart() {
     mWriteMipStart = true;
 }
@@ -181,6 +189,7 @@ int MIPCpxSolver::solve() {
     log(INFO, "Start Solving using Cplex");
     std::string optimFile = mLocation + "_optim.log";
     std::string lpFile = mLocation + "_model.lp";
+    
     std::string paramFile = mLocation + "_cplexParam.prm";
     std::string mipStartFile = mLocation + "_mipstart.mst";
     CPXENVptr env = NULL;
@@ -392,6 +401,10 @@ int MIPCpxSolver::solve() {
         if (mLpFile)
         {            
             CPXwriteprob(env, lp, lpFile.c_str(), NULL);
+            if (mLpFileCycle > 0) {
+                std::string lpFile_i = mLocation + "_model_RH_" + std::to_string(mLpFileCycle) + ".lp";
+                CPXwriteprob(env, lp, lpFile_i.c_str(), NULL);
+            }
         }
         if(mFileMipStart!=""){
             status = CPXreadcopymipstarts(env,lp,mFileMipStart.c_str());
@@ -446,7 +459,9 @@ int MIPCpxSolver::solve() {
                               &objval,
                               mOptimalSolution.data(),
                               NULL, NULL, NULL);
-
+        // log(INFO, "lpstat " + std::to_string(lpstat));
+        lpstat = CPXgetstat (env, lp); //To get cplex status 
+        // log(INFO, "lpstat " + std::to_string(lpstat));
 
         if (lpstat == CPX_STAT_OPTIMAL ||
             lpstat == CPXMIP_OPTIMAL ||
@@ -538,6 +553,128 @@ int MIPCpxSolver::solve() {
     mlogFile = nullptr;
     return vRet;
 }
+
+void MIPCpxSolver::conflict(CPXENVptr env, CPXLPptr lp){
+    log(INFO, "Start Conflict refiner"); 
+
+    int status;
+
+    int ncols = CPXgetnumcols (env, lp);
+    int nrows = CPXgetnumrows (env, lp);
+    int nqconstrs = CPXgetnumqconstrs (env, lp);
+    int nsos = CPXgetnumsos (env, lp);
+    int nindconstrs = CPXgetnumindconstrs (env, lp);
+    int npwl = CPXgetnumpwl (env, lp);
+
+    /* Variables for constraint groups. */
+    int grpcnt = 0;
+    double *grppref = NULL;
+    int *grpbeg = NULL;
+    int *grpind = NULL;
+    char *grptype = NULL;
+    int *grpstat = NULL;
+
+
+    grpcnt += ncols * 2;  /* For upper and lower bounds. */
+    grpcnt += nrows;
+    grpcnt += nqconstrs;
+    grpcnt += nsos;
+    grpcnt += nindconstrs;
+    grpcnt += npwl;
+
+    grppref = static_cast<double *>(malloc(grpcnt * sizeof(*grppref)));
+    grpbeg = static_cast<int *>(malloc((grpcnt+1) * sizeof(*grpbeg)));
+    grpind = static_cast<int *>(malloc((grpcnt) * sizeof(*grpind)));
+    grptype = static_cast<char *>(malloc((grpcnt) * sizeof(*grptype)));
+
+    /* Variable lower bound groups. */
+
+    int idx = 0;
+    int i;
+    grpbeg[0] = 0;
+    for (i = 0; i < ncols; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_LOWER_BOUND;
+    }
+
+    /* Variable upper bound groups. */
+
+    for (i = 0; i < ncols; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_UPPER_BOUND;
+    }
+
+    /* Linear constraints groups. */
+
+    for (i = 0; i < nrows; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_LINEAR;
+    }
+
+    /* Quadratic constraint groups. */
+
+    for (i = 0; i < nqconstrs; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_QUADRATIC;
+    }
+
+    /* Special ordered set groups. */
+
+    for (i = 0; i < nsos; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_SOS;
+    }
+
+    /* Indicator constraint groups. */
+
+    for (i = 0; i < nindconstrs; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_INDICATOR;
+    }
+
+    /* Piecewise linear constraint groups. */
+
+    for (i = 0; i < npwl; ++i, ++idx) {
+      grppref[idx] = 1.0;
+      grpbeg[idx + 1] = grpbeg[idx] + 1;
+      grpind[idx] = i;
+      grptype[idx] = CPX_CON_PWL;
+    }
+
+    status = CPXrefineconflictext (env, lp, grpcnt, grpcnt, grppref,
+                                  grpbeg, grpind, grptype);
+
+    // grpstat = malloc (grpcnt * sizeof(*grpstat));
+    grpstat = static_cast<int *>(malloc(grpcnt * sizeof(*grpstat)));
+
+
+    status = CPXgetconflictext (env, lp, grpstat, 0, grpcnt - 1);
+    std::string conflict_file = mLocation + "_conflict.clp";
+    const char *chaineC = conflict_file.c_str();
+
+    status = CPXclpwrite (env, lp, chaineC);
+    log(INFO, "Conflict file written at " + conflict_file); 
+    
+    free (grppref);
+    free (grpbeg);
+    free (grpind);
+    free (grptype);
+    free (grpstat);
+}
+
+
 // --------------------------------------------------------------------------
 MIPCpxSolver::~MIPCpxSolver() {
 
