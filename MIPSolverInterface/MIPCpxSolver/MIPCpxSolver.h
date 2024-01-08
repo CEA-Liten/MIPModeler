@@ -78,7 +78,7 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    int mMaxNumberOfSolutions{ 0 };
+    int mMaxNumberOfSolutions{ 1 };
     int* mTerminate;
 
     std::string mLocation ;
