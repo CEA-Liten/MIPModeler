@@ -81,7 +81,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "TerminateSignal") {
                 setTerminateSignal(vParam.second.signal);
             }
-        }
+        }        
         vRet = solve();
         a_Results.setResults(getOptimisationStatus(), getOptimalSolution(), getNbSolutionsGardees());
         a_Results.setOtherResults(mOtherSolutions);
@@ -517,6 +517,8 @@ int MIPCpxSolver::solve() {
         
         log(INFO, "Number max of solutions gardees:",  mMaxNumberOfSolutions);        
         log(INFO, "Number of solutions gardees:",  mNbSolutionsGardees);        
+        mOtherSolutions.clear();
+        mObjectiveOtherSolutions.clear();
         for(int i=0; i<mNbSolutionsGardees;i++){
             mOtherSolutions.push_back(std::vector<double>( numCols, 0 ));
             status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i].data(), 0, numCols - 1);
@@ -526,11 +528,10 @@ int MIPCpxSolver::solve() {
             msg1 <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i];            
             log(INFO, msg1.str());
         }
-    }
-
+    }    
     if (lp)
         CPXfreeprob (env, &lp);
-
+    
     if (env)
         CPXcloseCPLEX (&env);
 
