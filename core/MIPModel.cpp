@@ -142,6 +142,15 @@ void MIPModel::buildProblem() {
     // objective information
     Eigen::SparseMatrix<double, Eigen::RowMajor> sprarseMatrixObjective(1, mNumCols);
     std::list<Node> objectiveNodes = mObjectiveExpression.getNode();
+    //checking mObjectiveExpression
+    std::list<Node>::iterator itNode;
+    for (itNode = objectiveNodes.begin(); itNode != objectiveNodes.end() ; itNode++) {
+        if(itNode->col() < 0 || itNode->row() < 0){
+            //throw exception 
+            qCritical() << "error at the nodeObjective : col val  is -1 ";
+            throw (QString("An error found after checking objectiveNodes col/row val (<-1) sparseMatrixObjective ! plesae check added model"));
+        }
+    }
     sprarseMatrixObjective.setFromTriplets(objectiveNodes.begin(), objectiveNodes.end());
 
     double* value = sprarseMatrixObjective.valuePtr();

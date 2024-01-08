@@ -37,6 +37,7 @@ public:
 
     int solve();
     void writeLp();
+    void writeLpCycle(const int aStep);
 //---------------------------------------------------------------------------
     void setSolverPrint(const int& solverPrint);
     void setTimeLimit(const double& timeLimit);
@@ -61,6 +62,7 @@ private:
     double mGap;
     int mThreads;
     bool mLpFile;
+    int mLpFileCycle;
     int mSolverPrint;
 };
 

@@ -12,7 +12,8 @@ namespace MIPSolverInterface {
 MIPClpSolver::MIPClpSolver()
     : mModel(nullptr),
       mLpFile(false),
-      mSolverPrint(1)
+      mSolverPrint(1),
+      mLpFileCycle(0)
 {   
 }
 
@@ -56,6 +57,10 @@ void MIPClpSolver::setSolverPrint(const int& solverPrint) {
 //--------------------------------------------------------------------------
 void MIPClpSolver::writeLp(){
     mLpFile = true;
+}
+// --------------------------------------------------------------------------
+void MIPClpSolver::writeLpCycle(const int aStep) {
+    mLpFileCycle = aStep;
 }
 //--------------------------------------------------------------------------
 int MIPClpSolver::solve() {

@@ -36,6 +36,7 @@ public:
 
     int solve();
     void writeLp();
+    void writeLpCycle(const int aStep);
     void writeMipStart();
 // --------------------------------------------------------------------------
     void setSolverPrint(const bool& solverPrint);
@@ -75,6 +76,7 @@ private:
     int mThreads;
     int mTreeMemoryLimit;
     bool mLpFile;
+    int mLpFileCycle;
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
@@ -89,8 +91,11 @@ private:
         INFO = 0,
         ERR = 1
     };
+
     void log(logLevel level, const std::string msg);
     void log(logLevel level, const std::string msg, double value);
+
+    void MIPCpxSolver::conflict(CPXENVptr env, CPXLPptr lp);
 };
 
 }
