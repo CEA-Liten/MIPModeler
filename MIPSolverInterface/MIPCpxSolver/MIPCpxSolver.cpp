@@ -540,6 +540,9 @@ int MIPCpxSolver::solve() {
             msg1 <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i];            
             log(INFO, msg1.str());
         }
+        double mgap;
+        status = CPXgetmiprelgap(env, lp, &mgap);
+        log(INFO, "Gap du probleme", mgap);
     }
 
     if (lp)
