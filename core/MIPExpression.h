@@ -96,7 +96,7 @@ private:
     double mConstPart;
 };
 
-#if not defined(WIN32) && not defined(_WIN32)
+#if  !defined(WIN32) &&  !defined(_WIN32)
 MIPExpression operator * (const MIPVariable0D& var, const double& val);
 MIPExpression operator * (const double& val, const MIPVariable0D& var);
 MIPExpression operator * (const double& val, const MIPExpression& var);

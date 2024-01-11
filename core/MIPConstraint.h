@@ -90,7 +90,7 @@ private:
     std::string mName;
 };
 
-#if not defined(WIN32) && not defined(_WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
 MIPConstraint operator == (const MIPExpression& expr, const double& val);
 MIPConstraint operator == ( const double& val, const MIPExpression& expr);
 MIPConstraint operator == (const MIPVariable0D& var, const double& val);

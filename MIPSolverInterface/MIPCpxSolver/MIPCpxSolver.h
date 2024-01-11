@@ -53,7 +53,6 @@ public:
 // --------------------------------------------------------------------------
     const double* getOptimalSolution() const {return mOptimalSolution.data(); }
     int getNbSolutionsGardees(){return mNbSolutionsGardees;}
-    std::vector<double*> getOtherSolutions() const {return pOtherSolutions;}
     std::vector<double> getObjectiveOtherSolutions() const {return mObjectiveOtherSolutions;}
     double getObjectiveValue() const {return mObjectiveValue;}
     double getLpValue() const {return mLpValue;}
@@ -63,7 +62,6 @@ private:
     MIPModeler::MIPModel* mModel;
 
     std::vector<double> mOptimalSolution;
-    std::vector<double*> pOtherSolutions;
     std::vector<std::vector<double>> mOtherSolutions;
 
     double mObjectiveValue{ 0 };
@@ -82,7 +80,7 @@ private:
     bool mSolverPrint;
     bool mWriteMipStart;
     bool mReadParamFile;
-    int mMaxNumberOfSolutions{ 0 };
+    int mMaxNumberOfSolutions{ 1 };
     int* mTerminate;
 
     std::string mLocation ;

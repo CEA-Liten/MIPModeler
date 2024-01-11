@@ -33,13 +33,29 @@ class MIPSolverResults {
 public:
     MIPSolverResults() {}
     const std::string& getOptimisationStatus() { return m_OptimisationStatus; }
-    const double *getOptimalSolution() { return m_OptimalSolution;  }
+    const double *getOptimalSolution(int aNsol) { 
+        if (!aNsol)
+            return m_OptimalSolution;  
+        else {
+            return m_OtherSolutions[aNsol];
+        }    
+    }
+    int getNumberOfSolutions() { return m_NumberOfSolutions;  };
 
-    void setResults(const std::string &a_OptimisationStatus, const double* ap_OptimalSolution)
+    void setResults(const std::string &a_OptimisationStatus, const double* ap_OptimalSolution, int a_NumberOfSolutions=1)
     {
         m_OptimisationStatus = a_OptimisationStatus;
         m_OptimalSolution = ap_OptimalSolution;
+        m_NumberOfSolutions = a_NumberOfSolutions;
+
     }
+    void setOtherResults(const std::vector<std::vector<double>> &aOtherSolutions)
+    {        
+        for (auto& vOtherSolution : aOtherSolutions) {
+            m_OtherSolutions.push_back(vOtherSolution.data());
+        }
+    }
+
     void modifyResults(MIPModeler::MIPModel* ap_Model) {
         if (ap_Model) {
             int numCols = ap_Model->getNumCols();
@@ -55,6 +71,8 @@ protected:
     std::string m_OptimisationStatus;
     const double* m_OptimalSolution { nullptr };
     std::vector<double> m_infeasiblesol;
+    int m_NumberOfSolutions{ 1 };
+    std::vector<const double*> m_OtherSolutions;
 };
 
 
