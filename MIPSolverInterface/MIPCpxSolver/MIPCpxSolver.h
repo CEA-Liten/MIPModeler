@@ -95,7 +95,7 @@ private:
     void log(logLevel level, const std::string msg);
     void log(logLevel level, const std::string msg, double value);
 
-    void MIPCpxSolver::conflict(CPXENVptr env, CPXLPptr lp);
+    void conflict(CPXENVptr env, CPXLPptr lp);
 };
 
 }
