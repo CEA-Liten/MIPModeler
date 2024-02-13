@@ -21,6 +21,6 @@
 #include "MIPModel.h"
 #include "MIPUtils.h"
 
-static std::string MIPModeler_Release("3.1.207") ;
+static std::string MIPModeler_Release("3.1.208") ;
 
 #endif // MIPMODELER_H
