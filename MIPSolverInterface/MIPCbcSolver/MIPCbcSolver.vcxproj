@@ -19,15 +19,16 @@
     <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">    
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>    
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">    
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>    
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -35,7 +36,7 @@
   </Target>
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />    
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyMIPModeler.props" />
     <Import Project="PropertyCbc.props" />
     <Import Project="$(MILPMODELER_HOME)\core\PropertyEigen.props" />
