@@ -57,6 +57,8 @@ public:
     double getObjectiveValue() const {return mObjectiveValue;}
     double getLpValue() const {return mLpValue;}
     std::string getOptimisationStatus() const {return mOptimisationStatus;}
+// ------------------- Used for GUI debug interface -------------------------
+    void setCheckConflicts(const bool checkConflicts);
 // --------------------------------------------------------------------------
 private:
     MIPModeler::MIPModel* mModel;
@@ -94,8 +96,10 @@ private:
 
     void log(logLevel level, const std::string msg);
     void log(logLevel level, const std::string msg, double value);
-
+    // ------------------- Used for GUI debug interface -------------------------
     void conflict(CPXENVptr env, CPXLPptr lp);
+    bool mCheckConflicts;
+    // --------------------------------------------------------------------------
 };
 
 }

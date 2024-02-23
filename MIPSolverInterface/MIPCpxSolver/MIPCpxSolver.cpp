@@ -30,7 +30,8 @@ MIPCpxSolver::MIPCpxSolver()
       mFileMipStart(""),
       mReadParamFile(false),
       mTerminate(NULL),
-      mLpFileCycle(0)
+      mLpFileCycle(0),
+      mCheckConflicts(false)
 {    
 }
 
@@ -85,9 +86,18 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "TerminateSignal") {
                 setTerminateSignal(vParam.second.signal);
             }
+            //Used for GUI debug interface
+            else if (vParam.first == "Conflicts") {
+                setCheckConflicts(vParam.second.bValue);
+            }
         }        
         vRet = solve();
-        a_Results.setResults(getOptimisationStatus(), getOptimalSolution(), getNbSolutionsGardees());
+        if (vRet == 3) { //GUI debug Interface: check for conflicts
+            a_Results.setResults(getOptimisationStatus(), getOptimalSolution(), getNbSolutionsGardees(), true);
+        }
+        else {
+            a_Results.setResults(getOptimisationStatus(), getOptimalSolution(), getNbSolutionsGardees());
+        }
         a_Results.setOtherResults(mOtherSolutions);
     }        
     return vRet;
@@ -183,6 +193,10 @@ void MIPCpxSolver::writeLpCycle(const int aStep) {
 // --------------------------------------------------------------------------
 void MIPCpxSolver::writeMipStart() {
     mWriteMipStart = true;
+}
+// --------------------------------------------------------------------------
+void MIPCpxSolver::setCheckConflicts(const bool checkConflicts) {
+    mCheckConflicts = checkConflicts;
 }
 // --------------------------------------------------------------------------
 int MIPCpxSolver::solve() {
@@ -510,6 +524,14 @@ int MIPCpxSolver::solve() {
             mOptimisationStatus = "Unknown Cplex code:"+std::to_string(lpstat);
             vRet = 1;
         }
+
+        if (mCheckConflicts) {
+            //Look for conflicts and stop
+            conflict(env, lp);
+            return 3;
+        }
+
+        //Obtain solutions
         if (mWriteMipStart){            
             CPXwritemipstarts(env, lp, mipStartFile.c_str(), 0, 0);
         }

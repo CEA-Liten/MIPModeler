@@ -25,7 +25,6 @@ public:
     void addParam(const std::string& a_Name, const std::string& a_setName, const std::vector<double>& a_Value) { m_Params[a_Name].type = eVector;  m_Params[a_Name].values = a_Value; m_Params[a_Name].str = a_setName;  }
     void addParam(const std::string& a_Name, const std::vector<std::string>& a_Value) { m_Params[a_Name].type = eStrings;  m_Params[a_Name].strs = a_Value; }
 
-
     t_MIPModelerParams::const_iterator find(const std::string& a_Name) const { return m_Params.find(a_Name); }
     t_MIPModelerParams::const_iterator begin() const { return m_Params.begin(); }
     t_MIPModelerParams::const_iterator end() const { return m_Params.end(); }

@@ -12,6 +12,7 @@ public:
     struct MIPSolverParam {
         double value;
         QString str;
+        bool bValue;
         int* signal;
         MIPSolverParam() { value = 0; signal = nullptr; str = ""; };        
         ~MIPSolverParam() {};
@@ -21,6 +22,7 @@ public:
     MIPSolverParams() {}
     void addParam(const QString& a_Name, const QString& a_Value) {  m_Params[a_Name].str = a_Value; }
     void addParam(const QString& a_Name, const double& a_Value) { m_Params[a_Name].value = a_Value; }
+    void addBoolParam(const QString& a_Name, const bool& a_Value) { m_Params[a_Name].bValue = a_Value; }
     void addParam(const QString& a_Name, int *a_Value) { m_Params[a_Name].signal = a_Value; }
    
     t_MIPSolverParams::const_iterator begin() const { return m_Params.begin(); }
@@ -41,12 +43,14 @@ public:
         }    
     }
     int getNumberOfSolutions() { return m_NumberOfSolutions;  };
+    bool getIsCheckConflicts() { return m_IsCheckConflicts; };
 
-    void setResults(const std::string &a_OptimisationStatus, const double* ap_OptimalSolution, int a_NumberOfSolutions=1)
+    void setResults(const std::string &a_OptimisationStatus, const double* ap_OptimalSolution, int a_NumberOfSolutions=1, bool isCheckConflicts=false)
     {
         m_OptimisationStatus = a_OptimisationStatus;
         m_OptimalSolution = ap_OptimalSolution;
         m_NumberOfSolutions = a_NumberOfSolutions;
+        m_IsCheckConflicts = isCheckConflicts;
 
     }
     void setOtherResults(const std::vector<std::vector<double>> &aOtherSolutions)
@@ -73,6 +77,7 @@ protected:
     std::vector<double> m_infeasiblesol;
     int m_NumberOfSolutions{ 1 };
     std::vector<const double*> m_OtherSolutions;
+    bool m_IsCheckConflicts = false;
 };
 
 
