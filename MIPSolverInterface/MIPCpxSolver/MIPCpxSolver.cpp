@@ -525,7 +525,7 @@ int MIPCpxSolver::solve() {
             vRet = 1;
         }
 
-        if (mCheckConflicts) {
+        if (mCheckConflicts && mOptimisationStatus == "Infeasible") {
             //Look for conflicts and stop
             conflict(env, lp);
             return 3;
@@ -545,15 +545,15 @@ int MIPCpxSolver::solve() {
         }
 
         int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);        
-        log(INFO, "Number of solutions trouvees:", nbSolTrouvees);
+        log(INFO, "Number of solutions found: ", nbSolTrouvees);
         if (nbSolTrouvees>mMaxNumberOfSolutions)
             mNbSolutionsGardees=mMaxNumberOfSolutions;
         else{
             mNbSolutionsGardees=nbSolTrouvees;
         }
         
-        log(INFO, "Number max of solutions gardees:",  mMaxNumberOfSolutions);        
-        log(INFO, "Number of solutions gardees:",  mNbSolutionsGardees);        
+        log(INFO, "Number max of solutions gardees: ",  mMaxNumberOfSolutions);        
+        log(INFO, "Number of solutions gardees: ",  mNbSolutionsGardees);        
         mOtherSolutions.clear();
         mObjectiveOtherSolutions.clear();
         for(int i=0; i<mNbSolutionsGardees;i++){
@@ -562,12 +562,12 @@ int MIPCpxSolver::solve() {
             mObjectiveOtherSolutions.push_back(0);
             CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
             std::stringstream msg1;
-            msg1 <<"Solution "<<i<<":"<<mObjectiveOtherSolutions[i];            
+            msg1 <<"Solution "<<i<<": "<<mObjectiveOtherSolutions[i];            
             log(INFO, msg1.str());
         }
         double mgap;
         status = CPXgetmiprelgap(env, lp, &mgap);
-        log(INFO, "Gap du probleme", mgap);
+        log(INFO, "GGap of the problem: ", mgap);
     }
 
     if (lp)
