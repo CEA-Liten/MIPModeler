@@ -544,6 +544,8 @@ int MIPCpxSolver::solve() {
             return -1;
         }
 
+        log(INFO, "Problem status: " + mOptimisationStatus);
+
         int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);        
         log(INFO, "Number of solutions found: ", nbSolTrouvees);
         if (nbSolTrouvees>mMaxNumberOfSolutions)
@@ -552,8 +554,8 @@ int MIPCpxSolver::solve() {
             mNbSolutionsGardees=nbSolTrouvees;
         }
         
-        log(INFO, "Number max of solutions gardees: ",  mMaxNumberOfSolutions);        
-        log(INFO, "Number of solutions gardees: ",  mNbSolutionsGardees);        
+        log(INFO, "Number max of solutions kept: ",  mMaxNumberOfSolutions);        
+        log(INFO, "Number of solutions kept: ",  mNbSolutionsGardees);        
         mOtherSolutions.clear();
         mObjectiveOtherSolutions.clear();
         for(int i=0; i<mNbSolutionsGardees;i++){
@@ -567,7 +569,7 @@ int MIPCpxSolver::solve() {
         }
         double mgap;
         status = CPXgetmiprelgap(env, lp, &mgap);
-        log(INFO, "GGap of the problem: ", mgap);
+        log(INFO, "Gap of the solution: ", mgap);
     }
 
     if (lp)
