@@ -54,9 +54,11 @@ bool MIPSolverFactory::findSolvers(const QString& a_Path)
     for (auto& vFile : vFiles) {
         if (vFile.baseName().startsWith(filterStart)) {
             if (vFile.baseName().contains("Solver")) {
+                qDebug() << "find file solver : " << vFile.baseName();
                 SolverDescriptor vPlugIn;
                 if (vPlugIn.Init(vFile.absoluteFilePath())) {
                     QString vKey = vPlugIn.getInfos();
+                    qDebug() << "solver key : " << vKey;
                     m_PlugIns[vKey] = vPlugIn;
                     vRet = true; 
                 }
@@ -76,12 +78,13 @@ bool MIPSolverFactory::SolverDescriptor::Init(const QString& a_Name)
 {
     bool vRet = false;
     QPluginLoader loader(a_Name);
-    //bool vLoaded = loader.load();
+    bool vLoaded = loader.load();
     QObject* plugin = loader.instance();
+    qDebug() << "if solver plugin ? " << vLoaded << " | " << loader.errorString();
     if (plugin) {
         m_IPlugIn = qobject_cast<IMIPSolver*>(plugin);
         if (m_IPlugIn) {            
-            // Récupère les infos du driver
+            // Recupere les infos du driver
             m_Infos = m_IPlugIn->Infos();
             qDebug() << "Find solver " << m_Infos << " in " << a_Name;
             vRet = true;
