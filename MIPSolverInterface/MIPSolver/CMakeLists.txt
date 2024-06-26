@@ -41,7 +41,7 @@ set_property(TARGET ${COMPONENT} PROPERTY AUTOMOC OFF)
 
 # -- Specific Eigen to MIPModeler
 target_include_directories(${COMPONENT} PRIVATE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.2.9>)
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.4>)
 target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
 
 target_link_libraries(${COMPONENT} PRIVATE MIPModeler)

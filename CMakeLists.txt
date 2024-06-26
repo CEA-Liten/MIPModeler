@@ -53,7 +53,7 @@ endif()
 # Set project name and project languages
 include(ProjectSetup)
 project(${PROJECT_NAME} LANGUAGES CXX C  VERSION ${PROJECT_VERSION}) 
-set(CMAKE_CXX_STANDARD 11)  # Eigen 3.2.9 uses max C++11 (not compatible C++17)
+set(CMAKE_CXX_STANDARD 17) 
 set(PERSEE_APP ${CMAKE_HOME_DIRECTORY} CACHE INTERNAL "Persee application directory")
 
 # ========= Tests setup =========
