@@ -17,43 +17,43 @@ MIPModeler supports SOS variables and includes helpfull generic methods as piece
 GAMS interface is available on MIPModeler to build an optimization problem under GAMS formalism. This interface gives access to a nonlinear modeling and solvers. <br/><br/>
 
 
-# Installation pour le dÈveloppement
+# Installation pour le d√©veloppement
 
-### PrÈrequis pour le dÈveloppement:
+### Pr√©requis pour le d√©veloppement:
 - Qt 5.15
 - CMake >= 3.23
 - MSVC C++ >=2019 (C++, CMake, Python, et avec l'extension pour Qt)
 - Solvers : Cplex, Cbc, Clp, ...
 - GAMS 
 
-- Cloner le dÈpot MIPModeler -> ```<mipmodelerPath>```
-Pour une compilation CMake, il faut aussi rÈcupÈrer le dÈpot CMakeTools
+- Cloner le d√©pot MIPModeler -> ```<mipmodelerPath>```
+Pour une compilation CMake, il faut aussi r√©cup√©rer le d√©pot CMakeTools
 https://codev-tuleap.intra.cea.fr/plugins/git/pegase/CMakeTools.git
 
 Le poser dans ```<mipmodelerPath>/lib/import``` 
-sinon il faudra modifier le fichier de configuration par dÈfaut ```<mipmodelerPath>/CMakeLists.txt```, ligne 8
+sinon il faudra modifier le fichier de configuration par d√©faut ```<mipmodelerPath>/CMakeLists.txt```, ligne 8
 
-### ParamÈtrer Visual Studio 2022
+### Param√©trer Visual Studio 2022
 
-- Installer les extensions Qt Visual Studio Tools et Qt Vs Cmake Tools (non installÈ sur les serveurs)
+- Installer les extensions Qt Visual Studio Tools et Qt Vs Cmake Tools (non install√© sur les serveurs)
 Sur les serveurs, le fichier pour installer l'extension se trouve dans D:\B_VERSION_PERSEE_INTEGRATION, fichier qt-vsaddin-msvc2022-2.9.1-rev.06.vsix
-ou sinon aller dans (Menu Extensions -> GÈrer les extensions) pour tÈlÈcharger l'extension.
+ou sinon aller dans (Menu Extensions -> G√©rer les extensions) pour t√©l√©charger l'extension.
 	- Installation: Fermer Visual Studio, double-cliquer sur le fichier vsix pour installer l'extension.
-une fois l'extension installÈe, relancer Visual Sudio, elle doit se trouver dans Menu Extension -> Qt VS Tools
+une fois l'extension install√©e, relancer Visual Sudio, elle doit se trouver dans Menu Extension -> Qt VS Tools
 
-- ParamÈtrer Qt Visual Studio Tools : 
+- Param√©trer Qt Visual Studio Tools : 
   - Menu Extension -> Qt VS Tools -> Qt Versions
   - Ajouter la version de Qt: mettre le chemin de Qmake.bat pour msvc2019_x64 dans la colonne "Path" 
   - Mettre 5.15.0 dans la colonne "Version"
 
-L'extension Qt Visual Studio Tools sert uniquement pour le debuggage afin díafficher les QString, QList, Ö correctement dans le debugger. Líextension ne sert plus pour la compilation.
+L'extension Qt Visual Studio Tools sert uniquement pour le debuggage afin d‚Äôafficher les QString, QList, ‚Ä¶ correctement dans le debugger. L‚Äôextension ne sert plus pour la compilation.
   
 
-### ParamÈtrer Cmake
-PossibilitÈ de crÈer un fichier d'options, ‡ mettre dans <mipmodelerPath>/cmake  (on peut s'inspirer du fichier <mipmodelerPath>/cmake/default_options.cmake)
-Sinon par dÈfaut c'est le fichier <mipmodelerPath>/cmake/default_options.cmake qui est utilisÈ
+### Param√©trer Cmake
+Possibilit√© de cr√©er un fichier d'options, √† mettre dans <mipmodelerPath>/cmake  (on peut s'inspirer du fichier <mipmodelerPath>/cmake/default_options.cmake)
+Sinon par d√©faut c'est le fichier <mipmodelerPath>/cmake/default_options.cmake qui est utilis√©
 
-Ce fichier d'options permet entre autres de spÈcifier les chemins pour Qt5, Cplex, Python, ... et de choisir les modules ‡ compiler ou non.
+Ce fichier d'options permet entre autres de sp√©cifier les chemins pour Qt5, Cplex, Python, ... et de choisir les modules √† compiler ou non.
 
 Par exemple
 - Chemin pour Cplex (variable CPLEX_ROOT) : mettre le chemin du dossier d'installation cplex si cela ne correspond pas avec la version du serveur 
@@ -71,9 +71,9 @@ Par exemple
   ```
 
 ### Build en lignes de commande
-Utiliser la commande BuildAll.bat (un paramËtre release/debug permet de dÈfinir le type de compilation, par dÈfaut release)
+Utiliser la commande BuildAll.bat (un param√®tre release/debug permet de d√©finir le type de compilation, par d√©faut release)
 
-- Pour le BuildAll.bat, il prend par dÈfaut le chemin de CMake de VisualStudio 2022, voir les 1ieres lignes du BuildAll.bat:
+- Pour le BuildAll.bat, il prend par d√©faut le chemin de CMake de VisualStudio 2022, voir les 1ieres lignes du BuildAll.bat:
 ```
 set CMAKEPATH=C:/PROGRAM FILES/MICROSOFT VISUAL STUDIO/2022/COMMUNITY/COMMON7/IDE/COMMONEXTENSIONS/MICROSOFT/CMAKE/CMake/bin/
 if exist "cmakepath.bat" (           
@@ -82,7 +82,7 @@ if exist "cmakepath.bat" (
 echo %CMAKEPATH%
 ```
 
-Pour surcharger ce chemin par dÈfaut, il faut crÈer un fichier cmakepath.bat indiquant le CMAKEPATH pour utiliser son propre cmake (seule solution avec MSVC2019 car le cmake est trop ancien): 
+Pour surcharger ce chemin par d√©faut, il faut cr√©er un fichier cmakepath.bat indiquant le CMAKEPATH pour utiliser son propre cmake (seule solution avec MSVC2019 car le cmake est trop ancien): 
 
 ```
 set CMAKEPATH=C:/Program Files/CMake/bin
@@ -92,25 +92,25 @@ set CMAKEPATH=C:/Program Files/CMake/bin
 
 Ouvrir Visual Studio, choisir 'Ouvrir un dossier local', prendre <mipmodelerPath>
 
-Le menu Projet -> 'Configurer mipmodeler' permet de rÈaliser la commande cmake : configuration de la compilation/installation dans le rÈpertoire out/<configuration>
+Le menu Projet -> 'Configurer mipmodeler' permet de r√©aliser la commande cmake : configuration de la compilation/installation dans le r√©pertoire out/<configuration>
 
-Le menu GÈnÈrer -> 'Tout gÈnÈrer' permet de rÈaliser la commande cmake --build : compilation dans le rÈpertoire out/<configuration> (gÈnÈration des fichiers binaires)
+Le menu G√©n√©rer -> 'Tout g√©n√©rer' permet de r√©aliser la commande cmake --build : compilation dans le r√©pertoire out/<configuration> (g√©n√©ration des fichiers binaires)
 
-Le menu GÈnÈrer -> 'Installer mipmodeler' permet de rÈaliser la commande cmake --install : copie les fichiers utiles de out/<configuration> vers bin/<configuration>
+Le menu G√©n√©rer -> 'Installer mipmodeler' permet de r√©aliser la commande cmake --install : copie les fichiers utiles de out/<configuration> vers bin/<configuration>
 
-#### ElÈments de dÈmarrage en Debug
+#### El√©ments de d√©marrage en Debug
 Tous les outils de debugage Visual Studio sont disponibles.
 
-Le fichier <mipmodelerPath>/.vs/launch.vs.json permet de configurer les ÈlÈments de dÈmarrage avec des paramËtres de lancement pour le debugage. 
-(menu Deboguer->ParamËtres de debugage)
-- Dans le menu dÈroulant avec la flËche verte (Selectionner un ÈlÈment de dÈmarrage)
-- Le mode Debug se lance en cliquant sur la flËche Verte
+Le fichier <mipmodelerPath>/.vs/launch.vs.json permet de configurer les √©l√©ments de d√©marrage avec des param√®tres de lancement pour le debugage. 
+(menu Deboguer->Param√®tres de debugage)
+- Dans le menu d√©roulant avec la fl√®che verte (Selectionner un √©l√©ment de d√©marrage)
+- Le mode Debug se lance en cliquant sur la fl√®che Verte
 
 #### Configurations (Release, Debug, ...)
-Le fichier <mipmodelerPath>/CMakePresets.json dÈfinit les diffÈrentes configurations pour la configuration, compilation, installation, test, ...
+Le fichier <mipmodelerPath>/CMakePresets.json d√©finit les diff√©rentes configurations pour la configuration, compilation, installation, test, ...
 
-Pour ajouter ces propres configurations, il faut crÈer un fichier <mipmodelerPath>/CMakeUserPresets.json, 
-par exemple pour dÈfinir une configuration qui permet l'utilisation d'un fichier d'options particuliËres (cmake/my_options.cmake):
+Pour ajouter ces propres configurations, il faut cr√©er un fichier <mipmodelerPath>/CMakeUserPresets.json, 
+par exemple pour d√©finir une configuration qui permet l'utilisation d'un fichier d'options particuli√®res (cmake/my_options.cmake):
 ```
 {
   "version": 3,
