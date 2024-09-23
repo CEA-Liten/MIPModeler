@@ -77,8 +77,10 @@ if (EXISTS ${HIGHS_ROOT})
     set(HIGHS_DIR ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/lib/cmake/highs)
     add_subdirectory(${MIPMODELER_HOME}/MIPSolverInterface/MIPHiGHSSolver)
 endif()
-add_subdirectory(${MIPMODELER_HOME}/MIPSolverInterface/MIPCbcSolver)
-add_subdirectory(${MIPMODELER_HOME}/MIPSolverInterface/MIPClpSolver)
+if (EXISTS ${COINOR_ROOT})       
+    add_subdirectory(${MIPMODELER_HOME}/MIPSolverInterface/MIPCbcSolver)
+    add_subdirectory(${MIPMODELER_HOME}/MIPSolverInterface/MIPClpSolver)
+endif()
 
 # ============= Package configuration =============
 # i.e. what should be generated/configured at install.
