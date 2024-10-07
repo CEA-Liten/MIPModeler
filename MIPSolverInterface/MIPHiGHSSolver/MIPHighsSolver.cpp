@@ -163,7 +163,7 @@ void MIPHighsSolver::solve() {
 
     // write model in lp file
     if (mLpFile)
-        highs.writeModel('highs_model');
+        highs.writeModel("highsModel");
 
     // Solve the model and get solve information
     highs.run();
@@ -190,7 +190,7 @@ void MIPHighsSolver::solve() {
     mObjectiveValue = info.objective_function_value ;
 
     const HighsSolution& solution = highs.getSolution();
-    mOptimalSolution = new double[model.lp_.num_col_] ;
+    mOptimalSolution.resize(model.lp_.num_col_,0);
     for(int col=0; col < model.lp_.num_col_; col++)
         mOptimalSolution[col] = solution.col_value[col];
 
