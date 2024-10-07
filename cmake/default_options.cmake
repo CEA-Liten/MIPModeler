@@ -25,7 +25,7 @@ set(Qt5Creator_BIN C:/Qt/Qt5.15.0/Tools/QtCreator/bin CACHE INTERNAL "QtCreator 
 set(MIPMODELER_HOME ${CMAKE_SOURCE_DIR} CACHE INTERNAL "MIPModeler installation path")
 set(CPLEX_ROOT "C:/Program Files/IBM/ILOG/CPLEX_Studio201/cplex" CACHE INTERNAL "CPLEX installation path (if exists use CPLEX)")
 set(COINOR_ROOT ${MIPMODELER_HOME}/external/CoinOR CACHE INTERNAL "Cbc, Clp installation path")
-#set(HIGHS_ROOT ${MIPMODELER_HOME}/external/HiGHS CACHE INTERNAL "HiGHS installation path")
+set(HIGHS_ROOT ${MIPMODELER_HOME}/external/HiGHS CACHE INTERNAL "HiGHS installation path")
 
 # Python, to force Python (if not defined, use find_package Python3)
 set(PYTHON_HOME C:/PythonPegase/3_10_9/python CACHE INTERNAL "Python installation path")
