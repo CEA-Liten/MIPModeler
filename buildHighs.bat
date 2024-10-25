@@ -14,7 +14,7 @@ echo %OPTION%
 
 set HIGHSPATH=%2
 if "%HIGHSPATH%"=="" (
-	set HIGHSPATH=../HiGHS
+	set HIGHSPATH=external/HiGHS
 )
 echo %HIGHSPATH%
 set MIPMODELER_HOME=%~dp0
