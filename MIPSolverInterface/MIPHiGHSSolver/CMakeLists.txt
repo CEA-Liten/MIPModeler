@@ -43,7 +43,7 @@ target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 find_package(Qt REQUIRED)
 find_package(HIGHS REQUIRED)
 
-target_link_libraries(${COMPONENT} PRIVATE highs::highs)
+#target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 
 # -- Specific Eigen to MIPModeler
 target_include_directories(${COMPONENT} PRIVATE
