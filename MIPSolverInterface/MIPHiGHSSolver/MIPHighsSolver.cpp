@@ -51,6 +51,9 @@ int MIPHighsSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams&
             else if (vParam.first == "TimeLimit") setTimeLimit(vParam.second.value);
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
+            else if (vParam.first == "Location") {
+                setLocation(vParam.second.str.QString::toStdString());
+            }
             else if (vParam.first == "WriteLp") {
                 if (vParam.second.value) writeLp();
             }
@@ -77,56 +80,38 @@ void MIPHighsSolver::setGap(const double& gap){
 void MIPHighsSolver::setThreads(const int& threads) {
     mThreads = threads;
 }
+void MIPHighsSolver::setLocation(const std::string& location)
+{
+    mLocation = location;
+}
 // --------------------------------------------------------------------------
 void MIPHighsSolver::writeLp() {
     mLpFile = true;
 }
 // --------------------------------------------------------------------------
-std::vector<double> convertToVector(const double* arr) {
-    size_t length = sizeof(arr) / sizeof(arr[0]);
-    return std::vector<double>(arr, arr + length);
-}
-
-std::vector<int> convertToVector(const int* arr) {
-    size_t length = sizeof(arr) / sizeof(arr[0]);
-    return std::vector<int>(arr, arr + length);
-}
-
 
 int MIPHighsSolver::solve() {
     int vRet = -1;
     std::cout<<"Start Solving using Highs"<<std::endl;
 
-    HighsModel model;
-
-    // Variables
-    model.lp_.num_col_ = mModel->getNumCols();
-    model.lp_.col_lower_ = convertToVector(mModel->getColLowerBounds());
-    model.lp_.col_upper_ = convertToVector(mModel->getColUpperBounds());
-
-    // Variable names
-    model.lp_.col_names_ =  mModel->getColNames();
-
     // Variable Types
-    model.lp_.integrality_ = std::vector<HighsVarType>(mModel->getNumCols(), HighsVarType::kContinuous);
+    std::vector<HighsInt> integrality_ = std::vector<HighsInt>(mModel->getNumCols(), (HighsInt)HighsVarType::kContinuous);
     int numIntCols = mModel->getNumIntegerCols();
     if  (numIntCols > 0) {
         const int* intCols = mModel->getColIntegers();
         for(int col = 0; col< numIntCols; col++)
-            model.lp_.integrality_[intCols[col]] = HighsVarType::kInteger;
+            integrality_[intCols[col]] = (HighsInt)HighsVarType::kInteger;
      }
-
-    // Objective Function
-    model.lp_.col_cost_ = convertToVector(mModel->getObjectiveCoefficients());
-
+    
+    HighsInt senseObj = 0;
     if (mModel->getObjectiveDirection() == MIPModeler::MIP_MAXIMIZE)
-        model.lp_.sense_ = ObjSense::kMaximize;
+        senseObj = (HighsInt)ObjSense::kMaximize;
     else if (mModel->getObjectiveDirection() == MIPModeler::MIP_MINIMIZE)
-        model.lp_.sense_ = ObjSense::kMinimize;
+        senseObj = (HighsInt)ObjSense::kMinimize;
 
     // Constraints
-    vector<double> rowLowerBound(mModel->getNumRows(), kHighsInf);
-    vector<double> rowUpperBound(mModel->getNumRows(), -kHighsInf);
+    vector<double> rowLowerBound(mModel->getNumRows(), -kHighsInf);
+    vector<double> rowUpperBound(mModel->getNumRows(), kHighsInf);
     const double* rhs = mModel->getRhs();
     const char* sense = mModel->getSense();
     for(int row=0 ; row < mModel->getNumRows(); row++) {
@@ -141,28 +126,46 @@ int MIPHighsSolver::solve() {
             rowLowerBound[row] = rhs[row];
         }
     }
-
-    model.lp_.num_row_ = mModel->getNumRows();
-    model.lp_.row_lower_ = rowLowerBound;
-    model.lp_.row_upper_ = rowUpperBound;
-    model.lp_.a_matrix_.value_ = convertToVector(mModel->getNonZeroElements()) ;
-    model.lp_.a_matrix_.start_ = convertToVector(mModel->getStartIndexes()) ;
-    model.lp_.a_matrix_.index_ = convertToVector(mModel->getIndexes()) ;
-    model.lp_.a_matrix_.format_ = MatrixFormat::kRowwise;
-
-    // Constraint names
-    model.lp_.col_names_ = mModel->getColNames ();
-
+        
+    
     // Create a Highs instance
     Highs highs;
     HighsStatus return_status;
 
     // Pass the model to HiGHS
-    highs.passModel(model);
+    highs.passModel(
+        mModel->getNumCols(),
+        mModel->getNumRows(),
+        mModel->getNumNonZeroElements(), //const HighsInt num_nz,        
+        (HighsInt)MatrixFormat::kRowwise, //const HighsInt a_format,         
+        senseObj, //const HighsInt sense, 
+        0, //const double offset, 
+        mModel->getObjectiveCoefficients(),
+        mModel->getColLowerBounds(),
+        mModel->getColUpperBounds(),
+        rowLowerBound.data(),
+        rowUpperBound.data(), 
+        mModel->getStartIndexes(),
+        mModel->getIndexes(),
+        mModel->getNonZeroElements(),
+        integrality_.data()
+    );
 
+    // Variable names
+    HighsInt col = 0;
+    for (auto& vName : mModel->getColNames()) {
+        highs.passColName(col++, vName);
+    }
+    
+    // Constraint names
+    /*HighsInt row = 0;    
+    for (auto& vName : mModel->getRowNames()) {
+        highs.passRowName(row++, vName);
+    }*/
+        
     // write model in lp file
     if (mLpFile)
-        highs.writeModel("highsModel");
+        highs.writeModel(mLocation + "Model.lp");
 
     // Solve the model and get solve information
     highs.run();
@@ -197,8 +200,8 @@ int MIPHighsSolver::solve() {
     mObjectiveValue = info.objective_function_value ;
 
     const HighsSolution& solution = highs.getSolution();
-    mOptimalSolution.resize(model.lp_.num_col_,0);
-    for(int col=0; col < model.lp_.num_col_; col++)
+    mOptimalSolution.resize(mModel->getNumCols(),0);
+    for(int col=0; col < mModel->getNumCols(); col++)
         mOptimalSolution[col] = solution.col_value[col];
 
     std::cout<<"Finish Solving using Highs"<<std::endl;
