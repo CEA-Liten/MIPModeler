@@ -11,19 +11,28 @@
 #include "MIPModeler.h"
 #include <iostream>
 #include <QtCore>
+#include "IMIPSolver.h"
 
 #ifndef MIPHIGHSSOLVER_H
 #define MIPHIGHSSOLVER_H
 
 namespace MIPSolverInterface {
 
-class MIPHIGHSSOLVERSHARED_EXPORT MIPHighsSolver {
+class MIPHIGHSSOLVERSHARED_EXPORT MIPHighsSolver : public QObject,
+    public IMIPSolver 
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
+    Q_INTERFACES(IMIPSolver)
 public:
 // --------------------------------------------------------------------------
-    MIPHighsSolver(MIPModeler::MIPModel* model);
+    MIPHighsSolver();
     ~MIPHighsSolver();
 // --------------------------------------------------------------------------
-    void solve();
+    QString Infos();
+    int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
+
+    int solve();
     void writeLp();
 // --------------------------------------------------------------------------
     void setSolverPrint(const bool& solverPrint);
@@ -38,9 +47,9 @@ public:
 private:
     MIPModeler::MIPModel* mModel;
 
-    std::vector<double> mOptimalSolution;
-    //const double* mOptimalSolution;
-    double mObjectiveValue;
+    std::vector<double> mOptimalSolution;    
+    
+    double mObjectiveValue{ 0 };
     std::string mOptimisationStatus;
 
     double mTimeLimit;

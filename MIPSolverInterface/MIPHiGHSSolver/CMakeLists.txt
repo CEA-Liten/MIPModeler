@@ -43,7 +43,7 @@ target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 find_package(Qt REQUIRED)
 find_package(HIGHS REQUIRED)
 
-#target_link_libraries(${COMPONENT} PRIVATE highs::highs)
+target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 
 # -- Specific Eigen to MIPModeler
 target_include_directories(${COMPONENT} PRIVATE
@@ -68,3 +68,22 @@ set(${COMPONENT}_INSTALL_INTERFACE_INCLUDE_DIRECTORIES
 #set(${COMPONENT}_HDRS_EXCLUDE)
 
 component_install_setup(${COMPONENT})
+
+if (HIGHS_LIBRARIES) 
+    if(CMAKE_SYSTEM_NAME MATCHES Windows)
+         install(FILES ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/bin/${HIGHS_LIBRARIES}.dll
+            DESTINATION .            
+            )
+    else()
+        foreach(HIGHS_LIBRARY IN LISTS HIGHS_LIBRARIES)                
+            find_library(HIGHS_LIB ${HIGHS_LIBRARY}
+                PATHS ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/bin
+                REQUIRED)            
+            list(APPEND HIGHS_LIBS ${HIGHS_LIB})       
+            unset(HIGHS_LIB CACHE)        
+        endforeach()      
+        install(FILES ${HIGHS_LIBS}
+                DESTINATION .            
+                )
+    endif()
+endif()

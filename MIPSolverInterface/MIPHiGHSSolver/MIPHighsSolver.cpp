@@ -16,18 +16,16 @@
 
 namespace MIPSolverInterface {
 // --------------------------------------------------------------------------
-MIPHighsSolver::MIPHighsSolver(MIPModeler::MIPModel* model)
-    : mModel(model),
+MIPHighsSolver::MIPHighsSolver()
+    : mModel(nullptr),
       mTimeLimit(TIME_LIMIT),
       mGap(GAP),
       mThreads(THREADS),
       mLpFile(false),
       mSolverPrint(1)
-{
-    if (mModel->isProblemBuilt() == false)
-        mModel->buildProblem();
+{    
 }
-/*
+
 QString MIPHighsSolver::Infos()
 {
     return "Highs";
@@ -62,7 +60,7 @@ int MIPHighsSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams&
     }
     return vRet;
 }
-*/
+
 // --------------------------------------------------------------------------
 void MIPHighsSolver::setSolverPrint(const bool& solverPrint){
     mSolverPrint = solverPrint;
@@ -95,7 +93,8 @@ std::vector<int> convertToVector(const int* arr) {
 }
 
 
-void MIPHighsSolver::solve() {
+int MIPHighsSolver::solve() {
+    int vRet = -1;
     std::cout<<"Start Solving using Highs"<<std::endl;
 
     HighsModel model;
@@ -172,16 +171,24 @@ void MIPHighsSolver::solve() {
 
     if (model_status == HighsModelStatus::kOptimal) {
         mOptimisationStatus = "Optimal";
+        vRet = 0;
 
     }
     else if (model_status == HighsModelStatus::kInfeasible) {
         mOptimisationStatus = "Infeasible";
+        vRet = 1;
     }
     else if (model_status == HighsModelStatus::kUnbounded) {
         mOptimisationStatus = "Unbounded";
+        vRet = 1;
     }
     else if (model_status == HighsModelStatus::kTimeLimit) {
         mOptimisationStatus = "Best Feasible (TimeLimit Reached)";
+        vRet = 0;
+    }
+    else {
+        mOptimisationStatus = "Unknown Highs code:" + std::to_string((int)model_status);
+        vRet = 1;
     }
 
     const HighsInfo& info = highs.getInfo();
@@ -195,6 +202,7 @@ void MIPHighsSolver::solve() {
         mOptimalSolution[col] = solution.col_value[col];
 
     std::cout<<"Finish Solving using Highs"<<std::endl;
+    return vRet;
 }
 // --------------------------------------------------------------------------
 MIPHighsSolver::~MIPHighsSolver() {
