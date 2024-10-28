@@ -84,7 +84,7 @@ public:
     std::string const getModelName() const {return mModelName;}
     std::vector<MIPWarmStart> const& getWarmStarts() const {return mWarmStarts;}
 // --------------------------------------------------------------------------
-    const double* getObjectiveCoefficients() const {return mObjectiveCoefficients;}
+    const double* getObjectiveCoefficients() const {return mObjectiveCoefficients.data();}
     const double* getNonZeroElements() const {return mNonZeroElements;}
     const int* getIndexes() const {return mIndexes;}
     const int* getStartIndexes() const {return mStartIndexes;}
@@ -98,6 +98,9 @@ public:
     const std::vector<MIPSubobjective> getListSubobjectives() const {return mListSubobjectives;}
     const std::vector<double*> getSubobjectiveCoefficients() const {return mSubObjCoeff;}
     const std::vector<int*> getSubobjectiveIndices() const {return mSubObjIndices;}
+    const std::vector<double> &getColUpperBoundsVec() const { return mColUpperBounds; }
+    const std::vector<double> &getColLowerBoundsVec() const { return mColLowerBounds; }
+    const std::vector<double> &getObjectiveCoefficientsVec() const { return mObjectiveCoefficients; }
 
 private:
     MIPExpression mObjectiveExpression;
@@ -123,7 +126,7 @@ private:
     std::vector<std::string> mColNames;
     std::vector<std::string> mRowNames;
 
-    double* mObjectiveCoefficients;
+    std::vector<double> mObjectiveCoefficients;
     double* mNonZeroElements;
     std::vector<int> mSubObjNz;
     int mObjNz;

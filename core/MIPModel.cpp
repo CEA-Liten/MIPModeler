@@ -155,7 +155,7 @@ void MIPModel::buildProblem() {
 
     double* value = sprarseMatrixObjective.valuePtr();
     int* idx = sprarseMatrixObjective.innerIndexPtr();
-    mObjectiveCoefficients = new double[mNumCols]();
+    mObjectiveCoefficients.resize(mNumCols, 0);
     for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
         if (std::isnan(value[i])) {
             mProblemBuilt = false;
