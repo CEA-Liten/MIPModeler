@@ -38,11 +38,9 @@ create_component(${COMPONENT})
 find_package(Qt REQUIRED)
 set_property(TARGET ${COMPONENT} PROPERTY AUTOMOC OFF)
 
-
-# -- Specific Eigen to MIPModeler
-target_include_directories(${COMPONENT} PRIVATE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.4>)
-target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
+# -- Eigen to MIPModeler
+include(EigenSetup)
+target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
 
 target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
 

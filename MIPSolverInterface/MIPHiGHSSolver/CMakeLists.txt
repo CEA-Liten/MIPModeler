@@ -41,14 +41,15 @@ target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 # Links with non-Pegase libraries
 # Qt, FBSF, MipModeler, Persee, Eigen, ....
 find_package(Qt REQUIRED)
-find_package(HIGHS REQUIRED)
+
+include(HiGHSSetup)
+#find_package(HIGHS REQUIRED)
 
 target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 
-# -- Specific Eigen to MIPModeler
-target_include_directories(${COMPONENT} PRIVATE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.4>)
-target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
+# -- Eigen to MIPModeler
+include(EigenSetup)
+target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
 
 
 # ---- Installation ----

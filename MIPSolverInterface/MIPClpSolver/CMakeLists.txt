@@ -43,10 +43,9 @@ target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 find_package(Qt REQUIRED)
 find_package(CLP REQUIRED)
 
-# -- Specific Eigen to MIPModeler
-target_include_directories(${COMPONENT} PRIVATE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../external/Eigen/3.4>)
-target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
+# -- Eigen to MIPModeler
+include(EigenSetup)
+target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
 
 
 # ---- Installation ----
