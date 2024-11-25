@@ -73,7 +73,7 @@ component_install_setup(${COMPONENT})
 if (HIGHS_LIBRARIES) 
     if(CMAKE_SYSTEM_NAME MATCHES Windows)
          install(FILES ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/bin/${HIGHS_LIBRARIES}.dll
-            DESTINATION .            
+            DESTINATION ${CMAKE_INSTALL_BINDIR}            
             )
     else()
         foreach(HIGHS_LIBRARY IN LISTS HIGHS_LIBRARIES)                
@@ -84,7 +84,7 @@ if (HIGHS_LIBRARIES)
             unset(HIGHS_LIB CACHE)        
         endforeach()      
         install(FILES ${HIGHS_LIBS}
-                DESTINATION .            
+                DESTINATION ${CMAKE_INSTALL_BINDIR}            
                 )
     endif()
 endif()
