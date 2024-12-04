@@ -8,45 +8,65 @@
 #include "MIPUtils.h"
 
 namespace MIPModeler {
+    //Typical messages used inside exceptions which are caught by an external application e.g Persee and then displayed to the user.
+    const std::string ERROR_MESSAGE_1D  = "Error: wrong input size of 1d-performance map. The input data vectors should have the same size.";
+    const std::string ERROR_MESSAGE_2D_DATA1 = "Error: wrong input size of 2d-performance map. The size of the first input data 1D-vector should be equal to "
+        "the number of rows in the input matrix (2D-vector).";
+    const std::string ERROR_MESSAGE_2D_DATA2 = "Error: wrong input size of 2d-performance map. The size of the secound input data 1D-vector should be equal to "
+            "the number of columns in the input matrix (2D-vector).";
+    const std::string ERROR_MESSAGE_2D_BUG = "Error while performing linearisation based on the 2d-performance map. Please, report the error to the maintenance team.";
 //-----------------------------------------------------------------------------------------------------
 bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
-    try{
+    //try{
         //check data
-        if (xTable.size() != yTable.size())
-            throw std::length_error("Error: MIPModeler::isConvexSet: "
-                                    "Wrong input sizes 'xTable and yTable'");
+        if (xTable.size() != yTable.size()) {
+            qDebug() << "Error in MIPModeler::isConvexSet: xTable and yTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_1D);
+        }
+        else if (xTable.size() < 3) {
+            qDebug() << "Error in MIPModeler::isConvexSet: the size of xTable and yTable should be at least 3, each.";
+            throw std::length_error(ERROR_MESSAGE_1D + " And, the size should be at least 3.");
+        }
         else{
             // compute gradiant
             uint64_t nbSeg = xTable.size() - 1;
             MIPData1D gradiant(nbSeg);
-            for(int i=0 ; i < nbSeg ; i++)
-                gradiant[i] = (yTable[i+1] - yTable[i])/(xTable[i+1] - xTable[i]);
+            for (int i = 0; i < nbSeg; i++) {
+                if (fabs(xTable[i + 1] - xTable[i]) > 1.e-6) {
+                    gradiant[i] = (yTable[i + 1] - yTable[i]) / (xTable[i + 1] - xTable[i]);
+                }
+                else {
+                    qDebug() << "Error in MIPModeler::isConvexSet: xTable cannot have two consecutive equal values (xTable[i + 1] - xTable[i] should be > 0).";
+                    throw std::invalid_argument("Error: 1d-performance map wrong input. The first data vector cannot have two consecutive equal values: " + std::to_string(xTable[i]) + ". Lines " + std::to_string(i) + " and " + std::to_string(i+1));
+                }
+            }
 
             // check if data set is convex
             bool convex = true;
             for(int i = 0 ; i < nbSeg - 1 ; i++){
-                if (gradiant[i] > gradiant[i+1]){
+                if (gradiant[i] > gradiant[i+1])
+                {
                     convex = false;
                     break;
                 }
             }
 
             // check is data set is concave
-            bool concave = true;
-            for(int i = 0 ; i < nbSeg-1 ; i++){
-                if (gradiant[i] < gradiant[i+1]){
-                    concave = false;
-                    break;
-                }
-            }
+            //bool concave = true;
+            //for(int i = 0 ; i < nbSeg-1 ; i++){
+            //    if (gradiant[i] < gradiant[i+1]){
+            //        concave = false;
+            //        break;
+            //    }
+            //}
 
             return (convex);
         }
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    //std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos, std::string aname="") {
@@ -127,23 +147,22 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                           std::string aname,
                                           const MIPLinearType& type,
                                           const bool& relaxedForm,
-                                          MIPVariable2D xSOS){
-    try{
+                                          MIPVariable2D xSOS)
+{
+    //try{
         //check data
-        if (xTable.size() != yTable.size ())
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPPiecewiseLinearisation: "
-                                    "Wrong input sizes 'xTable and yTable'");
+        if (xTable.size() != yTable.size()) {
+            qDebug() << "Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_1D);
+        }
         else{
             // 1D interpolation
             int length = xInputExpr.size();
             int xTableSize = xTable.size();
 
             MIPExpression1D yOutputExpr(length);
-
             MIPVariable2D xVar(length, xTableSize, 0., 1.);
 
-            //std::string aname = #xInputExpr;
             model.add(xVar, "Discretized_"+aname);
 
             for (int t = 0 ; t < length ; t++) {
@@ -173,11 +192,11 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
             xSOS = xVar;
             return yOutputExpr;
         }
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
@@ -187,19 +206,18 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D xSOS){
-    try{
+                                        MIPVariable1D xSOS)
+{
+    //try{
         //check data
-        if (xTable.size() != yTable.size ())
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPPiecewiseLinearisation: "
-                                    "Wrong input sizes 'xTable and yTable'");
+        if (xTable.size() != yTable.size()) {
+            qDebug() << "Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_1D);
+        }
         else{
             // 1D interpolation
             int xTableSize = xTable.size();
-
             MIPExpression yOutputExpr;
-
             MIPVariable1D xVar(xTableSize, 0., 1.);
             model.add(xVar, "Discretized_" + aname);
 
@@ -228,11 +246,11 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
             xSOS = xVar;
             return yOutputExpr;
         }
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
@@ -242,11 +260,13 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          std::string aname,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
-                                         MIPVariable2D xSOS){
+                                         MIPVariable2D xSOS)
+{
     int length = xInputData.size();
     MIPExpression1D xInputExpr(length);
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++) {
         xInputExpr[i] = xInputData[i];
+    }
 
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
@@ -258,7 +278,8 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D xSOS){
+                                        MIPVariable1D xSOS)
+{
     MIPExpression xInputExpr = xInputData;
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
@@ -270,11 +291,13 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          std::string aname,
                                          const MIPLinearType& type,
                                          const bool& relaxedForm,
-                                         MIPVariable2D xSOS){
+                                         MIPVariable2D xSOS)
+{
     int length = xInputVar.getDims();
     MIPExpression1D xInputExpr(length);
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++) {
         xInputExpr[i] += xInputVar(i);
+    }
 
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
@@ -286,7 +309,8 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         std::string aname,
                                         const MIPLinearType& type,
                                         const bool& relaxedForm,
-                                        MIPVariable1D xSOS){
+                                        MIPVariable1D xSOS)
+{
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
     return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
@@ -299,31 +323,28 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         MIPVariable3D weight,
                                         MIPVariable2D xSOS,
                                         MIPVariable2D ySOS,
-                                        MIPVariable2D diagSOS){
-    try{
+                                        MIPVariable2D diagSOS)
+{
+    //try{
         // check data
         if (xInputExpr.size() != yInputExpr.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xExpr and yExpr'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputExpr and yInputExpr should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
 
         if (xTable.size() != zTable.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xTable and zTable'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                throw std::length_error("Error: "
-                                        "MIPModeler::MIPTriMeshLinearisation: "
-                                        "Wrong input sizes 'yTable and zTable'");
-                break;
+                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.";
+                throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
 
-            // bilinear interpolation
+        // bilinear interpolation
         int length = xInputExpr.size();
         int xTableSize = xTable.size();
         int yTableSize = yTable.size();
@@ -440,11 +461,11 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
         diagSOS = diagVar;
 
         return zOutputExpr;
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPTriMeshLinearisation(MIPModel& model,
@@ -454,25 +475,23 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       MIPVariable2D weight,
                                       MIPVariable1D xSOS,
                                       MIPVariable1D ySOS,
-                                      MIPVariable1D diagSOS){
-    try{
+                                      MIPVariable1D diagSOS)
+{
+    //try{
         // check data
-        if (xTable.size() != zTable.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xTable and zTable'");
+        if (xTable.size() != zTable.size()) {
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
-        for(int i = 0 ; i < zTable.size() ; i++){
-            if (yTable.size() != zTable[i].size()){
-                throw std::length_error("Error: "
-                                        "MIPModeler::MIPTriMeshLinearisation: "
-                                        "Wrong input sizes 'yTable and zTable'");
-                break;
+        for (int i = 0; i < zTable.size(); i++) {
+            if (yTable.size() != zTable[i].size()) {
+                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.";
+                throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
 
-            // bilinear interpolation
+        // bilinear interpolation
         int xTableSize = xTable.size();
         int yTableSize = yTable.size();
         int diagSize = xTableSize + yTableSize - 1;
@@ -581,11 +600,11 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
         diagSOS = diagVar;
 
         return zOutputExpr;
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
@@ -595,16 +614,16 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         MIPVariable3D weight,
                                         MIPVariable2D xSOS,
                                         MIPVariable2D ySOS,
-                                        MIPVariable2D diagSOS){
+                                        MIPVariable2D diagSOS)
+{
     MIPExpression1D xInputExpr;
     MIPExpression1D yInputExpr;
 
-    try{
+    //try{
         // check data
         if (xInputData.size() != yInputData.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xInputData and yInputData'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputData and yInputData should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
         else{
             int xlength = xInputData.size();
@@ -620,17 +639,14 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
         }
 
         if (xTable.size() != zTable.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xTable and zTable'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                throw std::length_error("Error: "
-                                        "MIPModeler::MIPTriMeshLinearisation: "
-                                        "Wrong input sizes 'yTable and zTable'");
-                break;
+                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.";
+                throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
 
@@ -639,11 +655,11 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                        xTable, yTable, zTable,
                                        type, relaxedForm,
                                        weight, xSOS, ySOS, diagSOS);
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPTriMeshLinearisation(MIPModel& model,
@@ -671,16 +687,16 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         MIPVariable3D& weight,
                                         MIPVariable2D& xSOS,
                                         MIPVariable2D& ySOS,
-                                        MIPVariable2D& diagSOS){
+                                        MIPVariable2D& diagSOS)
+{
     MIPExpression1D xInputExpr;
     MIPExpression1D yInputExpr;
 
-    try{
+    //try{
         // check data
         if (xInputVar.getDims() != yInputVar.getDims()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xInputVar and yInputVar'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputVar and yInputVar should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
         else{
             int xlength = xInputVar.getDims();
@@ -696,30 +712,25 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
         }
 
         if (xTable.size() != zTable.size()){
-            throw std::length_error("Error: "
-                                    "MIPModeler::MIPTriMeshLinearisation: "
-                                    "Wrong input sizes 'xTable and zTable'");
+            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                throw std::length_error("Error: "
-                                        "MIPModeler::MIPTriMeshLinearisation: "
-                                        "Wrong input sizes 'yTable and zTable'");
-                break;
+                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.";
+                throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
 
-        return MIPTriMeshLinearisation(model,
-                                       xInputExpr, yInputExpr,
-                                       xTable, yTable, zTable,
-                                       type, relaxedForm,
-                                       weight, xSOS, ySOS, diagSOS);
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+        return MIPTriMeshLinearisation(model, xInputExpr, yInputExpr, xTable, yTable, zTable,
+                                       type, relaxedForm, weight, xSOS, ySOS, diagSOS);
+
+    //}
+    //catch(const std::exception& e){
+    //    std::cerr << e.what() << std::endl;
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 //-----------------------------------------------------------------------------------------------------
 MIPExpression MIPTriMeshLinearisation(MIPModel& model,
@@ -729,7 +740,8 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       MIPVariable2D weight,
                                       MIPVariable1D xSOS,
                                       MIPVariable1D ySOS,
-                                      MIPVariable1D diagSOS){
+                                      MIPVariable1D diagSOS)
+{
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
     MIPExpression yInputExpr;
