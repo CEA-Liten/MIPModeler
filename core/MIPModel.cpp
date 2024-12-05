@@ -57,41 +57,41 @@ bool MIPModel::isMip() {
     return false;
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPVariable0D& variable0D, const std::string& name) {
+void MIPModel::add(const QObject* obj, MIPVariable0D& variable0D, const std::string& name) {
     variable0D.setColIdx(mNumCols);
     if (!name.empty())
-        variable0D.setName(name);
+        variable0D.setName(CName(obj, name));
     mVariables.insert(mVariables.end(), &variable0D);
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPVariable1D& variable1D, const std::string& name) {
+void MIPModel::add(const QObject* obj, MIPVariable1D& variable1D, const std::string& name) {
     variable1D.setColIdx(mNumCols);
     if (!name.empty())
-        variable1D.setName(name);
+        variable1D.setName(CName(obj,name));
     std::vector<MIPVariable0D*> variables = variable1D.getVariables();
     mVariables.insert(mVariables.end(), variables.begin(), variables.end());
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPVariable2D& variable2D, const std::string& name) {
+void MIPModel::add(const QObject* obj, MIPVariable2D& variable2D, const std::string& name) {
     variable2D.setColIdx(mNumCols);
     if (!name.empty())
-        variable2D.setName(name);
+        variable2D.setName(CName(obj, name));
     std::vector<MIPVariable0D*> variables = variable2D.getVariables();
     mVariables.insert(mVariables.end(), variables.begin(), variables.end());
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPVariable3D& variable3D, const std::string& name) {
+void MIPModel::add(const QObject* obj, MIPVariable3D& variable3D, const std::string& name) {
     variable3D.setColIdx(mNumCols);
     if (!name.empty())
-        variable3D.setName(name);
+        variable3D.setName(CName(obj, name));
     std::vector<MIPVariable0D*> variables = variable3D.getVariables();
     mVariables.insert(mVariables.end(), variables.begin(), variables.end());
 }
 // --------------------------------------------------------------------------
-void MIPModel::add(MIPConstraint constraint, const std::string& name) {
+void MIPModel::add(const QObject* obj, MIPConstraint constraint, const std::string& name, const uint& t) {
     constraint.setRowIndex(mNumRows);
     if (!name.empty())
-        constraint.setName(name);
+        constraint.setName(CName(obj, name, t));
     mConstraints.insert(mConstraints.end(), constraint);
 }
 // --------------------------------------------------------------------------

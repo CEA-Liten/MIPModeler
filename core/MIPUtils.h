@@ -56,7 +56,8 @@ bool MIPMODELERSHARED_EXPORT
  1D interpolation of y =f(x).
 */
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPPiecewiseLinearisation(MIPModel& model,
+                MIPPiecewiseLinearisation(const QObject* obj,
+                                          MIPModel& model,
                                           const MIPExpression1D& xInputExpr,
                                           const MIPData1D& xTable,
                                           const MIPData1D& yTable, 
@@ -65,7 +66,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPPiecewiseLinearisation(MIPModel& model,
+              MIPPiecewiseLinearisation(const QObject* obj,
+                                        MIPModel& model,
                                         const MIPExpression& xInputExpr,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -74,7 +76,8 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                         const bool& relaxedForm = false,
                                         MIPVariable1D xSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPPiecewiseLinearisation(MIPModel& model,
+                MIPPiecewiseLinearisation(const QObject* obj, 
+                                          MIPModel& model,
                                           const MIPData1D& xInputData,
                                           const MIPData1D& xTable,
                                           const MIPData1D& yTable, 
@@ -83,7 +86,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPPiecewiseLinearisation(MIPModel& model,
+              MIPPiecewiseLinearisation(const QObject* obj,
+                                        MIPModel& model,
                                         const double& xInputData,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -92,7 +96,8 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                         const bool& relaxedForm = false,
                                         MIPVariable1D xSOS  = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPPiecewiseLinearisation(MIPModel& model,
+                MIPPiecewiseLinearisation(const QObject* obj,
+                                          MIPModel& model,
                                           const MIPVariable1D& xInputVar,
                                           const MIPData1D& xTable,
                                           const MIPData1D& yTable, 
@@ -101,7 +106,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                           const bool& relaxedForm = false,
                                           MIPVariable2D xSOS  = MIPVariable2D());
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPPiecewiseLinearisation(MIPModel& model,
+              MIPPiecewiseLinearisation(const QObject* obj, 
+                                        MIPModel& model,
                                         const MIPVariable0D& xInputVar,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -133,7 +139,8 @@ MIPExpression MIPMODELERSHARED_EXPORT
                             X
 */
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPTriMeshLinearisation(MIPModel& model,
+                MIPTriMeshLinearisation(const QObject* obj, 
+                                        MIPModel& model,
                                         const MIPExpression1D& xInputExpr, const MIPExpression1D& yInputExpr,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
@@ -144,7 +151,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                         MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPTriMeshLinearisation(MIPModel& model,
+              MIPTriMeshLinearisation(const QObject* obj, 
+                                      MIPModel& model,
                                       const MIPExpression& xInputExpr, const MIPExpression& yInputExpr,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
@@ -154,7 +162,8 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                       MIPVariable1D ySOS = MIPVariable1D(),
                                       MIPVariable1D diagSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPTriMeshLinearisation(MIPModel& model,
+                MIPTriMeshLinearisation(const QObject* obj, 
+                                        MIPModel& model,
                                         const MIPData1D& xInputData, const MIPData1D& yInputData,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
@@ -165,7 +174,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                         MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPTriMeshLinearisation(MIPModel& model,
+              MIPTriMeshLinearisation(const QObject* obj, 
+                                      MIPModel& model,
                                       const double& xInputData, const double& yInputData,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
@@ -175,7 +185,8 @@ MIPExpression MIPMODELERSHARED_EXPORT
                                       MIPVariable1D ySOS = MIPVariable1D(),
                                       MIPVariable1D diagSOS = MIPVariable1D());
 MIPExpression1D MIPMODELERSHARED_EXPORT
-                MIPTriMeshLinearisation(MIPModel& model,
+                MIPTriMeshLinearisation(const QObject* obj, 
+                                        MIPModel& model,
                                         const MIPVariable1D& xInputVar, const MIPVariable1D& yInputVar,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type = MIP_SOS,
@@ -186,7 +197,8 @@ MIPExpression1D MIPMODELERSHARED_EXPORT
                                         MIPVariable2D diagSOS = MIPVariable2D());
 
 MIPExpression MIPMODELERSHARED_EXPORT
-              MIPTriMeshLinearisation(MIPModel& model,
+              MIPTriMeshLinearisation(const QObject* obj, 
+                                      MIPModel& model,
                                       const MIPVariable0D& xInputVar, const MIPVariable0D& yInputVar,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type = MIP_SOS,
