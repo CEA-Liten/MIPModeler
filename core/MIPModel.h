@@ -54,11 +54,11 @@ public:
     void setExternalModeler(ModelerInterface *ap_modeler);
     ModelerInterface* getExternalModeler() { return mExternalModeler; }
 // --------------------------------------------------------------------------
-    void add(const QObject* obj, MIPVariable0D& variable0D, const std::string& name = "");
-    void add(const QObject* obj, MIPVariable1D& variable1D, const std::string& name = "");
-    void add(const QObject* obj, MIPVariable2D& variable2D, const std::string& name = "");
-    void add(const QObject* obj, MIPVariable3D& variable3D, const std::string& name = "");
-    void add(const QObject* obj, MIPConstraint constraint, const std::string& name = "", const uint& t=0);
+    void add(MIPVariable0D& variable0D, const std::string& name = "");
+    void add(MIPVariable1D& variable1D, const std::string& name = "");
+    void add(MIPVariable2D& variable2D, const std::string& name = "");
+    void add(MIPVariable3D& variable3D, const std::string& name = "");
+    void add(MIPConstraint constraint, const std::string& name = "");
     void add(const MIPSpecialOrderedSet& sos, const MIPSOSType& sosType);
     void add(const MIPWarmStart& warmStartSolution);
 //---------------------------------------------------------------------------
@@ -101,18 +101,6 @@ public:
     const std::vector<double> &getColUpperBoundsVec() const { return mColUpperBounds; }
     const std::vector<double> &getColLowerBoundsVec() const { return mColLowerBounds; }
     const std::vector<double> &getObjectiveCoefficientsVec() const { return mObjectiveCoefficients; }
-// --------------------------------------------------------------------------
-    std::string CName(const QObject* obj, const std::string aRadical, const uint& t) const
-    {
-        std::string aname = "c" + aRadical + obj->parent()->objectName().toStdString();
-        std::string aname2 = aname + std::to_string(t);
-        return aname2;
-    }
-    std::string CName(const QObject* obj, std::string aRadical) const
-    {
-        std::string aname = "v" + aRadical + obj->parent()->objectName().toStdString();
-        return aname;
-    }
 // --------------------------------------------------------------------------
 private:
     MIPExpression mObjectiveExpression;

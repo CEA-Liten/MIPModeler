@@ -69,7 +69,7 @@ bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-void useLogarithmicForm(const QObject* obj, MIPModel* model, MIPSpecialOrderedSet& sos, std::string aname="") {
+void useLogarithmicForm(MIPModel* model, MIPSpecialOrderedSet& sos, std::string aname="") {
     int nbSOSVar = sos.getNumElements();
 
     // linearisation form using log(n-1) binary variables
@@ -81,7 +81,7 @@ void useLogarithmicForm(const QObject* obj, MIPModel* model, MIPSpecialOrderedSe
     }
 
     MIPVariable1D binVar(binVarSize, 0.0, 1.0, MIP_INT);
-    model->add(obj, binVar, "lambda_" + aname);
+    model->add(binVar, "lambda_" + aname);
     // build bijective function (using gray code)
     std::vector<std::vector<int>> injectiveTable(nbSOSVar, std::vector<int>(binVarSize));
     for (int i = 0; i < nbSOSVar; i++)
@@ -131,16 +131,16 @@ void useLogarithmicForm(const QObject* obj, MIPModel* model, MIPSpecialOrderedSe
         }
 
         if (succ == true)
-            model->add(obj, successors <= binVar(i) );
+            model->add(successors <= binVar(i) );
         successors.close();
 
         if (pred == true)
-            model->add(obj, predecessors <= 1 - binVar(i) );
+            model->add(predecessors <= 1 - binVar(i) );
         predecessors.close();
     }
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                           const MIPExpression1D& xInputExpr,
                                           const MIPData1D& xTable,
                                           const MIPData1D& yTable, 
@@ -163,7 +163,7 @@ MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
             MIPExpression1D yOutputExpr(length);
             MIPVariable2D xVar(length, xTableSize, 0., 1.);
 
-            model.add(obj, xVar, "Discretized_"+aname);
+            model.add(xVar, "Discretized_"+aname);
 
             for (int t = 0 ; t < length ; t++) {
                 MIPExpression expression_X;
@@ -175,14 +175,14 @@ MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
                     convexity_X += xVar(t, i);
                     sos2_X.add(xVar(t, i));
                 }
-                model.add(obj, xInputExpr[t] == expression_X, aname+std::to_string(t));
+                model.add(xInputExpr[t] == expression_X, aname+std::to_string(t));
                 expression_X.close();
-                model.add(obj, convexity_X == 1, "Convexity_"+aname);
+                model.add(convexity_X == 1, "Convexity_"+aname);
                 convexity_X.close();
 
                 if (relaxedForm == false) {
                     if (type == MIP_LOG)
-                        useLogarithmicForm(obj, &model, sos2_X, aname);
+                        useLogarithmicForm(&model, sos2_X, aname);
                     else
                         model.add(sos2_X, MIP_SOS2);
                 }
@@ -199,7 +199,7 @@ MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPExpression& xInputExpr,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -219,7 +219,7 @@ MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
             int xTableSize = xTable.size();
             MIPExpression yOutputExpr;
             MIPVariable1D xVar(xTableSize, 0., 1.);
-            model.add(obj, xVar, "Discretized_" + aname);
+            model.add(xVar, "Discretized_" + aname);
 
             MIPExpression expression_X;
             MIPExpression convexity_X;
@@ -230,14 +230,14 @@ MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
                 convexity_X += xVar(i);
                 sos2_X.add(xVar(i));
             }
-            model.add(obj, xInputExpr == expression_X, "C_" + aname );
+            model.add(xInputExpr == expression_X, "C_" + aname );
             expression_X.close();
-            model.add(obj, convexity_X == 1 );
+            model.add(convexity_X == 1 );
             convexity_X.close();
 
             if (relaxedForm == false) {
                 if (type == MIP_LOG)
-                    useLogarithmicForm(obj, &model, sos2_X);
+                    useLogarithmicForm(&model, sos2_X);
                 else
                     model.add(sos2_X, MIP_SOS2);
             }
@@ -253,7 +253,7 @@ MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPData1D& xInputData,
                                          const MIPData1D& xTable,
                                          const MIPData1D& yTable,
@@ -268,10 +268,10 @@ MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
         xInputExpr[i] = xInputData[i];
     }
 
-    return MIPPiecewiseLinearisation(obj, model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const double& xInputData,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -281,10 +281,10 @@ MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
                                         MIPVariable1D xSOS)
 {
     MIPExpression xInputExpr = xInputData;
-    return MIPPiecewiseLinearisation(obj, model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
                                          const MIPVariable1D& xInputVar,
                                          const MIPData1D& xTable,
                                          const MIPData1D& yTable, 
@@ -299,10 +299,10 @@ MIPExpression1D MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
         xInputExpr[i] += xInputVar(i);
     }
 
-    return MIPPiecewiseLinearisation(obj, model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
                                         const MIPVariable0D& xInputVar,
                                         const MIPData1D& xTable,
                                         const MIPData1D& yTable, 
@@ -313,10 +313,10 @@ MIPExpression MIPPiecewiseLinearisation(const QObject* obj, MIPModel& model,
 {
     MIPExpression xInputExpr;
     xInputExpr += xInputVar;
-    return MIPPiecewiseLinearisation(obj, model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
+    return MIPPiecewiseLinearisation(model, xInputExpr, xTable, yTable, aname, type, relaxedForm, xSOS);
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPExpression1D& xInputExpr, const MIPExpression1D& yInputExpr,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type, const bool& relaxedForm,
@@ -354,10 +354,10 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
         MIPVariable2D yVar(length, yTableSize, 0., 1.);
         MIPVariable2D diagVar(length, diagSize, 0., 1.);
         MIPVariable3D weightVar(length, xTableSize, yTableSize, 0., INFINITY);
-        model.add(obj, xVar, "xVar");
-        model.add(obj, yVar, "yVar");
-        model.add(obj, diagVar, "diagVar");
-        model.add(obj, weightVar, "weightVar");
+        model.add(xVar, "xVar");
+        model.add(yVar, "yVar");
+        model.add(diagVar, "diagVar");
+        model.add(weightVar, "weightVar");
 
         //-------------------- sos2 and convexity on x
         //-------------------- mXVar(t,i) = sum(j, mWeightVar(t,i,j))
@@ -370,13 +370,13 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                 MIPExpression sum_Y;
                 for (int j = 0; j < yTableSize ; j++)
                     sum_Y += weightVar(t,i,j);
-                model.add(obj, sum_Y == xVar(t,i));
+                model.add(sum_Y == xVar(t,i));
                 sum_Y.close();
             }
-            model.add(obj, convexity_X == 1);
+            model.add(convexity_X == 1);
             if (relaxedForm == false) {
                 if (type == MIP_LOG)
-                    useLogarithmicForm(obj, &model, sos2_X);
+                    useLogarithmicForm(&model, sos2_X);
                 else
                     model.add(sos2_X, MIP_SOS2);
             }
@@ -395,13 +395,13 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                 MIPExpression sum_X;
                 for (int i = 0; i < xTableSize ; i++)
                     sum_X += weightVar(t,i,j);
-                model.add(obj, sum_X == yVar(t,j));
+                model.add(sum_X == yVar(t,j));
                 sum_X.close();
             }
-            model.add(obj, convexity_Y == 1);
+            model.add(convexity_Y == 1);
             if (relaxedForm == false) {
                 if (type == MIP_LOG)
-                    useLogarithmicForm(obj, &model, sos2_Y);
+                    useLogarithmicForm(&model, sos2_Y);
                 else
                     model.add(sos2_Y, MIP_SOS2);
             }
@@ -422,13 +422,13 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                      i <= std::min(int(diagSize - k - 1), int(xTableSize - 1)); i++) {
                     sum_XY += weightVar(t, i, i - xTableSize + k + 1);
                 }
-                model.add(obj, sum_XY == diagVar(t, k));
+                model.add(sum_XY == diagVar(t, k));
                 sum_XY.close();
             }
-            model.add(obj, convexity_Diag == 1);
+            model.add(convexity_Diag == 1);
             if (relaxedForm == false) {
                 if (type == MIP_LOG)
-                    useLogarithmicForm(obj, &model, sos2_Diag);
+                    useLogarithmicForm(&model, sos2_Diag);
                 else
                     model.add(sos2_Diag, MIP_SOS2);
             }
@@ -450,8 +450,8 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                     zOutputExpr[t] += zTable[i][j] * weightVar(t,i,j);
                 }
             }
-            model.add(obj, expression_X == xInputExpr[t]);
-            model.add(obj, expression_Y == yInputExpr[t]);
+            model.add(expression_X == xInputExpr[t]);
+            model.add(expression_Y == yInputExpr[t]);
             expression_X.close();
             expression_Y.close();
         }
@@ -468,7 +468,7 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const MIPExpression& xInputExpr, const MIPExpression& yInputExpr,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
@@ -500,10 +500,10 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
         MIPVariable1D yVar(yTableSize, 0., 1.);
         MIPVariable1D diagVar(diagSize, 0., 1.);
         MIPVariable2D weightVar(xTableSize, yTableSize, 0., INFINITY);
-        model.add(obj, xVar, "xVar");
-        model.add(obj, yVar, "yVar");
-        model.add(obj, diagVar, "diagVar");
-        model.add(obj, weightVar, "weightVar");
+        model.add(xVar, "xVar");
+        model.add(yVar, "yVar");
+        model.add(diagVar, "diagVar");
+        model.add(weightVar, "weightVar");
 
         //-------------------- sos2 and convexity on x
         //-------------------- mXVar(i) = sum(j, mWeightVar(i,j))
@@ -515,13 +515,13 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
             MIPExpression sum_Y;
             for (int j = 0; j < yTableSize ; j++)
                 sum_Y += weightVar(i,j);
-            model.add(obj, sum_Y == xVar(i));
+            model.add(sum_Y == xVar(i));
             sum_Y.close();
         }
-        model.add(obj, convexity_X == 1);
+        model.add(convexity_X == 1);
         if (relaxedForm == false) {
             if (type == MIP_LOG)
-                useLogarithmicForm(obj, &model, sos2_X);
+                useLogarithmicForm(&model, sos2_X);
             else
                 model.add(sos2_X, MIP_SOS2);
         }
@@ -538,13 +538,13 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
             MIPExpression sum_X;
             for (int i = 0; i < xTableSize ; i++)
                 sum_X += weightVar(i,j);
-            model.add(obj, sum_X == yVar(j));
+            model.add(sum_X == yVar(j));
             sum_X.close();
         }
-        model.add(obj, convexity_Y == 1);
+        model.add(convexity_Y == 1);
         if (relaxedForm == false) {
             if (type == MIP_LOG)
-                useLogarithmicForm(obj, &model, sos2_Y);
+                useLogarithmicForm(&model, sos2_Y);
             else
                 model.add(sos2_Y, MIP_SOS2);
         }
@@ -563,13 +563,13 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                  i <= std::min(int(diagSize - k - 1), int(xTableSize - 1)); i++) {
                 sum_XY += weightVar(i, i - xTableSize + k + 1);
             }
-            model.add(obj, sum_XY == diagVar(k));
+            model.add(sum_XY == diagVar(k));
             sum_XY.close();
         }
-        model.add(obj, convexity_Diag == 1);
+        model.add(convexity_Diag == 1);
         if (relaxedForm == false) {
             if (type == MIP_LOG)
-                useLogarithmicForm(obj, &model, sos2_Diag);
+                useLogarithmicForm(&model, sos2_Diag);
             else
                 model.add(sos2_Diag, MIP_SOS2);
         }
@@ -589,8 +589,8 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
                 zOutputExpr += zTable[i][j] * weightVar(i,j);
             }
         }
-        model.add(obj, expression_X == xInputExpr);
-        model.add(obj, expression_Y == yInputExpr);
+        model.add(expression_X == xInputExpr);
+        model.add(expression_Y == yInputExpr);
         expression_X.close();
         expression_Y.close();
 
@@ -607,7 +607,7 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPData1D& xInputData, const MIPData1D& yInputData,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type, const bool& relaxedForm,
@@ -650,7 +650,7 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
             }
         }
 
-        return MIPTriMeshLinearisation(obj, model,
+        return MIPTriMeshLinearisation(model,
                                        xInputExpr, yInputExpr,
                                        xTable, yTable, zTable,
                                        type, relaxedForm,
@@ -662,7 +662,7 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const double& xInputData, const double& yInputData,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
@@ -673,14 +673,14 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     MIPExpression xInputExpr = xInputData;
     MIPExpression yInputExpr = yInputData;
 
-    return MIPTriMeshLinearisation(obj, model,
+    return MIPTriMeshLinearisation(model,
                                    xInputExpr, yInputExpr,
                                    xTable, yTable, zTable,
                                    type, relaxedForm,
                                    weight, xSOS, ySOS, diagSOS);
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
                                         const MIPVariable1D& xInputVar, const MIPVariable1D& yInputVar,
                                         const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                         const MIPLinearType& type, const bool& relaxedForm,
@@ -723,7 +723,7 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
             }
         }
 
-        return MIPTriMeshLinearisation(obj, model, xInputExpr, yInputExpr, xTable, yTable, zTable,
+        return MIPTriMeshLinearisation(model, xInputExpr, yInputExpr, xTable, yTable, zTable,
                                        type, relaxedForm, weight, xSOS, ySOS, diagSOS);
 
     //}
@@ -733,7 +733,7 @@ MIPExpression1D MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     //}
 }
 //-----------------------------------------------------------------------------------------------------
-MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
+MIPExpression MIPTriMeshLinearisation(MIPModel& model,
                                       const MIPVariable0D& xInputVar, const MIPVariable0D& yInputVar,
                                       const MIPData1D& xTable, const MIPData1D& yTable, const MIPData2D& zTable,
                                       const MIPLinearType& type, const bool& relaxedForm,
@@ -747,7 +747,7 @@ MIPExpression MIPTriMeshLinearisation(const QObject* obj, MIPModel& model,
     MIPExpression yInputExpr;
     yInputExpr = yInputVar;
 
-    return MIPTriMeshLinearisation(obj, model,
+    return MIPTriMeshLinearisation(model,
                                    xInputExpr, yInputExpr,
                                    xTable, yTable, zTable,
                                    type, relaxedForm,
