@@ -16,7 +16,7 @@
 # Component name (i.e. target name)
 set(COMPONENT MIPModeler)
 message("-- Set up for ${PROJECT_NAME}_${COMPONENT} library ...\n")
-
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/MIPModelerVersion.in ${CMAKE_CURRENT_SOURCE_DIR}/MIPModelerVersion.h @ONLY)
 # ------ source directories for current component ------
 # What is needed by component to compile ?
 # List here all directories that contain sources files for current component.
