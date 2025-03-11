@@ -187,8 +187,8 @@ void MIPCpxSolver::writeLp() {
     mLpFile = true;
 }
 // --------------------------------------------------------------------------
-void MIPCpxSolver::writeLpCycle(const int aStep) {
-    mLpFileCycle = aStep;
+void MIPCpxSolver::writeLpCycle(const int cycel) {
+    mLpFileCycle = cycel;
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::writeMipStart() {

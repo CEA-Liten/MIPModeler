@@ -82,8 +82,8 @@ void MIPCbcSolver::writeLp() {
     mLpFile = true;
 }
 // --------------------------------------------------------------------------
-void MIPCbcSolver::writeLpCycle(const int aStep) {
-    mLpFileCycle = aStep;
+void MIPCbcSolver::writeLpCycle(const int cycel) {
+    mLpFileCycle = cycel;
 }
 //---------------------------------------------------------------------------
 int MIPCbcSolver::solve() {

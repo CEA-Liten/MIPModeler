@@ -36,7 +36,7 @@ public:
 
     int solve();
     void writeLp();
-    void writeLpCycle(const int aStep);
+    void writeLpCycle(const int cycel);
     void writeMipStart();
 // --------------------------------------------------------------------------
     void setSolverPrint(const bool& solverPrint);
