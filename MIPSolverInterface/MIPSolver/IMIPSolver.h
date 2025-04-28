@@ -1,5 +1,4 @@
 #pragma once
-#include <QtPlugin>
 #include <QString>
 #include "MIPModel.h"
 
@@ -89,6 +88,3 @@ public:
 };
 
 
-#define SolverInInterface_iid "Cea.MIPSolver.SolverInterface"
-
-Q_DECLARE_INTERFACE(IMIPSolver, SolverInInterface_iid)

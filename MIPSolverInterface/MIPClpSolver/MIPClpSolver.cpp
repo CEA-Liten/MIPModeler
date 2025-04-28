@@ -6,6 +6,10 @@
 */
 
 #include "MIPClpSolver.h"
+extern "C" MIPCLPSOLVERSHARED_EXPORT IMIPSolver * createSolver()
+{
+    return new MIPSolverInterface::MIPClpSolver();
+}
 
 namespace MIPSolverInterface {
 // --------------------------------------------------------------------------

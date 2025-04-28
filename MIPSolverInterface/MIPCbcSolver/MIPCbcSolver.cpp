@@ -6,7 +6,10 @@
 */
 
 #include "MIPCbcSolver.h"
-
+extern "C" MIPCBCSOLVERSHARED_EXPORT IMIPSolver * createSolver()
+{
+    return new MIPSolverInterface::MIPCbcSolver();
+}
 //---------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8
 #define GAP 1e-4

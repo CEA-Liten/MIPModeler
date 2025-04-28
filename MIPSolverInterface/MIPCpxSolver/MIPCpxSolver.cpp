@@ -8,6 +8,10 @@
 
 #include "MIPCpxSolver.h"
 #include <cstring>
+extern "C" MIPCPXSOLVERSHARED_EXPORT IMIPSolver* createSolver()
+{
+    return new MIPSolverInterface::MIPCpxSolver();
+}
 
 // --------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8

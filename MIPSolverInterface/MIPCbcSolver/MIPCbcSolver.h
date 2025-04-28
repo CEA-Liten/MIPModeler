@@ -20,13 +20,8 @@
 
 namespace MIPSolverInterface {
 
-class MIPCBCSOLVERSHARED_EXPORT MIPCbcSolver : public QObject,
-    public IMIPSolver
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
-    Q_INTERFACES(IMIPSolver)
-
+class MIPCBCSOLVERSHARED_EXPORT MIPCbcSolver : public IMIPSolver
+{    
 public:
 //---------------------------------------------------------------------------
     MIPCbcSolver();

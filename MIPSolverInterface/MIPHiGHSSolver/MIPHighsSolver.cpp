@@ -8,6 +8,10 @@
 
 #include "MIPHighsSolver.h"
 #include <cstring>
+extern "C" MIPHIGHSSOLVERSHARED_EXPORT IMIPSolver* createSolver()
+{
+    return new MIPSolverInterface::MIPHighsSolver();
+}
 
 // --------------------------------------------------------------------------
 #define TIME_LIMIT 10e+8

@@ -18,12 +18,8 @@
 
 namespace MIPSolverInterface {
 
-class MIPHIGHSSOLVERSHARED_EXPORT MIPHighsSolver : public QObject,
-    public IMIPSolver 
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID SolverInInterface_iid)
-    Q_INTERFACES(IMIPSolver)
+class MIPHIGHSSOLVERSHARED_EXPORT MIPHighsSolver :  public IMIPSolver 
+{    
 public:
 // --------------------------------------------------------------------------
     MIPHighsSolver();
