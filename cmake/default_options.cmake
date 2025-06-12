@@ -17,7 +17,6 @@ option(BUILD_SHARED_LIBS "Building of shared libraries. Default = ON" ON)
 set(Qt5_HOME C:/Qt/Qt5.15.0/5.15.0/msvc2019_64 CACHE INTERNAL "Qt5 home path")
 set(Qt5_DIR ${Qt5_HOME}/lib/cmake/Qt5 CACHE INTERNAL "Qt5 installation path")
 set(Qt5_BIN ${Qt5_HOME}/bin CACHE INTERNAL "Qt5 bin path")
-set(Qt5Creator_BIN C:/Qt/Qt5.15.0/Tools/QtCreator/bin CACHE INTERNAL "QtCreator bin path")
 
 
 # Compilation de MIPModeler 
