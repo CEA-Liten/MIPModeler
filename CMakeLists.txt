@@ -5,7 +5,7 @@ cmake_minimum_required (VERSION 3.23)
 # (i.e. the those which contain all user-defined FindXXX.cmake files among other things)
 set(CMAKE_MODULE_PATH 
     ${CMAKE_SOURCE_DIR}/cmake
-    ${CMAKE_SOURCE_DIR}/lib/import/CMakeTools
+    ${CMAKE_SOURCE_DIR}/lib/CMakeTools
 )
 
 # Force out-of-source build
