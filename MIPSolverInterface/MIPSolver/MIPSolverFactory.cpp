@@ -17,7 +17,7 @@ MIPSolverFactory::MIPSolverFactory()
 {     
     // recherche les solvers
     if (!findSolvers(QCoreApplication::applicationDirPath())) {
-        QString appDir = qEnvironmentVariable("PERSEE_BIN", QDir::currentPath());
+        QString appDir = qEnvironmentVariable("CAIRN_BIN", QDir::currentPath());
         findSolvers(appDir);
     }
 }
