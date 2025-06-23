@@ -41,7 +41,9 @@ int main()
     model.setObjective(obj, MIPModeler::MIP_MINIMIZE);
     obj.close();
 
-    MIPSolverInterface::MIPClpSolver clpSolver(&model);
-    clpSolver.solve();
+    MIPSolverInterface::MIPClpSolver clpSolver;
+    MIPSolverParams vParams;
+    MIPSolverResults vResults;
+    clpSolver.solve(&model, vParams, vResults);
     return VERIFY(clpSolver.getObjectiveValue(), 153.6750);
 }

@@ -68,8 +68,11 @@ component_install_setup(${COMPONENT})
 
 
 
-#if(WITH_TESTING)	
-#	include(CTestTools)	
-	#add_tests(${MIPMODELER_HOME}/test/testTransport 	
-	#DEPS MIPModeler)	
-#endif()
+if(WITH_TESTING)	
+	include(CTestTools)	
+    find_package(CPLEX REQUIRED)
+
+
+	add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	DEPS MIPModeler Qt5 Eigen3::Eigen MIPCpxSolver MIPClpSolver CPLEX::CPLEX)	
+endif()

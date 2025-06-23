@@ -10,7 +10,7 @@
 #include "MIPCpxSolver.h"
 
 
-void testTransport::test_MIPModeler_CplexSolver()
+int main()
 {
     MIPModeler::MIPModel model;
 
@@ -40,7 +40,9 @@ void testTransport::test_MIPModeler_CplexSolver()
     model.setObjective(obj, MIPModeler::MIP_MINIMIZE);
     obj.close();
 
-    MIPSolverInterface::MIPCpxSolver cpxSolver(&model);
-    cpxSolver.solve();
+    MIPSolverInterface::MIPCpxSolver cpxSolver;
+    MIPSolverParams vParams;
+    MIPSolverResults vResults;
+    cpxSolver.solve(&model, vParams, vResults);   
     return VERIFY(cpxSolver.getObjectiveValue(), 153.6750);    
 }

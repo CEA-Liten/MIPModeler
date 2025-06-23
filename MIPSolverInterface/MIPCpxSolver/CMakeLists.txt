@@ -42,6 +42,7 @@ target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 # Qt, FBSF, MipModeler, Persee, Eigen, ....
 find_package(Qt REQUIRED)
 find_package(CPLEX REQUIRED)
+target_link_libraries(${COMPONENT} PRIVATE CPLEX::CPLEX)
 
 # -- Eigen to MIPModeler
 include(EigenSetup)
