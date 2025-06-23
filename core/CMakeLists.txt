@@ -65,3 +65,11 @@ set(${COMPONENT}_INSTALL_INTERFACE_INCLUDE_DIRECTORIES
 #set(${COMPONENT}_HDRS_EXCLUDE)
 
 component_install_setup(${COMPONENT})
+
+
+
+#if(WITH_TESTING)	
+#	include(CTestTools)	
+	#add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	#DEPS MIPModeler)	
+#endif()
