@@ -1,0 +1,1 @@
+static std::string MIPModeler_Release("@PROJECT_VERSION@") ;

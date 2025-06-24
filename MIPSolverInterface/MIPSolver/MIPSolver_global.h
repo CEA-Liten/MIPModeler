@@ -1,0 +1,12 @@
+#ifndef MIPSOLVER_GLOBAL_H
+#define MIPSOLVER_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(MIPSOLVER_LIBRARY)
+#  define MIPSOLVERSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MIPSOLVERSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // MIPCPXSOLVER_GLOBAL_H
