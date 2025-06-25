@@ -1,3 +1,4 @@
+
 [submodule "lib/CMakeTools"]
 	path = lib/CMakeTools
-	url = https://gitlab.deeplab.intra.cea.fr/lset/outils/CMakeTools.git
+	url = https://github.com/CEA-Liten/LSET_CMakeTools.git
