@@ -72,7 +72,7 @@ bool MIPSolverFactory::findSolvers(const QString& a_Path)
                     if (vPlugIn.Init(vFile.absoluteFilePath())) {
                         QString vKey = vPlugIn.getInfos();                        
                         m_PlugIns[vKey] = vPlugIn;
-                        vRet = true;
+                        vRet = true; // find a solver
                     }
                 }                                
             }
@@ -103,14 +103,14 @@ bool MIPSolverFactory::SolverDescriptor::Init(const QString& a_FileName)
     }
     if (!hGetProcIDDLL) {
         DWORD dError = GetLastError();
-        qCritical() << "could not load the dynamic library " << a_FileName << ", error: " << dError;
-        throw(std::exception_ptr());
+        qWarning() << "could not load the dynamic library " << a_FileName << ", error: " << dError;
+        return false;
     }
 #else   
     void* hGetProcIDDLL = dlopen((const char*)vFileName.c_str(), RTLD_NOW);
     if (!hGetProcIDDLL) {        
-        qCritical() << "could not load the dynamic library " << a_FileName);
-        throw(std::exception_ptr());
+        qWarning() << "could not load the dynamic library " << a_FileName);
+        return false;
     }
 #endif
     
@@ -121,21 +121,21 @@ bool MIPSolverFactory::SolverDescriptor::Init(const QString& a_FileName)
     vFunct = (f_Solver)GetProcAddress(hGetProcIDDLL, sModuleName.c_str());
     if (!vFunct) {
         DWORD dError = GetLastError();
-        qCritical() << "could not locate the function createSolver" << ", error: " << dError;
-        throw(std::exception_ptr());
+        qWarning() << "could not locate the function createSolver" << ", error: " << dError;
+        return false;
     }
 #else
     vFunct = (f_Solver)dlsym(hGetProcIDDLL, sModuleName.c_str());
     if (!vFunct) {        
-        qCritical() << "could not locate the function createSolver";
-        throw(std::exception_ptr());
+        qWarning() << "could not locate the function createSolver";
+        return false;
     }
 #endif
     m_IPlugIn = (*vFunct)();
 
     if (!m_IPlugIn) {
-        qCritical() << "could not create the Solver " << m_Infos;
-        throw(std::exception_ptr());
+        qWarning() << "could not create the Solver " << m_Infos;
+        return false;
     }
     else {
         m_Infos = m_IPlugIn->Infos();
