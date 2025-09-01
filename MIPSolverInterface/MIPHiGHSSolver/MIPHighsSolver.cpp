@@ -162,10 +162,10 @@ int MIPHighsSolver::solve() {
     }
     
     // Constraint names
-    /*HighsInt row = 0;    
+    HighsInt row = 0;    
     for (auto& vName : mModel->getRowNames()) {
         highs.passRowName(row++, vName);
-    }*/
+    }
         
     // write model in lp file
     if (mLpFile)
