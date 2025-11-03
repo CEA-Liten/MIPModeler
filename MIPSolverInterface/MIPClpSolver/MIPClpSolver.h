@@ -24,7 +24,7 @@ public:
     MIPClpSolver();
     ~MIPClpSolver();
 //---------------------------------------------------------------------------
-    QString Infos();
+    std::string Infos();
     int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
 
     int solve();

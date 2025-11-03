@@ -35,12 +35,14 @@ set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES
 include(ComponentSetup)
 create_component(${COMPONENT})
 
-find_package(Qt REQUIRED)
-set_property(TARGET ${COMPONENT} PROPERTY AUTOMOC OFF)
+#find_package(Qt REQUIRED)
+#set_property(TARGET ${COMPONENT} PROPERTY AUTOMOC OFF)
 
 # -- Eigen to MIPModeler
 include(EigenSetup)
 target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
+include(SpdlogSetup)
+target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
 
 target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
 

@@ -8,10 +8,14 @@
 
 #include "test_MIPModeler.h"
 #include "MIPCpxSolver.h"
-
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 int main()
 {
+    auto console = spdlog::stdout_color_mt("console");
+    spdlog::set_default_logger(console);
+ 
     MIPModeler::MIPModel model;
 
     MIPModeler::MIPVariable2D transp(mFactory, mClient, 0.0, MIP_INFINITY);

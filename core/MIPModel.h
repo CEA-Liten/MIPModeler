@@ -7,6 +7,7 @@
 */
 
 #include "MIPModeler_global.h"
+#include "MIPLogger.h"
 #include <string>
 #include "MIPVariable0D.h"
 #include "MIPVariable1D.h"

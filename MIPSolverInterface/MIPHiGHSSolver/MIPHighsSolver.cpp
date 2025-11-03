@@ -8,6 +8,8 @@
 
 #include "MIPHighsSolver.h"
 #include <cstring>
+#include "spdlog/spdlog.h"
+
 extern "C" MIPHIGHSSOLVERSHARED_EXPORT IMIPSolver* createSolver()
 {
     return new MIPSolverInterface::MIPHighsSolver();
@@ -30,9 +32,18 @@ MIPHighsSolver::MIPHighsSolver()
 {    
 }
 
-QString MIPHighsSolver::Infos()
+std::string MIPHighsSolver::Infos()
 {
     return "Highs";
+}
+
+
+void userCallback(const int callback_type, const char* message, const HighsCallbackDataOut* data_out, HighsCallbackDataIn* data_in, void* user_callback_data)
+{
+    //spdlog::info(message);
+    if (data_in && user_callback_data) {
+        data_in->user_interrupt = *(int*)user_callback_data;
+    }
 }
 
 int MIPHighsSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results)
@@ -45,7 +56,7 @@ int MIPHighsSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams&
                 mModel->buildProblem();
             }
             catch (...) {
-                qCritical() << "An Exception is detected in MIPModel::buildProblem()!";
+                spdlog::error("An Exception is detected in MIPModel::buildProblem()!");
                 return -1;
             }
         }
@@ -56,11 +67,14 @@ int MIPHighsSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams&
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
             else if (vParam.first == "Location") {
-                setLocation(vParam.second.str.QString::toStdString());
+                setLocation(vParam.second.str);
             }
             else if (vParam.first == "WriteLp") {
                 if (vParam.second.value) writeLp();
             }
+            else if (vParam.first == "TerminateSignal") {
+                mTerminateSignal = vParam.second.signal;
+            }            
         }
         vRet = solve();
         a_Results.setResults(getOptimisationStatus(), getOptimalSolution());
@@ -88,6 +102,7 @@ void MIPHighsSolver::setLocation(const std::string& location)
 {
     mLocation = location;
 }
+
 // --------------------------------------------------------------------------
 void MIPHighsSolver::writeLp() {
     mLpFile = true;
@@ -96,7 +111,7 @@ void MIPHighsSolver::writeLp() {
 
 int MIPHighsSolver::solve() {
     int vRet = -1;
-    std::cout<<"Start Solving using Highs"<<std::endl;
+    spdlog::info("Start Solving using Highs");
 
     // Variable Types
     std::vector<HighsInt> integrality_ = std::vector<HighsInt>(mModel->getNumCols(), (HighsInt)HighsVarType::kContinuous);
@@ -134,7 +149,10 @@ int MIPHighsSolver::solve() {
     
     // Create a Highs instance
     Highs highs;
-    HighsStatus return_status;
+    HighsStatus return_status = highs.setCallback(userCallback, mTerminateSignal);    
+    highs.setOptionValue("log_file", mLocation + "_optim.log");
+    highs.startCallback(1);
+    
 
     // Pass the model to HiGHS
     highs.passModel(
@@ -169,7 +187,7 @@ int MIPHighsSolver::solve() {
         
     // write model in lp file
     if (mLpFile)
-        highs.writeModel(mLocation + "Model.lp");
+        highs.writeModel(mLocation + "_model.lp");
 
     // Solve the model and get solve information
     highs.run();
@@ -208,7 +226,8 @@ int MIPHighsSolver::solve() {
     for(int col=0; col < mModel->getNumCols(); col++)
         mOptimalSolution[col] = solution.col_value[col];
 
-    std::cout<<"Finish Solving using Highs"<<std::endl;
+    highs.stopCallback(1);
+    spdlog::info("Finish Solving using Highs");
     return vRet;
 }
 // --------------------------------------------------------------------------

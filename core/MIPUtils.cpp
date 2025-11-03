@@ -6,6 +6,7 @@
 */
 
 #include "MIPUtils.h"
+#include "spdlog/spdlog.h"
 
 namespace MIPModeler {
     //Typical messages used inside exceptions which are caught by an external application e.g Persee and then displayed to the user.
@@ -20,11 +21,11 @@ bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
     //try{
         //check data
         if (xTable.size() != yTable.size()) {
-            qDebug() << "Error in MIPModeler::isConvexSet: xTable and yTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::isConvexSet: xTable and yTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_1D);
         }
         else if (xTable.size() < 3) {
-            qDebug() << "Error in MIPModeler::isConvexSet: the size of xTable and yTable should be at least 3, each.";
+            spdlog::debug("Error in MIPModeler::isConvexSet: the size of xTable and yTable should be at least 3, each.");
             throw std::length_error(ERROR_MESSAGE_1D + " And, the size should be at least 3.");
         }
         else{
@@ -36,7 +37,7 @@ bool isConvexSet(const MIPData1D& xTable, const MIPData1D& yTable){
                     gradiant[i] = (yTable[i + 1] - yTable[i]) / (xTable[i + 1] - xTable[i]);
                 }
                 else {
-                    qDebug() << "Error in MIPModeler::isConvexSet: xTable cannot have two consecutive equal values (xTable[i + 1] - xTable[i] should be > 0).";
+                    spdlog::debug("Error in MIPModeler::isConvexSet: xTable cannot have two consecutive equal values (xTable[i + 1] - xTable[i] should be > 0).");
                     throw std::invalid_argument("Error: 1d-performance map wrong input. The first data vector cannot have two consecutive equal values: " + std::to_string(xTable[i]) + ". Lines " + std::to_string(i) + " and " + std::to_string(i+1));
                 }
             }
@@ -152,7 +153,7 @@ MIPExpression1D MIPPiecewiseLinearisation(MIPModel& model,
     //try{
         //check data
         if (xTable.size() != yTable.size()) {
-            qDebug() << "Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_1D);
         }
         else{
@@ -211,7 +212,7 @@ MIPExpression MIPPiecewiseLinearisation(MIPModel& model,
     //try{
         //check data
         if (xTable.size() != yTable.size()) {
-            qDebug() << "Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPPiecewiseLinearisation: xTable and yTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_1D);
         }
         else{
@@ -328,18 +329,18 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
     //try{
         // check data
         if (xInputExpr.size() != yInputExpr.size()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputExpr and yInputExpr should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xInputExpr and yInputExpr should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
 
         if (xTable.size() != zTable.size()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.";
+                spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.");
                 throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
@@ -480,13 +481,13 @@ MIPExpression MIPTriMeshLinearisation(MIPModel& model,
     //try{
         // check data
         if (xTable.size() != zTable.size()) {
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for (int i = 0; i < zTable.size(); i++) {
             if (yTable.size() != zTable[i].size()) {
-                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.";
+                spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: yTable and zTable[i] should have the same size.");
                 throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
@@ -622,7 +623,7 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
     //try{
         // check data
         if (xInputData.size() != yInputData.size()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputData and yInputData should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xInputData and yInputData should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
         else{
@@ -639,13 +640,13 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
         }
 
         if (xTable.size() != zTable.size()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.";
+                spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.");
                 throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }
@@ -695,7 +696,7 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
     //try{
         // check data
         if (xInputVar.getDims() != yInputVar.getDims()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xInputVar and yInputVar should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xInputVar and yInputVar should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_BUG);
         }
         else{
@@ -712,13 +713,13 @@ MIPExpression1D MIPTriMeshLinearisation(MIPModel& model,
         }
 
         if (xTable.size() != zTable.size()){
-            qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.";
+            spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable should have the same size.");
             throw std::length_error(ERROR_MESSAGE_2D_DATA1);
         }
 
         for(int i = 0 ; i < zTable.size() ; i++){
             if (yTable.size() != zTable[i].size()){
-                qDebug() << "Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.";
+                spdlog::debug("Error in MIPModeler::MIPTriMeshLinearisation: xTable and zTable[i] should have the same size.");
                 throw std::length_error(ERROR_MESSAGE_2D_DATA2);
             }
         }

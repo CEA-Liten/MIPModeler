@@ -8,7 +8,7 @@
             "installDir": "${sourceDir}/bin/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
+                "CMAKE_CXX_COMPILER": "cl.exe"                
             },
             "condition": {
                 "type": "equals",
@@ -16,8 +16,7 @@
                 "rhs": "Windows"
             },
             "environment": {
-                "PERSEE_APP": "${sourceDir}",
-                "PERSEE_BIN": "${sourceDir}/bin/${presetName}",
+                "CAIRN_BIN": "${sourceDir}/bin/${presetName}",
                 "Path": "$penv{Path};${sourceDir}/bin/${presetName};C:/Qt/Qt5.15.0/5.15.0/msvc2019_64/bin"
             }
         },
@@ -40,6 +39,20 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "configurePreset": "debug",
+            "configuration": "debug"
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "configurePreset": "release",
+            "configuration": "release"
         }
     ]
 }

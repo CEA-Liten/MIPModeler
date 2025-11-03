@@ -38,10 +38,6 @@ create_component(${COMPONENT})
 target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
 target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 
-# Links with non-Pegase libraries
-# Qt, FBSF, MipModeler, Persee, Eigen, ....
-find_package(Qt REQUIRED)
-
 include(HiGHSSetup)
 #find_package(HIGHS REQUIRED)
 
@@ -50,6 +46,8 @@ target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 # -- Eigen to MIPModeler
 include(EigenSetup)
 target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
+include(SpdlogSetup)
+target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
 
 
 # ---- Installation ----

@@ -10,7 +10,6 @@
 #include "Highs.h"
 #include "MIPModeler.h"
 #include <iostream>
-#include <QtCore>
 #include "IMIPSolver.h"
 
 #ifndef MIPHIGHSSOLVER_H
@@ -25,7 +24,7 @@ public:
     MIPHighsSolver();
     ~MIPHighsSolver();
 // --------------------------------------------------------------------------
-    QString Infos();
+    std::string Infos();
     int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults& a_Results);
 
     int solve();
@@ -55,6 +54,9 @@ private:
     bool mLpFile;
     bool mSolverPrint;
     std::string mLocation;
+    int* mTerminateSignal{ nullptr };
+
+   
 };
 
 }

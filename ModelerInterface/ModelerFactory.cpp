@@ -1,22 +1,20 @@
-#include <QCoreApplication>
-#include <QDir>
-#include <QPluginLoader>
-#include <QDebug>
 
 #include "ModelerFactory.h"
+#include "spdlog/spdlog.h"
+#include <filesystem>
 
+namespace fs = std::filesystem;
 ModelerFactory::t_mapPlugIns ModelerFactory::m_PlugIns;
 
 ModelerFactory::ModelerFactory()
 {
     // recherche les modelers externe
-    if (!findModelers(QCoreApplication::applicationDirPath())) {
-        QString appDir = qEnvironmentVariable("PERSEE_BIN", QDir::currentPath());
-        findModelers(appDir);
+    if (!findModelers(fs::current_path().string())) {
+        findModelers(std::getenv("CAIRN_BIN"));
     }
 }
 
-void ModelerFactory::getModelersName(QStringList& a_Modelers)
+void ModelerFactory::getModelersName(std::vector< std::string>& a_Modelers)
 {
     a_Modelers.clear();
     t_mapPlugIns::iterator end = m_PlugIns.end();
@@ -25,7 +23,7 @@ void ModelerFactory::getModelersName(QStringList& a_Modelers)
     }
 }
 
-ModelerInterface* ModelerFactory::getModeler(QString& a_Name)
+ModelerInterface* ModelerFactory::getModeler(std::string& a_Name)
 {
     ModelerInterface* vRet = nullptr;
     t_mapPlugIns::iterator vIter = m_PlugIns.find(a_Name);
@@ -33,15 +31,15 @@ ModelerInterface* ModelerFactory::getModeler(QString& a_Name)
         vRet = vIter->second;
     }
     else {
-        qWarning() << "cannot find modeler " << a_Name;
+        spdlog::warn("cannot find modeler " + a_Name);
     }
     return vRet;
 }
 
-bool ModelerFactory::findModelers(const QString& a_Path)
+bool ModelerFactory::findModelers(const std::string& a_Path)
 {
     bool vRet = false;
-    QString filterExt, filterStart;
+    std::string filterExt, filterStart;
 #if (defined (_WIN32) || defined (_WIN64))
     filterExt = "*.dll";
     filterStart = "MIP";
@@ -49,18 +47,22 @@ bool ModelerFactory::findModelers(const QString& a_Path)
     filterExt = "*.so";
     filterStart = "libMIP";
 #endif
-    QDir vDir(a_Path, filterExt);    
-    qDebug() << "Search modelers in: " << a_Path;
-    QFileInfoList vFiles(vDir.entryInfoList());
-    for (auto& vFile : vFiles) {
-        if (vFile.baseName().contains("Modeler")) {
-            if (!vFile.baseName().startsWith(filterStart)) {
-                ModelerInterface *vPlugIn = load(vFile.absoluteFilePath());
-                if (vPlugIn != nullptr) {
-                    QString vKey = QString(vPlugIn->Infos().c_str());
-                    m_PlugIns[vKey] = vPlugIn;
-                    qDebug() << "Find modeler " << vKey << " in: " << a_Path;
-                    vRet = true;
+    spdlog::debug("Search modelers in: " + a_Path);
+    fs::path vPath(a_Path);
+    for (auto const& dir_entry : fs::directory_iterator{ vPath }) {
+        if (!dir_entry.is_directory()) {
+            const fs::path& vFile = dir_entry.path();
+            if (vFile.extension() == filterExt) {
+                std::string vName = vFile.stem().string();
+                size_t vPos = vName.rfind("Modeler");
+                if (vPos != std::string::npos) {
+                    if (vName.rfind(filterStart, 0) == std::string::npos) {
+                        ModelerInterface* vPlugIn = load(fs::absolute(vFile).string());
+                        if (vPlugIn != nullptr) {
+                            m_PlugIns[vPlugIn->Infos()] = vPlugIn;
+                            vRet = true;
+                        }
+                    }
                 }
             }
         }
@@ -68,13 +70,14 @@ bool ModelerFactory::findModelers(const QString& a_Path)
     return vRet;
 }
 
-ModelerInterface* ModelerFactory::load(const QString& a_Name)
+ModelerInterface* ModelerFactory::load(const std::string& a_FileName)
 {
     ModelerInterface* vRet = nullptr;
-    QPluginLoader loader(a_Name);
-    QObject* plugin = loader.instance();
-    if (plugin) {
-        vRet = qobject_cast<ModelerInterface*>(plugin);        
-    }
+    if (a_FileName == "")
+        return vRet;
+
+    // TODO
+
+
     return vRet;
 }

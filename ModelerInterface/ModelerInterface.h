@@ -1,5 +1,5 @@
 #pragma once
-#include <QtPlugin>
+#include <map>
 
 class ModelerParams {
 public:
@@ -70,8 +70,3 @@ public:
     virtual void addModelFromFile(const std::string& fileName, const std::string& modelName, const ModelerParams& a_params) = 0;
    
 };
-
-
-#define ModelerInterface_iid "Cea.MIPModeler.ModelerInterface"
-
-Q_DECLARE_INTERFACE(ModelerInterface, ModelerInterface_iid)

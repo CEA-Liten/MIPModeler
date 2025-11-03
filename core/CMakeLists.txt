@@ -35,7 +35,6 @@ set(${COMPONENT}_INTERFACE_INCLUDE_DIRECTORIES
 include(ComponentSetup)
 create_component(${COMPONENT})
 
-find_package(Qt REQUIRED Core)
 if (${USE_GAMS})
     target_link_libraries(${COMPONENT} PRIVATE GAMSModeler)
     target_compile_definitions(${COMPONENT} PRIVATE -DUSE_GAMS)
@@ -43,10 +42,15 @@ if (${USE_GAMS})
 endif()
 
 # -- Eigen to MIPModeler
+
+include(SpdlogSetup)
+target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
+
 include(EigenSetup)
 target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
 
 target_link_libraries(${COMPONENT} PRIVATE ModelerInterface)
+
 
 # ---- Installation ----
 # Call component_install_setup(<COMPONENT>)
@@ -72,7 +76,11 @@ if(WITH_TESTING)
 	include(CTestTools)	
     find_package(CPLEX REQUIRED)
 
-
-	add_tests(${MIPMODELER_HOME}/test/testTransport 	
-	DEPS MIPModeler Qt5 Eigen3::Eigen MIPCpxSolver MIPClpSolver CPLEX::CPLEX)	
+    if (COINOR_ROOT)
+	    add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	        DEPS MIPModeler Eigen3::Eigen MIPCpxSolver MIPClpSolver CPLEX::CPLEX spdlog::spdlog_header_only)	
+    else()
+        add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	        DEPS MIPModeler Eigen3::Eigen MIPCpxSolver CPLEX::CPLEX spdlog::spdlog_header_only EXCLUDE_TESTS ../test/testTransport/test_MIPModeler_ClpSolver.cpp)	
+    endif()
 endif()

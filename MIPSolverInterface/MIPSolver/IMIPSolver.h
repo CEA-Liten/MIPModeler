@@ -1,5 +1,4 @@
 #pragma once
-#include <QString>
 #include "MIPModel.h"
 
 constexpr double OPTIM_HUGE_VAL = 1e100;
@@ -10,19 +9,19 @@ class MIPSolverParams {
 public:
     struct MIPSolverParam {
         double value;
-        QString str;
+        std::string str;
         bool bValue;
         int* signal;
         MIPSolverParam() { value = 0; signal = nullptr; str = ""; };        
         ~MIPSolverParam() {};
     };
-    typedef std::map<QString, MIPSolverParam >  t_MIPSolverParams;
+    typedef std::map<std::string, MIPSolverParam >  t_MIPSolverParams;
 
     MIPSolverParams() {}
-    void addParam(const QString& a_Name, const QString& a_Value) {  m_Params[a_Name].str = a_Value; }
-    void addParam(const QString& a_Name, const double& a_Value) { m_Params[a_Name].value = a_Value; }
-    void addBoolParam(const QString& a_Name, const bool& a_Value) { m_Params[a_Name].bValue = a_Value; }
-    void addParam(const QString& a_Name, int *a_Value) { m_Params[a_Name].signal = a_Value; }
+    void addParam(const std::string& a_Name, const std::string& a_Value) {  m_Params[a_Name].str = a_Value; }
+    void addParam(const std::string& a_Name, const double& a_Value) { m_Params[a_Name].value = a_Value; }
+    void addBoolParam(const std::string& a_Name, const bool& a_Value) { m_Params[a_Name].bValue = a_Value; }
+    void addParam(const std::string& a_Name, int *a_Value) { m_Params[a_Name].signal = a_Value; }
    
     t_MIPSolverParams::const_iterator begin() const { return m_Params.begin(); }
     t_MIPSolverParams::const_iterator end() const { return m_Params.end(); }
@@ -83,7 +82,7 @@ protected:
 class IMIPSolver {
 public:
     virtual ~IMIPSolver() {}
-    virtual QString Infos() = 0;
+    virtual std::string Infos() = 0;
     virtual int solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a_Params, MIPSolverResults &a_Results) = 0;
 };
 

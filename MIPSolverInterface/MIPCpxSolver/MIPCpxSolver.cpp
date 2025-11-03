@@ -7,6 +7,8 @@
 
 
 #include "MIPCpxSolver.h"
+#include "spdlog/spdlog.h"
+
 #include <cstring>
 extern "C" MIPCPXSOLVERSHARED_EXPORT IMIPSolver* createSolver()
 {
@@ -39,7 +41,7 @@ MIPCpxSolver::MIPCpxSolver()
 {    
 }
 
-QString MIPCpxSolver::Infos()
+std::string MIPCpxSolver::Infos()
 {
     return "Cplex";
 }
@@ -54,7 +56,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 mModel->buildProblem();
             }
             catch(...) {
-                qCritical() << "An Exception is detected in MIPModel::buildProblem()!";
+                spdlog::error("An Exception is detected in MIPModel::buildProblem()!");
                 return -1;
             }
         }
@@ -67,7 +69,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "TreeMemoryLimit") setTreeMemoryLimit(vParam.second.value);
             else if (vParam.first == "NbSolToKeep") setMaxNumberOfSolutions(vParam.second.value);
             else if (vParam.first == "Location") {                
-                setLocation(vParam.second.str.QString::toStdString());
+                setLocation(vParam.second.str);
             }
             else if (vParam.first == "SolverPrint") setSolverPrint(vParam.second.value);
             else if (vParam.first == "WriteLp") {
@@ -84,7 +86,7 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             }
             else if (vParam.first == "FileMipStart") {
                 if (vParam.second.str != "") {                    
-                    setFileMipStart(vParam.second.str.QString::toStdString());
+                    setFileMipStart(vParam.second.str);
                 }
             }
             else if (vParam.first == "TerminateSignal") {

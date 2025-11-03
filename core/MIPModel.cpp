@@ -6,7 +6,7 @@
 */
 
 #include "MIPModel.h"
-#include <QDebug>
+
 
 namespace MIPModeler {
 // --------------------------------------------------------------------------
@@ -117,12 +117,12 @@ void MIPModel::buildProblem() {
         //Check for NAN values
         if (std::isnan((*itVar)->getLowerBound())) {
             mProblemBuilt = false;
-            qCritical() << "The Lower Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+            spdlog::error("The Lower Bound of " + (*itVar)->getName() + " is NAN!");
         }
 
         if (std::isnan((*itVar)->getUpperBound())) {
             mProblemBuilt = false;
-            qCritical() << "The Upper Bound of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+            spdlog::error("The Upper Bound of " + (*itVar)->getName() + " is NAN!");
         }
 
         mColLowerBounds.push_back((*itVar)->getLowerBound());
@@ -132,7 +132,7 @@ void MIPModel::buildProblem() {
         if ((*itVar)->isInteger()){
             if ( std::isnan(static_cast<float>( (*itVar)->getColIdx() )) ) {
                 mProblemBuilt = false;
-                qCritical() << "The index of " + QString::fromStdString((*itVar)->getName()) + " is NAN!";
+                spdlog::error("The index of " + (*itVar)->getName() + " is NAN!");
             }
             mColIntegers.push_back((*itVar)->getColIdx());
             mNumIntegerCols ++;
@@ -147,8 +147,8 @@ void MIPModel::buildProblem() {
     for (itNode = objectiveNodes.begin(); itNode != objectiveNodes.end() ; itNode++) {
         if(itNode->col() < 0 || itNode->row() < 0){
             //throw exception 
-            qCritical() << "error at the nodeObjective : col val  is -1 ";
-            throw (QString("An error found after checking objectiveNodes col/row val (<-1) sparseMatrixObjective ! plesae check added model"));
+            spdlog::critical("error at the nodeObjective : col val  is -1 ");
+            throw ("An error found after checking objectiveNodes col/row val (<-1) sparseMatrixObjective ! plesae check added model");
         }
     }
     sprarseMatrixObjective.setFromTriplets(objectiveNodes.begin(), objectiveNodes.end());
@@ -159,7 +159,7 @@ void MIPModel::buildProblem() {
     for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
         if (std::isnan(value[i])) {
             mProblemBuilt = false;
-            qCritical() << "The Objective Coefficient of " + QString::fromStdString(mColNames[i]) + " is NAN!";
+            spdlog::error("The Objective Coefficient of " + mColNames[i] + " is NAN!");
         }
         mObjectiveCoefficients[idx[i]] = value[i];
     }
@@ -179,7 +179,7 @@ void MIPModel::buildProblem() {
 
                 if (std::isnan(it->value())) {
                     mProblemBuilt = false;
-                    qCritical() << "A NAN value found in the subobjective expression: "+QString::fromStdString(mListSubobjectives[j].getName());
+                    spdlog::error("A NAN value found in the subobjective expression: "+ mListSubobjectives[j].getName());
                 }
 
                 mSubObjCoeff[j][i] = it->value();
@@ -201,24 +201,29 @@ void MIPModel::buildProblem() {
         {
             if (it->row() <0  || it->col() <0)
             {
-                qDebug()<< " == ERROR constraint == "
-                        << QString::fromStdString(itConstr->getName())
-                        << " reference to bad variable "
-                        << " r " << it->row() << " c " << it->col() << " v " << it->value() ;
+                spdlog::debug(" == ERROR constraint == "
+                        + itConstr->getName()
+                        + " reference to bad variable "
+                        + " r " 
+                        + std::to_string(it->row()) 
+                        + " c " 
+                        + std::to_string(it->col()) 
+                        + " v " 
+                        + std::to_string(it->value()) );
 
-                throw (QString("An error found while building the constraint matrix: a negative row or column index is detected!"));
+                throw ("An error found while building the constraint matrix: a negative row or column index is detected!");
             }
 
             if (std::isnan(it->value())) {
                 mProblemBuilt = false;
-                qCritical() << "An NAN value found in the constraint: "+QString::fromStdString(itConstr->getName());
+                spdlog::error("An NAN value found in the constraint: "+ itConstr->getName());
             }
         }
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
 
         if (std::isnan(itConstr->getConstPart())) {
             mProblemBuilt = false;
-            qCritical() << "The Constant Part of the constraint "+QString::fromStdString(itConstr->getName())+" is NAN!" << itConstr->getConstPart();
+            spdlog::error("The Constant Part of the constraint "+ itConstr->getName() + " is NAN!" + std::to_string(itConstr->getConstPart()));
         }
 
         mRhs.push_back(itConstr->getConstPart());
@@ -228,7 +233,7 @@ void MIPModel::buildProblem() {
 
     //Throw exception -- The exception is thrown at the end in order to report all NAN values in the .log before.
     if (!mProblemBuilt)
-        throw (QString("An error has found while building the optimal problem: undefined value (NAN)!"));
+        throw ("An error has found while building the optimal problem: undefined value (NAN)!");
 
     Eigen::SparseMatrix<double, Eigen::RowMajor>* sparseMatrixConstraints;
     sparseMatrixConstraints = new Eigen::SparseMatrix<double, Eigen::RowMajor>(mNumRows, mNumCols);

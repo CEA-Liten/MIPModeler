@@ -6,6 +6,8 @@
 */
 
 #include "MIPClpSolver.h"
+#include "spdlog/spdlog.h"
+
 extern "C" MIPCLPSOLVERSHARED_EXPORT IMIPSolver * createSolver()
 {
     return new MIPSolverInterface::MIPClpSolver();
@@ -22,7 +24,7 @@ MIPClpSolver::MIPClpSolver()
 }
 
 
-QString MIPClpSolver::Infos()
+std::string MIPClpSolver::Infos()
 {
     return "Clp";
 }
@@ -37,7 +39,7 @@ int MIPClpSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
                 mModel->buildProblem();
             }
             catch (...) {
-                qCritical() << "An Exception is detected in MIPModel::buildProblem()!";
+                spdlog::error("An Exception is detected in MIPModel::buildProblem()!");
                 return -1;
             }
         }

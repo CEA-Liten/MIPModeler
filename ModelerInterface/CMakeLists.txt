@@ -35,8 +35,8 @@ include(ComponentSetup)
 create_component(${COMPONENT})
 target_compile_definitions(${COMPONENT} PRIVATE -DMODELERINTERFACE_LIB)
 
-find_package(Qt REQUIRED)
-
+include(SpdlogSetup)
+target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
 
 # ---- Installation ----
 # Call component_install_setup(<COMPONENT>)

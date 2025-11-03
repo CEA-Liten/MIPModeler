@@ -1,12 +1,24 @@
 #ifndef MIPCBCSOLVER_GLOBAL_H
 #define MIPCBCSOLVER_GLOBAL_H
 
-#include <QtCore/qglobal.h>
+#if defined(_MSC_VER)
+#define EXPORT __declspec(dllexport)
+#define IMPORT __declspec(dllimport)
+#elif defined(__GNUC__)
+//  GCC
+#define EXPORT __attribute__((visibility("default")))
+#define IMPORT
+#else
+//  do nothing and hope for the best?
+#define EXPORT
+#define IMPORT
+#pragma warning Unknown dynamic link import/export semantics.
+#endif
 
 #if defined(MIPCBCSOLVER_LIBRARY)
-#  define MIPCBCSOLVERSHARED_EXPORT Q_DECL_EXPORT
+#  define MIPCBCSOLVERSHARED_EXPORT EXPORT
 #else
-#  define MIPCBCSOLVERSHARED_EXPORT Q_DECL_IMPORT
+#  define MIPCBCSOLVERSHARED_EXPORT IMPORT
 #endif
 
 #endif // MIPCBCSOLVER_GLOBAL_H

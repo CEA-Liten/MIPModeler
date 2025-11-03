@@ -54,7 +54,7 @@ endif()
 include(ProjectSetup)
 project(${PROJECT_NAME} LANGUAGES CXX C  VERSION ${${PROJECT_NAME}_VERSION}) 
 set(CMAKE_CXX_STANDARD 17) 
-set(PERSEE_APP ${CMAKE_HOME_DIRECTORY} CACHE INTERNAL "Persee application directory")
+
 
 # ========= Tests setup =========
 if(WITH_TESTING)  
