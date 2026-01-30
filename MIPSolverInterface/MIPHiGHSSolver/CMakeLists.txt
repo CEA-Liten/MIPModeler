@@ -39,8 +39,6 @@ target_link_libraries(${COMPONENT} PRIVATE MIPModeler)
 target_link_libraries(${COMPONENT} PRIVATE MIPSolver)
 
 include(HiGHSSetup)
-#find_package(HIGHS REQUIRED)
-
 target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 
 # -- Eigen to MIPModeler
@@ -66,23 +64,8 @@ set(${COMPONENT}_INSTALL_INTERFACE_INCLUDE_DIRECTORIES
 # List header files (in dir above) that must not be installed 
 #set(${COMPONENT}_HDRS_EXCLUDE)
 
+if (DEPS_INSTALL AND EXISTS ${DEPS_ROOT})
+	set(${COMPONENT}_EXTRA_FILES ${DEPS_ROOT}/bin/${CMAKE_BUILD_TYPE}/bin/highs${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()
 component_install_setup(${COMPONENT})
 
-if (HIGHS_LIBRARIES) 
-    if(CMAKE_SYSTEM_NAME MATCHES Windows)
-         install(FILES ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/bin/${HIGHS_LIBRARIES}.dll
-            DESTINATION ${CMAKE_INSTALL_BINDIR}            
-            )
-    else()
-        foreach(HIGHS_LIBRARY IN LISTS HIGHS_LIBRARIES)                
-            find_library(HIGHS_LIB ${HIGHS_LIBRARY}
-                PATHS ${HIGHS_ROOT}/${CMAKE_BUILD_TYPE}/bin
-                REQUIRED)            
-            list(APPEND HIGHS_LIBS ${HIGHS_LIB})       
-            unset(HIGHS_LIB CACHE)        
-        endforeach()      
-        install(FILES ${HIGHS_LIBS}
-                DESTINATION ${CMAKE_INSTALL_BINDIR}            
-                )
-    endif()
-endif()
