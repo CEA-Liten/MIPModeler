@@ -48,7 +48,7 @@ target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
 
 include(EigenSetup)
 target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
-
+target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
 target_link_libraries(${COMPONENT} PRIVATE ModelerInterface)
 
 

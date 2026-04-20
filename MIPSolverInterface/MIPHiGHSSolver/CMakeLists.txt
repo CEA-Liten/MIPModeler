@@ -44,6 +44,7 @@ target_link_libraries(${COMPONENT} PRIVATE highs::highs)
 # -- Eigen to MIPModeler
 include(EigenSetup)
 target_link_libraries(${COMPONENT} PRIVATE Eigen3::Eigen)
+target_compile_definitions(${COMPONENT} PRIVATE -DEIGEN_MPL2_ONLY)
 include(SpdlogSetup)
 target_link_libraries(${COMPONENT} PRIVATE spdlog::spdlog_header_only)
 
@@ -64,8 +65,8 @@ set(${COMPONENT}_INSTALL_INTERFACE_INCLUDE_DIRECTORIES
 # List header files (in dir above) that must not be installed 
 #set(${COMPONENT}_HDRS_EXCLUDE)
 
-if (DEPS_INSTALL AND EXISTS ${DEPS_ROOT})
-	set(${COMPONENT}_EXTRA_FILES ${DEPS_ROOT}/bin/${CMAKE_BUILD_TYPE}/bin/highs${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()
+#if (DEPS_INSTALL AND EXISTS ${DEPS_ROOT})
+#	set(${COMPONENT}_EXTRA_FILES ${DEPS_ROOT}/bin/${CMAKE_BUILD_TYPE}/bin/highs${CMAKE_SHARED_LIBRARY_SUFFIX})
+#endif()
 component_install_setup(${COMPONENT})
 
