@@ -73,14 +73,16 @@ component_install_setup(${COMPONENT})
 
 
 if(WITH_TESTING)	
-	include(CTestTools)	
-    find_package(CPLEX REQUIRED)
+    if (EXISTS ${CPLEX_ROOT})
+	    include(CTestTools)	
+        find_package(CPLEX REQUIRED)
 
-    if (COINOR_ROOT)
-	    add_tests(${MIPMODELER_HOME}/test/testTransport 	
-	        DEPS MIPModeler Eigen3::Eigen MIPCpxSolver MIPClpSolver CPLEX::CPLEX spdlog::spdlog_header_only)	
-    else()
-        add_tests(${MIPMODELER_HOME}/test/testTransport 	
-	        DEPS MIPModeler Eigen3::Eigen MIPCpxSolver CPLEX::CPLEX spdlog::spdlog_header_only EXCLUDE_TESTS ../test/testTransport/test_MIPModeler_ClpSolver.cpp)	
+        if (COINOR_ROOT)
+	        add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	            DEPS MIPModeler Eigen3::Eigen MIPCpxSolver MIPClpSolver CPLEX::CPLEX spdlog::spdlog_header_only)	
+        else()
+            add_tests(${MIPMODELER_HOME}/test/testTransport 	
+	            DEPS MIPModeler Eigen3::Eigen MIPCpxSolver CPLEX::CPLEX spdlog::spdlog_header_only EXCLUDE_TESTS ../test/testTransport/test_MIPModeler_ClpSolver.cpp)	
+        endif()
     endif()
 endif()

@@ -140,7 +140,7 @@ bool MIPSolverFactory::SolverDescriptor::Init(const std::string& a_FileName)
     }
     else {
         m_Infos = m_IPlugIn->Infos();
-        spdlog::info("Find solver " + m_Infos + " in " + a_FileName);
+        spdlog::debug("Find solver " + m_Infos + " in " + a_FileName);
     }
     
     return true;

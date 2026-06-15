@@ -104,126 +104,141 @@ void MIPModel::add(const MIPWarmStart& warmStartSolutions) {
     mWarmStarts.push_back(warmStartSolutions);
 }
 // --------------------------------------------------------------------------
-void MIPModel::buildProblem() {
+void MIPModel::buildProblem() 
+{
     mProblemBuilt = true;
 
-    // variables informations
+    // =========================== Variables information ===========================
     mColLowerBounds.reserve(mNumCols);
     mColUpperBounds.reserve(mNumCols);
     mColIntegers.reserve(mNumCols);
     mColNames.reserve(mNumCols);
-    std::list<MIPVariable0D*>::iterator itVar = mVariables.begin();
-    for (; itVar != mVariables.end(); itVar++){
-        //Check for NAN values
+
+    for (auto itVar = mVariables.begin(); itVar != mVariables.end(); itVar++) 
+    {
+        // --- Validate lower bound ---
         if (std::isnan((*itVar)->getLowerBound())) {
             mProblemBuilt = false;
-            spdlog::error("The Lower Bound of " + (*itVar)->getName() + " is NAN!");
+            spdlog::critical("The Lower Bound of {} is NAN!", (*itVar)->getName());
+            throw std::runtime_error("Invalid model: NAN lower bound");
         }
 
+        // --- Validate upper bound ---
         if (std::isnan((*itVar)->getUpperBound())) {
             mProblemBuilt = false;
-            spdlog::error("The Upper Bound of " + (*itVar)->getName() + " is NAN!");
+            spdlog::critical("The Upper Bound of {} is NAN!", (*itVar)->getName());
+            throw std::runtime_error("Invalid model: NAN upper bound");
         }
 
         mColLowerBounds.push_back((*itVar)->getLowerBound());
         mColUpperBounds.push_back((*itVar)->getUpperBound());
         mColNames.push_back((*itVar)->getName());
 
-        if ((*itVar)->isInteger()){
-            if ( std::isnan(static_cast<float>( (*itVar)->getColIdx() )) ) {
+        // --- Validate integer variable index ---
+        if ((*itVar)->isInteger()) {
+            if (std::isnan(static_cast<float>((*itVar)->getColIdx()))) {
                 mProblemBuilt = false;
-                spdlog::error("The index of " + (*itVar)->getName() + " is NAN!");
+                spdlog::critical("The index of {} is NAN!", (*itVar)->getName());
+                throw std::runtime_error("Invalid model: NAN column index");
             }
             mColIntegers.push_back((*itVar)->getColIdx());
-            mNumIntegerCols ++;
+            mNumIntegerCols++;
         }
     }
 
-    // objective information
+    // =========================== Objective information ===========================
+
     Eigen::SparseMatrix<double, Eigen::RowMajor> sprarseMatrixObjective(1, mNumCols);
     std::list<Node> objectiveNodes = mObjectiveExpression.getNode();
-    //checking mObjectiveExpression
-    std::list<Node>::iterator itNode;
-    for (itNode = objectiveNodes.begin(); itNode != objectiveNodes.end() ; itNode++) {
-        if(itNode->col() < 0 || itNode->row() < 0){
-            //throw exception 
-            spdlog::critical("error at the nodeObjective : col val  is -1 ");
-            throw ("An error found after checking objectiveNodes col/row val (<-1) sparseMatrixObjective ! plesae check added model");
+
+    // --- Validate objective expression ---
+    for (auto& node : objectiveNodes) {
+        if (node.col() < 0 || node.row() < 0) {
+            mProblemBuilt = false;
+            spdlog::critical("error at the objective expression : col or row is -1");
+            throw std::runtime_error("Invalid objective: negative row/col index");
         }
     }
+
     sprarseMatrixObjective.setFromTriplets(objectiveNodes.begin(), objectiveNodes.end());
 
     double* value = sprarseMatrixObjective.valuePtr();
     int* idx = sprarseMatrixObjective.innerIndexPtr();
     mObjectiveCoefficients.resize(mNumCols, 0);
-    for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++){
+
+    for (int i = 0; i < sprarseMatrixObjective.nonZeros(); i++) {
         if (std::isnan(value[i])) {
             mProblemBuilt = false;
-            spdlog::error("The Objective Coefficient of " + mColNames[i] + " is NAN!");
+            spdlog::critical("The Objective Coefficient of {} is NAN!", mColNames[idx[i]]);
+            throw std::runtime_error("Invalid model: NAN objective coefficient");
         }
         mObjectiveCoefficients[idx[i]] = value[i];
     }
 
-    // subobjective information
-    if(mNumObj>1){
-        for(int j = 0; j<mNumObj; j++){
+    /// =========================== Subobjective information ===========================
+
+    if(mNumObj>1) {
+        for(int j = 0; j<mNumObj; j++) {
             std::list<Node> objectiveNodes = mListSubobjectives[j].getSubObjectiveExpression().getNode();
             int nbNodes = objectiveNodes.size();
             mSubObjNz.push_back(nbNodes);
             mSubObjIndices.push_back(new int[nbNodes]());
             mSubObjCoeff.push_back(new double[nbNodes]());
-            int i=0;
-            std::list<Node>::iterator it = objectiveNodes.begin();
-            for (; it != objectiveNodes.end(); it++){
-                mSubObjIndices[j][i] = it->col();
 
-                if (std::isnan(it->value())) {
+            int i=0;
+            for (auto& node : objectiveNodes) {
+                mSubObjIndices[j][i] = node.col();
+
+                // --- Validate subobjective coefficient ---
+                if (std::isnan(node.value())) {
                     mProblemBuilt = false;
-                    spdlog::error("A NAN value found in the subobjective expression: "+ mListSubobjectives[j].getName());
+                    spdlog::critical("A NAN value found in subobjective: {}", mListSubobjectives[j].getName());
+                    throw std::runtime_error("Invalid model: NAN subobjective coefficient");
                 }
 
-                mSubObjCoeff[j][i] = it->value();
+                mSubObjCoeff[j][i] = node.value();
                 i++;
             }
         }
     }
 
-    //constraint matrix information
+    // =========================== Constraint matrix information ===========================
+
     mRhs.reserve(mNumRows);
     mSense.reserve(mNumRows);
-    std::list<Node> constraintNodes;
+
     std::list<Node> allConstraintNodes;
-    std::list<MIPConstraint>::iterator itConstr = mConstraints.begin();
 
-    for (; itConstr != mConstraints.end(); itConstr++){
-        constraintNodes = itConstr->getExpression().getNode();
-        for (std::list<Node>::iterator it = constraintNodes.begin(); it != constraintNodes.end(); it++)
-        {
-            if (it->row() <0  || it->col() <0)
-            {
-                spdlog::debug(" == ERROR constraint == "
-                        + itConstr->getName()
-                        + " reference to bad variable "
-                        + " r " 
-                        + std::to_string(it->row()) 
-                        + " c " 
-                        + std::to_string(it->col()) 
-                        + " v " 
-                        + std::to_string(it->value()) );
+    for (auto itConstr = mConstraints.begin(); itConstr != mConstraints.end(); ++itConstr) 
+    {
+        std::list<Node> constraintNodes = itConstr->getExpression().getNode();
 
-                throw ("An error found while building the constraint matrix: a negative row or column index is detected!");
+        for (auto& node : constraintNodes) {
+            // --- Validate constraint matrix ---
+            if (node.row() < 0 || node.col() < 0) {
+                mProblemBuilt = false;
+                spdlog::critical("ERROR constraint {}: bad variable reference r {} c {} v {}",
+                    itConstr->getName(),
+                    node.row(),
+                    node.col(),
+                    node.value());
+                throw std::runtime_error("Invalid constraint: negative row/col index");
             }
 
-            if (std::isnan(it->value())) {
+            if (std::isnan(node.value())) {
                 mProblemBuilt = false;
-                spdlog::error("An NAN value found in the constraint: "+ itConstr->getName());
+                spdlog::critical("A NAN value found in constraint: {}", itConstr->getName());
+                throw std::runtime_error("Invalid model: NAN constraint coefficient");
             }
         }
+
         allConstraintNodes.insert(allConstraintNodes.end(), constraintNodes.begin(), constraintNodes.end());
 
+        // --- Validate constant part ---
         if (std::isnan(itConstr->getConstPart())) {
             mProblemBuilt = false;
-            spdlog::error("The Constant Part of the constraint "+ itConstr->getName() + " is NAN!" + std::to_string(itConstr->getConstPart()));
+            spdlog::critical("The Constant Part of constraint {} is NAN!", itConstr->getName());
+            throw std::runtime_error("Invalid model: NAN constraint constant");
         }
 
         mRhs.push_back(itConstr->getConstPart());
@@ -231,29 +246,24 @@ void MIPModel::buildProblem() {
         mRowNames.push_back(itConstr->getName());
     }
 
-    //Throw exception -- The exception is thrown at the end in order to report all NAN values in the .log before.
-    if (!mProblemBuilt)
-        throw ("An error has found while building the optimal problem: undefined value (NAN)!");
+    // =========================== Build constraint matrix =========================== 
 
     Eigen::SparseMatrix<double, Eigen::RowMajor>* sparseMatrixConstraints;
     sparseMatrixConstraints = new Eigen::SparseMatrix<double, Eigen::RowMajor>(mNumRows, mNumCols);
     sparseMatrixConstraints->setFromTriplets(allConstraintNodes.begin(), allConstraintNodes.end());
+
     mNonZeroElements = sparseMatrixConstraints->valuePtr();
     mIndexes = sparseMatrixConstraints->innerIndexPtr();
     mStartIndexes= sparseMatrixConstraints->outerIndexPtr();
     mNumNonZeroElements = sparseMatrixConstraints->nonZeros();
+
     mLengths = new int[mNumRows];
     for (int i = 0; i < mNumRows; i++)
         mLengths[i] = mStartIndexes[i + 1] - mStartIndexes[i];
 }
-// --------------------------------------------------------------------------
-MIPModel::~MIPModel() {
 
-//    if (mNumCols > 0)
-//      delete [] mObjectiveCoefficients ;
-//    if (mNumRows > 0)
-//       delete [] mLengths ;
-
+MIPModel::~MIPModel() 
+{
     mColIntegers.clear();
     mColLowerBounds.clear();
     mColUpperBounds.clear();
@@ -264,5 +274,5 @@ MIPModel::~MIPModel() {
     mRowNames.clear();
     mListSubobjectives.clear();
 }
-//---------------------------------------------------------------------------
+
 }

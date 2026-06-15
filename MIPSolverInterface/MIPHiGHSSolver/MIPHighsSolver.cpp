@@ -111,6 +111,8 @@ void MIPHighsSolver::writeLp() {
 
 int MIPHighsSolver::solve() {
     int vRet = -1;
+
+    spdlog::info("       ");
     spdlog::info("Start Solving using Highs");
 
     // Variable Types
@@ -227,7 +229,10 @@ int MIPHighsSolver::solve() {
         mOptimalSolution[col] = solution.col_value[col];
 
     highs.stopCallback(1);
+
     spdlog::info("Finish Solving using Highs");
+    spdlog::info("       ");
+
     return vRet;
 }
 // --------------------------------------------------------------------------

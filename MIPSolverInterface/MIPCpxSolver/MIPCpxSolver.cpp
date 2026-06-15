@@ -37,7 +37,8 @@ MIPCpxSolver::MIPCpxSolver()
       mReadParamFile(false),
       mTerminate(NULL),
       mLpFileCycle(0),
-      mCheckConflicts(false)
+      mCheckConflicts(false),
+      mLpModel(false)
 {    
 }
 
@@ -68,6 +69,9 @@ int MIPCpxSolver::solve(MIPModeler::MIPModel* ap_Model, const MIPSolverParams& a
             else if (vParam.first == "Threads") setThreads(vParam.second.value);
             else if (vParam.first == "TreeMemoryLimit") setTreeMemoryLimit(vParam.second.value);
             else if (vParam.first == "NbSolToKeep") setMaxNumberOfSolutions(vParam.second.value);
+            else if (vParam.first == "LpModel") {
+                setPbType(vParam.second.value);
+            }
             else if (vParam.first == "Location") {                
                 setLocation(vParam.second.str);
             }
@@ -122,6 +126,10 @@ void MIPCpxSolver::setTimeLimit(const double& timeLimit) {
 
 void MIPCpxSolver::setGap(const double& gap){
     mGap = gap;
+}
+
+void MIPCpxSolver::setPbType(const bool& lp) {
+    mLpModel = lp;
 }
 // --------------------------------------------------------------------------
 void MIPCpxSolver::setReadParamFile(){
@@ -205,7 +213,9 @@ void MIPCpxSolver::setCheckConflicts(const bool checkConflicts) {
     mCheckConflicts = checkConflicts;
 }
 // --------------------------------------------------------------------------
-int MIPCpxSolver::solve() {
+int MIPCpxSolver::solve() 
+{
+    spdlog::info("       "); // separate between cycle logs on console 
 
     int vRet = -1;
     log(INFO, "Start Solving using Cplex");
@@ -459,14 +469,26 @@ int MIPCpxSolver::solve() {
         //solve mip or lp depending on problem type
         if(*(mModel->getNumSubobj())>1){
             status = CPXsetintparam(env,CPXPARAM_MultiObjective_Display,2);
-            status = CPXmultiobjopt(env,lp,NULL);
+            if (mLpModel) {
+                status = CPXchgprobtype(env, lp, 0);
+                status = CPXmultiobjopt(env, lp, NULL);
+            }
+            else {
+                status = CPXmultiobjopt(env, lp, NULL);
+            }
             if ( status ){
                 log(ERR, "CPXmipopt: Failed when solving mutliobj optimisation problem");
                 return -1;
              }
         }
         else{
-            status = CPXmipopt(env, lp);
+            if (mLpModel) {
+                status = CPXchgprobtype(env, lp, 0);
+                status = CPXlpopt(env, lp);
+            }
+            else {
+                status = CPXmipopt(env, lp);
+            }
             if ( status ){
                 log(ERR, "CPXmipopt: Failed when solving optimisation problem");
                 return -1;
@@ -542,41 +564,69 @@ int MIPCpxSolver::solve() {
             CPXwritemipstarts(env, lp, mipStartFile.c_str(), 0, 0);
         }
 
+        
         mObjectiveValue = objval;        
+        if (!mLpModel) {
+            status = CPXgetbestobjval(env, lp, &mLpValue); // retirer lp
+            if (status) {
+                log(ERR, "CPXgetbestobjval: Failed when getting best possible obj");
+                return -1;
+            }
+        }
+        if(!mLpModel){
+            int nbSolTrouvees = CPXgetsolnpoolnumsolns(env, lp);
+            log(INFO, "Number of solutions found: ", nbSolTrouvees);
+            if (nbSolTrouvees > mMaxNumberOfSolutions)
+                mNbSolutionsGardees = mMaxNumberOfSolutions;
+            else {
+                mNbSolutionsGardees = nbSolTrouvees;
+            }
+            log(INFO, "Number max of solutions kept: ", mMaxNumberOfSolutions);
+            log(INFO, "Number of solutions kept: ", mNbSolutionsGardees);
+            mOtherSolutions.clear();
+            mObjectiveOtherSolutions.clear();
+            for (int i = 0; i < mNbSolutionsGardees; i++) {
+                mOtherSolutions.push_back(std::vector<double>(numCols, 0));
+                status = CPXgetsolnpoolx(env, lp, i, mOtherSolutions[i].data(), 0, numCols - 1);
+                mObjectiveOtherSolutions.push_back(0);
+                CPXgetsolnpoolobjval(env, lp, i, &mObjectiveOtherSolutions[i]);
+                std::stringstream msg1;
+                msg1 << "Solution " << i << ": " << mObjectiveOtherSolutions[i];
+                log(INFO, msg1.str());
+            }
+        }
+        else {
+            log(INFO, "Number max of solutions kept: ", 1);
+            mNbSolutionsGardees = 1;
+            mOtherSolutions.clear();
+            mObjectiveOtherSolutions.clear();
+            for (int i = 0; i < mNbSolutionsGardees; i++) {
+                mOtherSolutions.push_back(std::vector<double>(numCols, 0));
+                status = CPXsolution(env,
+                            lp,
+                            &lpstat,
+                            &objval,
+                            mOtherSolutions[i].data(),
+                            NULL, NULL, NULL);
+                mObjectiveOtherSolutions.push_back(mObjectiveValue);
+                std::stringstream msg1;
+                msg1 << "Solution " << i << ": " << mObjectiveOtherSolutions[i];
+                log(INFO, msg1.str());
+            }
 
-        status = CPXgetbestobjval(env, lp, &mLpValue);
-        if ( status ){
-            log(ERR, "CPXgetbestobjval: Failed when getting best possible obj");
-            return -1;
+        }
+
+        
+
+        if (!mLpModel) {
+            double mgap;
+            status = CPXgetmiprelgap(env, lp, &mgap);
+            log(INFO, "Gap of the solution: ", mgap);
         }
 
         log(INFO, "Problem status: " + mOptimisationStatus);
-
-        int nbSolTrouvees = CPXgetsolnpoolnumsolns(env,lp);        
-        log(INFO, "Number of solutions found: ", nbSolTrouvees);
-        if (nbSolTrouvees>mMaxNumberOfSolutions)
-            mNbSolutionsGardees=mMaxNumberOfSolutions;
-        else{
-            mNbSolutionsGardees=nbSolTrouvees;
-        }
-        
-        log(INFO, "Number max of solutions kept: ",  mMaxNumberOfSolutions);        
-        log(INFO, "Number of solutions kept: ",  mNbSolutionsGardees);        
-        mOtherSolutions.clear();
-        mObjectiveOtherSolutions.clear();
-        for(int i=0; i<mNbSolutionsGardees;i++){
-            mOtherSolutions.push_back(std::vector<double>( numCols, 0 ));
-            status = CPXgetsolnpoolx(env,lp, i, mOtherSolutions[i].data(), 0, numCols - 1);
-            mObjectiveOtherSolutions.push_back(0);
-            CPXgetsolnpoolobjval(env,lp,i,&mObjectiveOtherSolutions[i]);
-            std::stringstream msg1;
-            msg1 <<"Solution "<<i<<": "<<mObjectiveOtherSolutions[i];            
-            log(INFO, msg1.str());
-        }
-        double mgap;
-        status = CPXgetmiprelgap(env, lp, &mgap);
-        log(INFO, "Gap of the solution: ", mgap);
     }
+    
 
     if (lp)
         CPXfreeprob (env, &lp);
@@ -584,7 +634,10 @@ int MIPCpxSolver::solve() {
     if (env)
         CPXcloseCPLEX (&env);
 
-    log(INFO, "Finish solving using Cplex");    
+    log(INFO, "Finish solving using Cplex");  
+
+    spdlog::info("       "); // separate between cycle logs on console 
+
     if (mlogFile) mlogFile->close();
     mlogFile = nullptr;
     return vRet;

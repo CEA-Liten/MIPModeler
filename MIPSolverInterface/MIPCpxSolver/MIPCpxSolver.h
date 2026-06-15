@@ -42,6 +42,7 @@ public:
     void setFileMipStart(const std::string &mipStartFile);
     void setMaxNumberOfSolutions(const int& maxNumberOfSolutions);
     void setReadParamFile();
+    void setPbType(const bool& lp);  // if lp = true, not a milp pb
     void setTerminateSignal(int* terminate);
     int* getTerminateSignal();
 // --------------------------------------------------------------------------
@@ -78,6 +79,7 @@ private:
     bool mReadParamFile;
     int mMaxNumberOfSolutions{ 1 };
     int* mTerminate;
+    bool mLpModel;
 
     std::string mLocation ;
     
