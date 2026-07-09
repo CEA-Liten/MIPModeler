@@ -442,28 +442,29 @@ int MIPCpxSolver::solve()
             status = CPXreadcopymipstarts(env,lp,mFileMipStart.c_str());
         }
         //set mip parameters
+        if (mReadParamFile) {
+            CPXreadcopyparam(env, paramFile.c_str());
+        }
+        // set time limit option
+        status = CPXsetdblparam(env, CPXPARAM_TimeLimit, mTimeLimit);
+        if (status) {
+            log(ERR, "Failed to set Cplex time limit");
+        }
+        status = CPXsetdblparam(env, CPXPARAM_MIP_Limits_TreeMemory, mTreeMemoryLimit);
+        // set number of threads
+        status = CPXsetintparam(env, CPXPARAM_Threads, mThreads);
+        if (status) {
+            log(ERR, "Failed to set Cplex number of threads");
+        }
+
         if (mModel->isMip()) {
-            if(mReadParamFile){                
-                CPXreadcopyparam(env, paramFile.c_str());
-            }
+            
             //set gap limit
             status = CPXsetdblparam(env, CPX_PARAM_EPGAP, mGap);
             if (status){
                 log(ERR, "Failed to set Cplex gap");
             }
-
-            // set time limit option
-            status = CPXsetdblparam(env, CPXPARAM_TimeLimit, mTimeLimit);
-            if (status){
-                 log(ERR, "Failed to set Cplex time limit");
-            }
-            status = CPXsetdblparam(env,CPXPARAM_MIP_Limits_TreeMemory,mTreeMemoryLimit);
-            // set number of threads
-            status = CPXsetintparam(env, CPXPARAM_Threads, mThreads);
-            if (status){
-                log(ERR, "Failed to set Cplex number of threads");
-            }
-
+            
         }
 
         //solve mip or lp depending on problem type
